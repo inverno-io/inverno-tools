@@ -33,7 +33,7 @@ import io.winterframework.tool.maven.internal.task.CreateProjectContainerImageTa
  * @author <a href="mailto:jeremy.kuhn@winterframework.io">Jeremy Kuhn</a>
  * @since 1.0
  */
-@Mojo(name = "build-image", defaultPhase = LifecyclePhase.PACKAGE, requiresProject = true, requiresDependencyCollection = ResolutionScope.COMPILE_PLUS_RUNTIME, requiresDependencyResolution = ResolutionScope.COMPILE_PLUS_RUNTIME)
+@Mojo(name = "build-image", defaultPhase = LifecyclePhase.INSTALL, requiresProject = true, requiresDependencyCollection = ResolutionScope.COMPILE_PLUS_RUNTIME, requiresDependencyResolution = ResolutionScope.COMPILE_PLUS_RUNTIME)
 public class BuildContainerImageMojo extends AbstractContainerImageMojo {
 
 	/**
