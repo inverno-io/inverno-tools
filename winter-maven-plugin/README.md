@@ -1470,7 +1470,7 @@ Builds a container image and publishes it to a registry.
 - Requires dependency resolution of artifacts in scope: compile+runtime.
 - Requires dependency collection of artifacts in scope: compile+runtime.
 - Since version: 1.0.
-- Binds by default to the lifecycle phase: package.
+- Binds by default to the lifecycle phase: install.
 
 
 #### Required parameters
@@ -2857,7 +2857,7 @@ Builds a Docker container image to a local Docker daemon.
 - Requires dependency resolution of artifacts in scope: compile+runtime.
 - Requires dependency collection of artifacts in scope: compile+runtime.
 - Since version: 1.0.
-- Binds by default to the lifecycle phase: package.
+- Binds by default to the lifecycle phase: install.
 
 
 #### Required parameters
