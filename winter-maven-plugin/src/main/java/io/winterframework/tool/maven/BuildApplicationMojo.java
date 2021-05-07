@@ -68,12 +68,6 @@ public class BuildApplicationMojo extends BuildRuntimeMojo {
 	private boolean skip;
 	
 	/**
-	 * The application name which corresponds to the name of the executable and root directory of the resulting package.
-	 */
-	@Parameter(property = "winter.app.name", defaultValue = "${project.artifactId}", required = true)
-	protected String name;
-	
-	/**
 	 * The application copyright.
 	 */
 	@Parameter(property = "winter.app.copyright", required = false)
@@ -92,12 +86,6 @@ public class BuildApplicationMojo extends BuildRuntimeMojo {
 	private String vendor;
 	
 	/**
-	 * The path to the application icon file. 
-	 */
-	@Parameter(property = "winter.app.iconFile", required = false)
-	private File iconFile;
-	
-	/**
 	 * The path to the application license file.
 	 */
 	@Parameter(property = "winter.app.licenseFile", defaultValue = "${project.basedir}/LICENSE", required = false)
@@ -108,25 +96,6 @@ public class BuildApplicationMojo extends BuildRuntimeMojo {
 	 */
 	@Parameter(property = "winter.app.resourceDirectory", required = false)
 	private File resourceDirectory;
-	
-	/**
-	 * The default arguments to pass to the application. 
-	 */
-	@Parameter(property = "winter.app.arguments", required = false)
-	private String arguments;
-	
-	/**
-	 * The VM options to use when executing the application. 
-	 */
-	@Parameter(property = "winter.app.vmOptions", required = false)
-	private String vmOptions;
-	
-	/**
-	 * The module containing the main class of the application. If not specified,
-	 * the project's module is selected.
-	 */
-	@Parameter(property = "winter.app.module", required = false)
-	private String module;
 	
 	/**
 	 * Absolute path of the installation directory of the application on OS X or
@@ -157,6 +126,9 @@ public class BuildApplicationMojo extends BuildRuntimeMojo {
 	/**
 	 * Enables the automatic generation of launchers based on the main classes
 	 * extracted from the application module.
+	 * 
+	 * If enabled, a launcher is generated for all main classes other than the main
+	 * launcher.
 	 */
 	@Parameter(property = "winter.app.automaticLaunchers", defaultValue = "false", required = false)
 	private boolean automaticLaunchers;
@@ -165,13 +137,7 @@ public class BuildApplicationMojo extends BuildRuntimeMojo {
 	 * A list of extra launchers to include in the resulting application.
 	 */
 	@Parameter(required = false)
-	private List<CreateProjectApplicationTask.Launcher> launchers;
-	
-	/**
-	 * Adds the unnamed modules when running the application.
-	 */
-	@Parameter(property = "winter.app.addUnnamedModules", defaultValue = "true", required = false)
-	private boolean addUnnamedModules;
+	protected List<CreateProjectApplicationTask.Launcher> launchers;
 	
 	@Override
 	protected void doExecute() throws MojoExecutionException, MojoFailureException {
@@ -235,23 +201,23 @@ public class BuildApplicationMojo extends BuildRuntimeMojo {
 		
 		task.setAutomaticLaunchers(this.automaticLaunchers);
 		task.setLaunchers(this.launchers);
-		task.setArguments(Optional.ofNullable(this.arguments).filter(StringUtils::isNotEmpty));
+//		task.setArguments(Optional.ofNullable(this.arguments).filter(StringUtils::isNotEmpty));
 		task.setCopyright(Optional.ofNullable(this.copyright).filter(StringUtils::isNotEmpty));
 		task.setDescription(Optional.ofNullable(this.description).filter(StringUtils::isNotEmpty));
-		task.setIconPath(Optional.ofNullable(this.iconFile).map(file -> file.toPath().toAbsolutePath()));
+//		task.setIconPath(Optional.ofNullable(this.iconFile).map(file -> file.toPath().toAbsolutePath()));
 		task.setInstallDirectory(Optional.ofNullable(this.installDirectory).filter(StringUtils::isNotEmpty));
 		task.setLaunchers(this.launchers);
 		task.setLicensePath(Optional.ofNullable(this.licenseFile).map(file -> file.toPath().toAbsolutePath()));
-		task.setMainClass(Optional.ofNullable(this.mainClass).filter(StringUtils::isNotEmpty));
-		task.setModule(Optional.ofNullable(this.module).filter(StringUtils::isNotEmpty));
-		task.setName(this.name);
+//		task.setMainClass(Optional.ofNullable(this.mainClass).filter(StringUtils::isNotEmpty));
+//		task.setModule(Optional.ofNullable(this.module).filter(StringUtils::isNotEmpty));
+//		task.setName(this.name);
 		task.setResourcePath(Optional.ofNullable(this.resourceDirectory).map(file -> file.toPath().toAbsolutePath()));
 		task.setVendor(Optional.ofNullable(this.vendor).filter(StringUtils::isNotEmpty));
-		task.setVmOptions(Optional.ofNullable(this.vmOptions).filter(StringUtils::isNotEmpty));
+//		task.setVmOptions(Optional.ofNullable(this.vmOptions).filter(StringUtils::isNotEmpty));
 		task.setLinuxConfiguration(Optional.ofNullable(this.linuxConfiguration));
 		task.setMacOSConfiguration(Optional.ofNullable(this.macOSConfiguration));
 		task.setWindowsConfiguration(Optional.ofNullable(this.windowsConfiguration));
-		task.setAddUnnamedModules(this.addUnnamedModules);
+//		task.setAddUnnamedModules(this.addUnnamedModules);
 		
 		task.setStep(step);
 		

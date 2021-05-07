@@ -45,18 +45,17 @@ public class CreateProjectJmodTask extends Task<Void> {
 
 	private final ToolProvider jmod;
 	private final ProjectModule projectModule;
-	private final boolean resolveMainClass;
 	
 	private String projectMainClass;
+	private boolean resolveProjectMainClass;
 	private Path projectConfPath;
 	private Path projectLegalPath;
 	private Path projectManPath;
 	
-	public CreateProjectJmodTask(AbstractMojo mojo, ToolProvider jmod, ProjectModule projectModule, boolean resolveMainClass) {
+	public CreateProjectJmodTask(AbstractMojo mojo, ToolProvider jmod, ProjectModule projectModule) {
 		super(mojo);
 		this.jmod = jmod;
 		this.projectModule = projectModule;
-		this.resolveMainClass = resolveMainClass;
 	}
 	
 	@Override
@@ -103,7 +102,7 @@ public class CreateProjectJmodTask extends Task<Void> {
 					jmod_args.add("--main-class");
 					jmod_args.add(this.projectMainClass);
 				}
-				else if(this.resolveMainClass) {
+				else if(this.resolveProjectMainClass) {
 					try {
 						Set<String> mainClasses = this.projectModule.getMainClasses();
 						if(mainClasses.size() == 1) {
@@ -172,4 +171,12 @@ public class CreateProjectJmodTask extends Task<Void> {
 	public void setProjectManPath(Path projectManPath) {
 		this.projectManPath = projectManPath;
 	}
+
+	public boolean isResolveProjectMainClass() {
+		return resolveProjectMainClass;
+	}
+
+	public void setResolveProjectMainClass(boolean resolveProjectMainClass) {
+		this.resolveProjectMainClass = resolveProjectMainClass;
+	}	
 }

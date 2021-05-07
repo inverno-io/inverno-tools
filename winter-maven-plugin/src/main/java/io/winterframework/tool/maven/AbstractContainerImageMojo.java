@@ -49,12 +49,21 @@ import io.winterframework.tool.maven.internal.task.PackageModularizedDependencie
  * @since 1.0
  */
 public abstract class AbstractContainerImageMojo extends BuildApplicationMojo {
-
+	
 	/**
 	 * The base container image.
 	 */
 	@Parameter(property = "winter.container.from", defaultValue = "debian:buster-slim", required = true)
 	private String from;
+	
+	/**
+	 * The executable in the application image to use as image entry point.
+	 * 
+	 * The specified name should correspond to a declared application image
+	 * launchers or the project artifact id if no launcher was specified.
+	 */
+	@Parameter(property = "winter.app.executable", defaultValue = "${project.artifactId}", required = true)
+	private String executable;
 	
 	/**
 	 * The registry part of the target image reference defined as: <code>${registry}/${repository}/${name}:${project.version}</code>
@@ -145,8 +154,19 @@ public abstract class AbstractContainerImageMojo extends BuildApplicationMojo {
 		CreateProjectContainerImageTask task = new CreateProjectContainerImageTask(this, this.projectModule);
 		
 		task.setVerbose(this.verbose);
+
+		if(this.launchers != null && !this.launchers.isEmpty()) {
+			task.setExecutable(this.launchers.stream()
+				.map(CreateProjectApplicationTask.Launcher::getName)
+				.filter(launcherName -> launcherName.equals(this.executable))
+				.findAny()
+				.orElseThrow(() -> new IllegalArgumentException("Executable " + this.executable + " does not exist in project application image"))
+			);
+		}
+		else {
+			task.setExecutable(this.project.getArtifactId());
+		}
 		
-		task.setName(this.name);
 		task.setFrom(this.from);
 		task.setRegistry(Optional.ofNullable(this.registry).filter(StringUtils::isNotEmpty));
 		task.setRepository(Optional.ofNullable(this.repository).filter(StringUtils::isNotEmpty));

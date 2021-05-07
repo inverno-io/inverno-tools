@@ -77,7 +77,7 @@ public abstract class AbstractExecMojo extends AbstractWinterMojo {
 	 * Overwrites dependencies that don't exist or are older than the source.
 	 */
 	@Parameter(property = "winter.exec.overWriteIfNewer", defaultValue = "true", required = false)
-	protected boolean overWriteIfNewer;
+	protected boolean overWriteIfNewer = true;
 	
 	/**
 	 * The main class to use to run the application. If not specified, a main class
@@ -96,7 +96,7 @@ public abstract class AbstractExecMojo extends AbstractWinterMojo {
 	 * Adds the unnamed modules when executing the application.
 	 */
 	@Parameter(property = "winter.exec.addUnnamedModules", defaultValue = "true", required = false)
-	protected boolean addUnnamedModules;
+	protected boolean addUnnamedModules = true;
 	
 	/**
 	 * The arguments to pass to the application.

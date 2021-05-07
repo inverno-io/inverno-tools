@@ -54,6 +54,19 @@ public class BuildRuntimeMojo extends AbstractImageMojo {
 	private boolean skip;
 	
 	/**
+	 * The main class in the project module to use when building the project JMOD
+	 * package.
+	 */
+	@Parameter(property = "winter.runtime.projectMainClass", required = false)
+	protected String projectMainClass;
+	
+	/**
+	 * Resolve the project main class when not specified explicitly.
+	 */
+	@Parameter(property = "winter.runtime.projectMainClass", defaultValue = "false", required = false)
+	protected boolean resolveProjectMainClass;
+	
+	/**
 	 * A list of launchers to include in the resulting runtime.
 	 */
 	@Parameter(required = false)
@@ -122,12 +135,13 @@ public class BuildRuntimeMojo extends AbstractImageMojo {
 	}
 	
 	protected CreateProjectJmodTask getCreateProjectJmodTask(ProgressBar.Step step) {
-		CreateProjectJmodTask task = new CreateProjectJmodTask(this, this.jmod, this.projectModule, true);
+		CreateProjectJmodTask task = new CreateProjectJmodTask(this, this.jmod, this.projectModule);
 
 		task.setVerbose(this.verbose);
 		task.setStep(step);
 
-		task.setProjectMainClass(this.mainClass);
+		task.setProjectMainClass(this.projectMainClass);
+		task.setResolveProjectMainClass(this.resolveProjectMainClass);
 		this.confPath.ifPresent(path -> task.setProjectConfPath(path));
 		this.legalPath.ifPresent(path -> task.setProjectLegalPath(path));
 		this.manPath.ifPresent(path -> task.setProjectManPath(path));
