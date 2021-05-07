@@ -158,7 +158,7 @@ public class BuildApplicationMojo extends BuildRuntimeMojo {
 	 * Enables the automatic generation of launchers based on the main classes
 	 * extracted from the application module.
 	 */
-	@Parameter(property = "winter.app.automaticLaunchers", defaultValue = "true", required = false)
+	@Parameter(property = "winter.app.automaticLaunchers", defaultValue = "false", required = false)
 	private boolean automaticLaunchers;
 	
 	/**
@@ -233,6 +233,7 @@ public class BuildApplicationMojo extends BuildRuntimeMojo {
 		
 		task.setVerbose(this.verbose);
 		
+		task.setAutomaticLaunchers(this.automaticLaunchers);
 		task.setLaunchers(this.launchers);
 		task.setArguments(Optional.ofNullable(this.arguments).filter(StringUtils::isNotEmpty));
 		task.setCopyright(Optional.ofNullable(this.copyright).filter(StringUtils::isNotEmpty));

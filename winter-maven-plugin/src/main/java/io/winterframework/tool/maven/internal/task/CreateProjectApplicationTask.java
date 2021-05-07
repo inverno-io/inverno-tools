@@ -21,8 +21,8 @@ import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
+import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -198,7 +198,6 @@ public class CreateProjectApplicationTask extends Task<Void> {
 				jpackage_args.add(value);
 			});
 			
-			Set<String> projectBinMainClasses = new HashSet<>();
 			jpackage_args.add("--module");
 
 			final String moduleName = this.module.orElse(this.projectModule.getModuleName());
@@ -300,15 +299,17 @@ public class CreateProjectApplicationTask extends Task<Void> {
 
 			if(this.automaticLaunchers) {
 				try {
+					Files.createDirectories(this.launchersPath);
+					
 					// Add launchers for module main classes that haven't been added yet 
 					for(String mainClass : this.projectModule.getMainClasses()) {
-						if(!projectBinMainClasses.contains(mainClass)) {
+						if(!moduleMainClass.equals(mainClass)) {
 							String launcherName = mainClass;
 							int classSimpleNameIndex = launcherName.lastIndexOf('.');
 							if(classSimpleNameIndex > 0) {
 								launcherName = launcherName.substring(classSimpleNameIndex + 1);							
 							}
-							
+							launcherName = Character.toLowerCase(launcherName.charAt(0)) + launcherName.substring(1);
 							Properties launcherProperties = new Properties();
 							
 							launcherProperties.put("module", this.projectModule.getModuleName() + "/" + mainClass);
@@ -427,11 +428,24 @@ public class CreateProjectApplicationTask extends Task<Void> {
 			
 			try {
 				if(this.projectModule.getImageArchivesPaths().isEmpty() || !JPACKAGE_TYPES.containsAll(this.projectModule.getImageArchivesPaths().keySet())) {
+					List<String> filtered_jpackage_args = new ArrayList<>();
+					for(Iterator<String> jpackage_argsIterator = jpackage_args.iterator();jpackage_argsIterator.hasNext();) {
+						String currentArg = jpackage_argsIterator.next();
+						if(currentArg.equals("--license-file")) {
+							jpackage_argsIterator.remove();
+							jpackage_argsIterator.next();
+							jpackage_argsIterator.remove();
+						}
+						else {
+							filtered_jpackage_args.add(currentArg);
+						}
+					}
+					
 					// We must generate app-image and invoke CreateImageArchivesTask later in the process
 					if(this.verbose) {
-						this.getLog().info(" - jpackage " + jpackage_args.stream().collect(Collectors.joining(" ")));			
+						this.getLog().info(" - jpackage " + filtered_jpackage_args.stream().collect(Collectors.joining(" ")));			
 					}
-					if(this.jpackage.run(this.verbose ? this.getOutStream() : new NullPrintStream(), this.getErrStream(), jpackage_args.stream().toArray(String[]::new)) == 0) {
+					if(this.jpackage.run(this.verbose ? this.getOutStream() : new NullPrintStream(), this.getErrStream(), filtered_jpackage_args.stream().toArray(String[]::new)) == 0) {
 						Files.move(packagePath.getParent().resolve(this.name), packagePath);
 					}
 					else {

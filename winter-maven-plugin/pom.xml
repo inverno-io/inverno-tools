@@ -124,7 +124,6 @@
 						<inherited>false</inherited>
 						<configuration>
 							<target>
-								<property name="sourceFile" value="pom.xml" />
 								<xslt in="${project.build.outputDirectory}/META-INF/maven/${project.groupId}/${project.artifactId}/plugin-help.xml" out="${project.basedir}/README.md" style="${project.basedir}/src/main/xsl/plugin-help.xsl" force="true" />
 							</target>
 						</configuration>
