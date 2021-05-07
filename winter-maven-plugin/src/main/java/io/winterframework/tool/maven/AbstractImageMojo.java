@@ -45,7 +45,7 @@ abstract class AbstractImageMojo extends AbstractWinterMojo {
 	 * Overwrite dependencies that don't exist or are older than the source.
 	 */
 	@Parameter(property = "winter.image.overWriteIfNewer", defaultValue = "true", required = false)
-	protected boolean overWriteIfNewer;
+	protected boolean overWriteIfNewer = true;
 
 	/*
 	 * I don't see anything else than jar for now, we could consider jmod but jmod
@@ -128,13 +128,6 @@ abstract class AbstractImageMojo extends AbstractWinterMojo {
 	protected String includeGroupIds;
 
 	/**
-	 * The main class to use to build the image. If not specified, a main class is
-	 * automatically selected.
-	 */
-	@Parameter(property = "winter.image.mainClass", required = false)
-	protected String mainClass;
-
-	/**
 	 * A directory containing module descriptors to use to modularize unnamed
 	 * dependency modules and which override the ones that are otherwise generated.
 	 */
@@ -197,13 +190,13 @@ abstract class AbstractImageMojo extends AbstractWinterMojo {
 	 * Strip debug information from the resulting image.
 	 */
 	@Parameter(property = "winter.image.stripDebug", defaultValue = "true", required = false)
-	protected boolean stripDebug;
+	protected boolean stripDebug = true;
 
 	/**
 	 * Strip native command (eg. java...) from the resulting image.
 	 */
 	@Parameter(property = "winter.image.stripNativeCommands", defaultValue = "true", required = false)
-	protected boolean stripNativeCommands;
+	protected boolean stripNativeCommands = true;
 
 	/**
 	 * Select the HotSpot VM in the output image defined as: {@code "client" / "server" / "minimal" / "all"}
@@ -222,7 +215,7 @@ abstract class AbstractImageMojo extends AbstractWinterMojo {
 	 * local Maven repository and deploy them to remote repositories.
 	 */
 	@Parameter(property = "winter.image.attach", defaultValue = "true", required = true)
-	protected boolean attach;
+	protected boolean attach = true;
 
 	// src
 	protected Optional<Path> jmodsOverridePath;

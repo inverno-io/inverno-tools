@@ -372,25 +372,6 @@ A project application package is a native self-contained Java application includ
             </ul>
         </td>
     </tr>
-    <tr>
-        <td>
-            <a href="#name">name</a>
-        </td>
-        <td>String</td>
-        <td>
-            The application name which corresponds to the name of the executable and root directory of the resulting package.
-            <ul>
-                <li>
-                    <em>User property</em>
-                    : winter.app.name
-                </li>
-                <li>
-                    <em>Default</em>
-                    : ${project.artifactId}
-                </li>
-            </ul>
-        </td>
-    </tr>
 </table>
 
 #### Optional parameters
@@ -433,45 +414,11 @@ A project application package is a native self-contained Java application includ
     </tr>
     <tr>
         <td>
-            <a href="#addUnnamedModules">addUnnamedModules</a>
-        </td>
-        <td>boolean</td>
-        <td>
-            Adds the unnamed modules when running the application.
-            <ul>
-                <li>
-                    <em>User property</em>
-                    : winter.app.addUnnamedModules
-                </li>
-                <li>
-                    <em>Default</em>
-                    : true
-                </li>
-            </ul>
-        </td>
-    </tr>
-    <tr>
-        <td>
-            <a href="#arguments">arguments</a>
-        </td>
-        <td>String</td>
-        <td>
-            The default arguments to pass to the application.
-            <ul>
-                <li>
-                    <em>User property</em>
-                    : winter.app.arguments
-                </li>
-            </ul>
-        </td>
-    </tr>
-    <tr>
-        <td>
             <a href="#automaticLaunchers">automaticLaunchers</a>
         </td>
         <td>boolean</td>
         <td>
-            Enables the automatic generation of launchers based on the main classes extracted from the application module.
+            Enables the automatic generation of launchers based on the main classes extracted from the application module. If enabled, a launcher is generated for all main classes other than the main launcher.
             <ul>
                 <li>
                     <em>User property</em>
@@ -627,21 +574,6 @@ A project application package is a native self-contained Java application includ
                 <li>
                     <em>User property</em>
                     : winter.image.excludeScope
-                </li>
-            </ul>
-        </td>
-    </tr>
-    <tr>
-        <td>
-            <a href="#iconFile">iconFile</a>
-        </td>
-        <td>File</td>
-        <td>
-            The path to the application icon file.
-            <ul>
-                <li>
-                    <em>User property</em>
-                    : winter.app.iconFile
                 </li>
             </ul>
         </td>
@@ -829,21 +761,6 @@ A project application package is a native self-contained Java application includ
     </tr>
     <tr>
         <td>
-            <a href="#mainClass">mainClass</a>
-        </td>
-        <td>String</td>
-        <td>
-            The main class to use to build the image. If not specified, a main class is automatically selected.
-            <ul>
-                <li>
-                    <em>User property</em>
-                    : winter.image.mainClass
-                </li>
-            </ul>
-        </td>
-    </tr>
-    <tr>
-        <td>
             <a href="#manDirectory">manDirectory</a>
         </td>
         <td>File</td>
@@ -863,21 +780,6 @@ A project application package is a native self-contained Java application includ
     </tr>
     <tr>
         <td>
-            <a href="#module">module</a>
-        </td>
-        <td>String</td>
-        <td>
-            The module containing the main class of the application. If not specified, the project's module is selected.
-            <ul>
-                <li>
-                    <em>User property</em>
-                    : winter.app.module
-                </li>
-            </ul>
-        </td>
-    </tr>
-    <tr>
-        <td>
             <a href="#overWriteIfNewer">overWriteIfNewer</a>
         </td>
         <td>boolean</td>
@@ -891,6 +793,40 @@ A project application package is a native self-contained Java application includ
                 <li>
                     <em>Default</em>
                     : true
+                </li>
+            </ul>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <a href="#projectMainClass">projectMainClass</a>
+        </td>
+        <td>String</td>
+        <td>
+            The main class in the project module to use when building the project JMOD package.
+            <ul>
+                <li>
+                    <em>User property</em>
+                    : winter.runtime.projectMainClass
+                </li>
+            </ul>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <a href="#resolveProjectMainClass">resolveProjectMainClass</a>
+        </td>
+        <td>boolean</td>
+        <td>
+            Resolve the project main class when not specified explicitly.
+            <ul>
+                <li>
+                    <em>User property</em>
+                    : winter.runtime.projectMainClass
+                </li>
+                <li>
+                    <em>Default</em>
+                    : false
                 </li>
             </ul>
         </td>
@@ -1018,21 +954,6 @@ A project application package is a native self-contained Java application includ
     </tr>
     <tr>
         <td>
-            <a href="#vmOptions">vmOptions</a>
-        </td>
-        <td>String</td>
-        <td>
-            The VM options to use when executing the application.
-            <ul>
-                <li>
-                    <em>User property</em>
-                    : winter.app.vmOptions
-                </li>
-            </ul>
-        </td>
-    </tr>
-    <tr>
-        <td>
             <a href="#windowsConfiguration">windowsConfiguration</a>
         </td>
         <td>WindowsConfiguration</td>
@@ -1065,25 +986,6 @@ The options to prepend before any other options when invoking the JVM in the res
 - **User property**: winter.image.addOptions
 
 
-##### &lt;addUnnamedModules&gt;
-
-Adds the unnamed modules when running the application.
-
-- **Type**: boolean
-- **Required**: no
-- **User property**: winter.app.addUnnamedModules
-- **Default**: true
-
-
-##### &lt;arguments&gt;
-
-The default arguments to pass to the application.
-
-- **Type**: java.lang.String
-- **Required**: no
-- **User property**: winter.app.arguments
-
-
 ##### &lt;attach&gt;
 
 Attach the resulting image archives to the project to install them in the local Maven repository and deploy them to remote repositories.
@@ -1096,7 +998,7 @@ Attach the resulting image archives to the project to install them in the local 
 
 ##### &lt;automaticLaunchers&gt;
 
-Enables the automatic generation of launchers based on the main classes extracted from the application module.
+Enables the automatic generation of launchers based on the main classes extracted from the application module. If enabled, a launcher is generated for all main classes other than the main launcher.
 
 - **Type**: boolean
 - **Required**: no
@@ -1195,15 +1097,6 @@ A list of archive formats to generate (eg. zip, tar.gz...)
 - **Type**: java.util.Set
 - **Required**: yes
 - **Default**: zip
-
-
-##### &lt;iconFile&gt;
-
-The path to the application icon file.
-
-- **Type**: java.io.File
-- **Required**: no
-- **User property**: winter.app.iconFile
 
 
 ##### &lt;ignoreSigningInformation&gt;
@@ -1321,15 +1214,6 @@ MacOS specific configuration.
 - **Required**: no
 
 
-##### &lt;mainClass&gt;
-
-The main class to use to build the image. If not specified, a main class is automatically selected.
-
-- **Type**: java.lang.String
-- **Required**: no
-- **User property**: winter.image.mainClass
-
-
 ##### &lt;manDirectory&gt;
 
 A directory containing man pages that will be copied to the resulting image.
@@ -1340,25 +1224,6 @@ A directory containing man pages that will be copied to the resulting image.
 - **Default**: ${project.basedir}/src/main/man/
 
 
-##### &lt;module&gt;
-
-The module containing the main class of the application. If not specified, the project's module is selected.
-
-- **Type**: java.lang.String
-- **Required**: no
-- **User property**: winter.app.module
-
-
-##### &lt;name&gt;
-
-The application name which corresponds to the name of the executable and root directory of the resulting package.
-
-- **Type**: java.lang.String
-- **Required**: yes
-- **User property**: winter.app.name
-- **Default**: ${project.artifactId}
-
-
 ##### &lt;overWriteIfNewer&gt;
 
 Overwrite dependencies that don't exist or are older than the source.
@@ -1367,6 +1232,25 @@ Overwrite dependencies that don't exist or are older than the source.
 - **Required**: no
 - **User property**: winter.image.overWriteIfNewer
 - **Default**: true
+
+
+##### &lt;projectMainClass&gt;
+
+The main class in the project module to use when building the project JMOD package.
+
+- **Type**: java.lang.String
+- **Required**: no
+- **User property**: winter.runtime.projectMainClass
+
+
+##### &lt;resolveProjectMainClass&gt;
+
+Resolve the project main class when not specified explicitly.
+
+- **Type**: boolean
+- **Required**: no
+- **User property**: winter.runtime.projectMainClass
+- **Default**: false
 
 
 ##### &lt;resourceDirectory&gt;
@@ -1436,15 +1320,6 @@ Select the HotSpot VM in the output image defined as: 'client' / 'server' / 'min
 - **User property**: winter.image.vm
 
 
-##### &lt;vmOptions&gt;
-
-The VM options to use when executing the application.
-
-- **Type**: java.lang.String
-- **Required**: no
-- **User property**: winter.app.vmOptions
-
-
 ##### &lt;windowsConfiguration&gt;
 
 Windows specific configuration.
@@ -1502,6 +1377,25 @@ Builds a container image and publishes it to a registry.
     </tr>
     <tr>
         <td>
+            <a href="#executable">executable</a>
+        </td>
+        <td>String</td>
+        <td>
+            The executable in the application image to use as image entry point. The specified name should correspond to a declared application image launchers or the project artifact id if no launcher was specified.
+            <ul>
+                <li>
+                    <em>User property</em>
+                    : winter.app.executable
+                </li>
+                <li>
+                    <em>Default</em>
+                    : ${project.artifactId}
+                </li>
+            </ul>
+        </td>
+    </tr>
+    <tr>
+        <td>
             <a href="#formats1">formats</a>
         </td>
         <td>Set</td>
@@ -1530,25 +1424,6 @@ Builds a container image and publishes it to a registry.
                 <li>
                     <em>Default</em>
                     : debian:buster-slim
-                </li>
-            </ul>
-        </td>
-    </tr>
-    <tr>
-        <td>
-            <a href="#name1">name</a>
-        </td>
-        <td>String</td>
-        <td>
-            The application name which corresponds to the name of the executable and root directory of the resulting package.
-            <ul>
-                <li>
-                    <em>User property</em>
-                    : winter.app.name
-                </li>
-                <li>
-                    <em>Default</em>
-                    : ${project.artifactId}
                 </li>
             </ul>
         </td>
@@ -1595,45 +1470,11 @@ Builds a container image and publishes it to a registry.
     </tr>
     <tr>
         <td>
-            <a href="#addUnnamedModules1">addUnnamedModules</a>
-        </td>
-        <td>boolean</td>
-        <td>
-            Adds the unnamed modules when running the application.
-            <ul>
-                <li>
-                    <em>User property</em>
-                    : winter.app.addUnnamedModules
-                </li>
-                <li>
-                    <em>Default</em>
-                    : true
-                </li>
-            </ul>
-        </td>
-    </tr>
-    <tr>
-        <td>
-            <a href="#arguments1">arguments</a>
-        </td>
-        <td>String</td>
-        <td>
-            The default arguments to pass to the application.
-            <ul>
-                <li>
-                    <em>User property</em>
-                    : winter.app.arguments
-                </li>
-            </ul>
-        </td>
-    </tr>
-    <tr>
-        <td>
             <a href="#automaticLaunchers1">automaticLaunchers</a>
         </td>
         <td>boolean</td>
         <td>
-            Enables the automatic generation of launchers based on the main classes extracted from the application module.
+            Enables the automatic generation of launchers based on the main classes extracted from the application module. If enabled, a launcher is generated for all main classes other than the main launcher.
             <ul>
                 <li>
                     <em>User property</em>
@@ -1799,21 +1640,6 @@ Builds a container image and publishes it to a registry.
                 <li>
                     <em>User property</em>
                     : winter.image.excludeScope
-                </li>
-            </ul>
-        </td>
-    </tr>
-    <tr>
-        <td>
-            <a href="#iconFile1">iconFile</a>
-        </td>
-        <td>File</td>
-        <td>
-            The path to the application icon file.
-            <ul>
-                <li>
-                    <em>User property</em>
-                    : winter.app.iconFile
                 </li>
             </ul>
         </td>
@@ -2030,21 +1856,6 @@ Builds a container image and publishes it to a registry.
     </tr>
     <tr>
         <td>
-            <a href="#mainClass1">mainClass</a>
-        </td>
-        <td>String</td>
-        <td>
-            The main class to use to build the image. If not specified, a main class is automatically selected.
-            <ul>
-                <li>
-                    <em>User property</em>
-                    : winter.image.mainClass
-                </li>
-            </ul>
-        </td>
-    </tr>
-    <tr>
-        <td>
             <a href="#manDirectory1">manDirectory</a>
         </td>
         <td>File</td>
@@ -2058,21 +1869,6 @@ Builds a container image and publishes it to a registry.
                 <li>
                     <em>Default</em>
                     : ${project.basedir}/src/main/man/
-                </li>
-            </ul>
-        </td>
-    </tr>
-    <tr>
-        <td>
-            <a href="#module1">module</a>
-        </td>
-        <td>String</td>
-        <td>
-            The module containing the main class of the application. If not specified, the project's module is selected.
-            <ul>
-                <li>
-                    <em>User property</em>
-                    : winter.app.module
                 </li>
             </ul>
         </td>
@@ -2104,6 +1900,21 @@ Builds a container image and publishes it to a registry.
         <td>
             The ports exposed by the container at runtime defined as: port_number [ '/' udp/tcp ]
             <ul/>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <a href="#projectMainClass1">projectMainClass</a>
+        </td>
+        <td>String</td>
+        <td>
+            The main class in the project module to use when building the project JMOD package.
+            <ul>
+                <li>
+                    <em>User property</em>
+                    : winter.runtime.projectMainClass
+                </li>
+            </ul>
         </td>
     </tr>
     <tr>
@@ -2162,6 +1973,25 @@ Builds a container image and publishes it to a registry.
                 <li>
                     <em>User property</em>
                     : winter.container.repository
+                </li>
+            </ul>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <a href="#resolveProjectMainClass1">resolveProjectMainClass</a>
+        </td>
+        <td>boolean</td>
+        <td>
+            Resolve the project main class when not specified explicitly.
+            <ul>
+                <li>
+                    <em>User property</em>
+                    : winter.runtime.projectMainClass
+                </li>
+                <li>
+                    <em>Default</em>
+                    : false
                 </li>
             </ul>
         </td>
@@ -2299,21 +2129,6 @@ Builds a container image and publishes it to a registry.
     </tr>
     <tr>
         <td>
-            <a href="#vmOptions1">vmOptions</a>
-        </td>
-        <td>String</td>
-        <td>
-            The VM options to use when executing the application.
-            <ul>
-                <li>
-                    <em>User property</em>
-                    : winter.app.vmOptions
-                </li>
-            </ul>
-        </td>
-    </tr>
-    <tr>
-        <td>
             <a href="#volumes">volumes</a>
         </td>
         <td>Set</td>
@@ -2356,25 +2171,6 @@ The options to prepend before any other options when invoking the JVM in the res
 - **User property**: winter.image.addOptions
 
 
-##### &lt;addUnnamedModules&gt;
-
-Adds the unnamed modules when running the application.
-
-- **Type**: boolean
-- **Required**: no
-- **User property**: winter.app.addUnnamedModules
-- **Default**: true
-
-
-##### &lt;arguments&gt;
-
-The default arguments to pass to the application.
-
-- **Type**: java.lang.String
-- **Required**: no
-- **User property**: winter.app.arguments
-
-
 ##### &lt;attach&gt;
 
 Attach the resulting image archives to the project to install them in the local Maven repository and deploy them to remote repositories.
@@ -2387,7 +2183,7 @@ Attach the resulting image archives to the project to install them in the local 
 
 ##### &lt;automaticLaunchers&gt;
 
-Enables the automatic generation of launchers based on the main classes extracted from the application module.
+Enables the automatic generation of launchers based on the main classes extracted from the application module. If enabled, a launcher is generated for all main classes other than the main launcher.
 
 - **Type**: boolean
 - **Required**: no
@@ -2487,6 +2283,16 @@ Scope to exclude. An Empty string indicates no scopes (default).
 - **User property**: winter.image.excludeScope
 
 
+##### &lt;executable&gt;
+
+The executable in the application image to use as image entry point. The specified name should correspond to a declared application image launchers or the project artifact id if no launcher was specified.
+
+- **Type**: java.lang.String
+- **Required**: yes
+- **User property**: winter.app.executable
+- **Default**: ${project.artifactId}
+
+
 ##### &lt;formats&gt;
 
 A list of archive formats to generate (eg. zip, tar.gz...)
@@ -2504,15 +2310,6 @@ The base container image.
 - **Required**: yes
 - **User property**: winter.container.from
 - **Default**: debian:buster-slim
-
-
-##### &lt;iconFile&gt;
-
-The path to the application icon file.
-
-- **Type**: java.io.File
-- **Required**: no
-- **User property**: winter.app.iconFile
 
 
 ##### &lt;ignoreSigningInformation&gt;
@@ -2648,15 +2445,6 @@ MacOS specific configuration.
 - **Required**: no
 
 
-##### &lt;mainClass&gt;
-
-The main class to use to build the image. If not specified, a main class is automatically selected.
-
-- **Type**: java.lang.String
-- **Required**: no
-- **User property**: winter.image.mainClass
-
-
 ##### &lt;manDirectory&gt;
 
 A directory containing man pages that will be copied to the resulting image.
@@ -2665,25 +2453,6 @@ A directory containing man pages that will be copied to the resulting image.
 - **Required**: no
 - **User property**: winter.image.manDirectory
 - **Default**: ${project.basedir}/src/main/man/
-
-
-##### &lt;module&gt;
-
-The module containing the main class of the application. If not specified, the project's module is selected.
-
-- **Type**: java.lang.String
-- **Required**: no
-- **User property**: winter.app.module
-
-
-##### &lt;name&gt;
-
-The application name which corresponds to the name of the executable and root directory of the resulting package.
-
-- **Type**: java.lang.String
-- **Required**: yes
-- **User property**: winter.app.name
-- **Default**: ${project.artifactId}
 
 
 ##### &lt;overWriteIfNewer&gt;
@@ -2702,6 +2471,15 @@ The ports exposed by the container at runtime defined as: port_number [ '/' udp/
 
 - **Type**: java.util.Set
 - **Required**: no
+
+
+##### &lt;projectMainClass&gt;
+
+The main class in the project module to use when building the project JMOD package.
+
+- **Type**: java.lang.String
+- **Required**: no
+- **User property**: winter.runtime.projectMainClass
 
 
 ##### &lt;registry&gt;
@@ -2738,6 +2516,16 @@ The repository part of the target image reference defined as: ${registry}/${repo
 - **Type**: java.lang.String
 - **Required**: no
 - **User property**: winter.container.repository
+
+
+##### &lt;resolveProjectMainClass&gt;
+
+Resolve the project main class when not specified explicitly.
+
+- **Type**: boolean
+- **Required**: no
+- **User property**: winter.runtime.projectMainClass
+- **Default**: false
 
 
 ##### &lt;resourceDirectory&gt;
@@ -2815,15 +2603,6 @@ Select the HotSpot VM in the output image defined as: 'client' / 'server' / 'min
 - **User property**: winter.image.vm
 
 
-##### &lt;vmOptions&gt;
-
-The VM options to use when executing the application.
-
-- **Type**: java.lang.String
-- **Required**: no
-- **User property**: winter.app.vmOptions
-
-
 ##### &lt;volumes&gt;
 
 The container's mount points.
@@ -2889,6 +2668,25 @@ Builds a Docker container image to a local Docker daemon.
     </tr>
     <tr>
         <td>
+            <a href="#executable1">executable</a>
+        </td>
+        <td>String</td>
+        <td>
+            The executable in the application image to use as image entry point. The specified name should correspond to a declared application image launchers or the project artifact id if no launcher was specified.
+            <ul>
+                <li>
+                    <em>User property</em>
+                    : winter.app.executable
+                </li>
+                <li>
+                    <em>Default</em>
+                    : ${project.artifactId}
+                </li>
+            </ul>
+        </td>
+    </tr>
+    <tr>
+        <td>
             <a href="#formats2">formats</a>
         </td>
         <td>Set</td>
@@ -2917,25 +2715,6 @@ Builds a Docker container image to a local Docker daemon.
                 <li>
                     <em>Default</em>
                     : debian:buster-slim
-                </li>
-            </ul>
-        </td>
-    </tr>
-    <tr>
-        <td>
-            <a href="#name2">name</a>
-        </td>
-        <td>String</td>
-        <td>
-            The application name which corresponds to the name of the executable and root directory of the resulting package.
-            <ul>
-                <li>
-                    <em>User property</em>
-                    : winter.app.name
-                </li>
-                <li>
-                    <em>Default</em>
-                    : ${project.artifactId}
                 </li>
             </ul>
         </td>
@@ -2982,45 +2761,11 @@ Builds a Docker container image to a local Docker daemon.
     </tr>
     <tr>
         <td>
-            <a href="#addUnnamedModules2">addUnnamedModules</a>
-        </td>
-        <td>boolean</td>
-        <td>
-            Adds the unnamed modules when running the application.
-            <ul>
-                <li>
-                    <em>User property</em>
-                    : winter.app.addUnnamedModules
-                </li>
-                <li>
-                    <em>Default</em>
-                    : true
-                </li>
-            </ul>
-        </td>
-    </tr>
-    <tr>
-        <td>
-            <a href="#arguments2">arguments</a>
-        </td>
-        <td>String</td>
-        <td>
-            The default arguments to pass to the application.
-            <ul>
-                <li>
-                    <em>User property</em>
-                    : winter.app.arguments
-                </li>
-            </ul>
-        </td>
-    </tr>
-    <tr>
-        <td>
             <a href="#automaticLaunchers2">automaticLaunchers</a>
         </td>
         <td>boolean</td>
         <td>
-            Enables the automatic generation of launchers based on the main classes extracted from the application module.
+            Enables the automatic generation of launchers based on the main classes extracted from the application module. If enabled, a launcher is generated for all main classes other than the main launcher.
             <ul>
                 <li>
                     <em>User property</em>
@@ -3211,21 +2956,6 @@ Builds a Docker container image to a local Docker daemon.
                 <li>
                     <em>User property</em>
                     : winter.image.excludeScope
-                </li>
-            </ul>
-        </td>
-    </tr>
-    <tr>
-        <td>
-            <a href="#iconFile2">iconFile</a>
-        </td>
-        <td>File</td>
-        <td>
-            The path to the application icon file.
-            <ul>
-                <li>
-                    <em>User property</em>
-                    : winter.app.iconFile
                 </li>
             </ul>
         </td>
@@ -3442,21 +3172,6 @@ Builds a Docker container image to a local Docker daemon.
     </tr>
     <tr>
         <td>
-            <a href="#mainClass2">mainClass</a>
-        </td>
-        <td>String</td>
-        <td>
-            The main class to use to build the image. If not specified, a main class is automatically selected.
-            <ul>
-                <li>
-                    <em>User property</em>
-                    : winter.image.mainClass
-                </li>
-            </ul>
-        </td>
-    </tr>
-    <tr>
-        <td>
             <a href="#manDirectory2">manDirectory</a>
         </td>
         <td>File</td>
@@ -3470,21 +3185,6 @@ Builds a Docker container image to a local Docker daemon.
                 <li>
                     <em>Default</em>
                     : ${project.basedir}/src/main/man/
-                </li>
-            </ul>
-        </td>
-    </tr>
-    <tr>
-        <td>
-            <a href="#module2">module</a>
-        </td>
-        <td>String</td>
-        <td>
-            The module containing the main class of the application. If not specified, the project's module is selected.
-            <ul>
-                <li>
-                    <em>User property</em>
-                    : winter.app.module
                 </li>
             </ul>
         </td>
@@ -3520,6 +3220,21 @@ Builds a Docker container image to a local Docker daemon.
     </tr>
     <tr>
         <td>
+            <a href="#projectMainClass2">projectMainClass</a>
+        </td>
+        <td>String</td>
+        <td>
+            The main class in the project module to use when building the project JMOD package.
+            <ul>
+                <li>
+                    <em>User property</em>
+                    : winter.runtime.projectMainClass
+                </li>
+            </ul>
+        </td>
+    </tr>
+    <tr>
+        <td>
             <a href="#registry1">registry</a>
         </td>
         <td>String</td>
@@ -3544,6 +3259,25 @@ Builds a Docker container image to a local Docker daemon.
                 <li>
                     <em>User property</em>
                     : winter.container.repository
+                </li>
+            </ul>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <a href="#resolveProjectMainClass2">resolveProjectMainClass</a>
+        </td>
+        <td>boolean</td>
+        <td>
+            Resolve the project main class when not specified explicitly.
+            <ul>
+                <li>
+                    <em>User property</em>
+                    : winter.runtime.projectMainClass
+                </li>
+                <li>
+                    <em>Default</em>
+                    : false
                 </li>
             </ul>
         </td>
@@ -3681,21 +3415,6 @@ Builds a Docker container image to a local Docker daemon.
     </tr>
     <tr>
         <td>
-            <a href="#vmOptions2">vmOptions</a>
-        </td>
-        <td>String</td>
-        <td>
-            The VM options to use when executing the application.
-            <ul>
-                <li>
-                    <em>User property</em>
-                    : winter.app.vmOptions
-                </li>
-            </ul>
-        </td>
-    </tr>
-    <tr>
-        <td>
             <a href="#volumes1">volumes</a>
         </td>
         <td>Set</td>
@@ -3738,25 +3457,6 @@ The options to prepend before any other options when invoking the JVM in the res
 - **User property**: winter.image.addOptions
 
 
-##### &lt;addUnnamedModules&gt;
-
-Adds the unnamed modules when running the application.
-
-- **Type**: boolean
-- **Required**: no
-- **User property**: winter.app.addUnnamedModules
-- **Default**: true
-
-
-##### &lt;arguments&gt;
-
-The default arguments to pass to the application.
-
-- **Type**: java.lang.String
-- **Required**: no
-- **User property**: winter.app.arguments
-
-
 ##### &lt;attach&gt;
 
 Attach the resulting image archives to the project to install them in the local Maven repository and deploy them to remote repositories.
@@ -3769,7 +3469,7 @@ Attach the resulting image archives to the project to install them in the local 
 
 ##### &lt;automaticLaunchers&gt;
 
-Enables the automatic generation of launchers based on the main classes extracted from the application module.
+Enables the automatic generation of launchers based on the main classes extracted from the application module. If enabled, a launcher is generated for all main classes other than the main launcher.
 
 - **Type**: boolean
 - **Required**: no
@@ -3886,6 +3586,16 @@ Scope to exclude. An Empty string indicates no scopes (default).
 - **User property**: winter.image.excludeScope
 
 
+##### &lt;executable&gt;
+
+The executable in the application image to use as image entry point. The specified name should correspond to a declared application image launchers or the project artifact id if no launcher was specified.
+
+- **Type**: java.lang.String
+- **Required**: yes
+- **User property**: winter.app.executable
+- **Default**: ${project.artifactId}
+
+
 ##### &lt;formats&gt;
 
 A list of archive formats to generate (eg. zip, tar.gz...)
@@ -3903,15 +3613,6 @@ The base container image.
 - **Required**: yes
 - **User property**: winter.container.from
 - **Default**: debian:buster-slim
-
-
-##### &lt;iconFile&gt;
-
-The path to the application icon file.
-
-- **Type**: java.io.File
-- **Required**: no
-- **User property**: winter.app.iconFile
 
 
 ##### &lt;ignoreSigningInformation&gt;
@@ -4047,15 +3748,6 @@ MacOS specific configuration.
 - **Required**: no
 
 
-##### &lt;mainClass&gt;
-
-The main class to use to build the image. If not specified, a main class is automatically selected.
-
-- **Type**: java.lang.String
-- **Required**: no
-- **User property**: winter.image.mainClass
-
-
 ##### &lt;manDirectory&gt;
 
 A directory containing man pages that will be copied to the resulting image.
@@ -4064,25 +3756,6 @@ A directory containing man pages that will be copied to the resulting image.
 - **Required**: no
 - **User property**: winter.image.manDirectory
 - **Default**: ${project.basedir}/src/main/man/
-
-
-##### &lt;module&gt;
-
-The module containing the main class of the application. If not specified, the project's module is selected.
-
-- **Type**: java.lang.String
-- **Required**: no
-- **User property**: winter.app.module
-
-
-##### &lt;name&gt;
-
-The application name which corresponds to the name of the executable and root directory of the resulting package.
-
-- **Type**: java.lang.String
-- **Required**: yes
-- **User property**: winter.app.name
-- **Default**: ${project.artifactId}
 
 
 ##### &lt;overWriteIfNewer&gt;
@@ -4103,6 +3776,15 @@ The ports exposed by the container at runtime defined as: port_number [ '/' udp/
 - **Required**: no
 
 
+##### &lt;projectMainClass&gt;
+
+The main class in the project module to use when building the project JMOD package.
+
+- **Type**: java.lang.String
+- **Required**: no
+- **User property**: winter.runtime.projectMainClass
+
+
 ##### &lt;registry&gt;
 
 The registry part of the target image reference defined as: ${registry}/${repository}/${name}:${project.version}
@@ -4119,6 +3801,16 @@ The repository part of the target image reference defined as: ${registry}/${repo
 - **Type**: java.lang.String
 - **Required**: no
 - **User property**: winter.container.repository
+
+
+##### &lt;resolveProjectMainClass&gt;
+
+Resolve the project main class when not specified explicitly.
+
+- **Type**: boolean
+- **Required**: no
+- **User property**: winter.runtime.projectMainClass
+- **Default**: false
 
 
 ##### &lt;resourceDirectory&gt;
@@ -4196,15 +3888,6 @@ Select the HotSpot VM in the output image defined as: 'client' / 'server' / 'min
 - **User property**: winter.image.vm
 
 
-##### &lt;vmOptions&gt;
-
-The VM options to use when executing the application.
-
-- **Type**: java.lang.String
-- **Required**: no
-- **User property**: winter.app.vmOptions
-
-
 ##### &lt;volumes&gt;
 
 The container's mount points.
@@ -4272,6 +3955,25 @@ $ docker load --input target/&lt;image&gt;.tar
     </tr>
     <tr>
         <td>
+            <a href="#executable2">executable</a>
+        </td>
+        <td>String</td>
+        <td>
+            The executable in the application image to use as image entry point. The specified name should correspond to a declared application image launchers or the project artifact id if no launcher was specified.
+            <ul>
+                <li>
+                    <em>User property</em>
+                    : winter.app.executable
+                </li>
+                <li>
+                    <em>Default</em>
+                    : ${project.artifactId}
+                </li>
+            </ul>
+        </td>
+    </tr>
+    <tr>
+        <td>
             <a href="#formats3">formats</a>
         </td>
         <td>Set</td>
@@ -4300,25 +4002,6 @@ $ docker load --input target/&lt;image&gt;.tar
                 <li>
                     <em>Default</em>
                     : debian:buster-slim
-                </li>
-            </ul>
-        </td>
-    </tr>
-    <tr>
-        <td>
-            <a href="#name3">name</a>
-        </td>
-        <td>String</td>
-        <td>
-            The application name which corresponds to the name of the executable and root directory of the resulting package.
-            <ul>
-                <li>
-                    <em>User property</em>
-                    : winter.app.name
-                </li>
-                <li>
-                    <em>Default</em>
-                    : ${project.artifactId}
                 </li>
             </ul>
         </td>
@@ -4365,45 +4048,11 @@ $ docker load --input target/&lt;image&gt;.tar
     </tr>
     <tr>
         <td>
-            <a href="#addUnnamedModules3">addUnnamedModules</a>
-        </td>
-        <td>boolean</td>
-        <td>
-            Adds the unnamed modules when running the application.
-            <ul>
-                <li>
-                    <em>User property</em>
-                    : winter.app.addUnnamedModules
-                </li>
-                <li>
-                    <em>Default</em>
-                    : true
-                </li>
-            </ul>
-        </td>
-    </tr>
-    <tr>
-        <td>
-            <a href="#arguments3">arguments</a>
-        </td>
-        <td>String</td>
-        <td>
-            The default arguments to pass to the application.
-            <ul>
-                <li>
-                    <em>User property</em>
-                    : winter.app.arguments
-                </li>
-            </ul>
-        </td>
-    </tr>
-    <tr>
-        <td>
             <a href="#automaticLaunchers3">automaticLaunchers</a>
         </td>
         <td>boolean</td>
         <td>
-            Enables the automatic generation of launchers based on the main classes extracted from the application module.
+            Enables the automatic generation of launchers based on the main classes extracted from the application module. If enabled, a launcher is generated for all main classes other than the main launcher.
             <ul>
                 <li>
                     <em>User property</em>
@@ -4569,21 +4218,6 @@ $ docker load --input target/&lt;image&gt;.tar
                 <li>
                     <em>User property</em>
                     : winter.image.excludeScope
-                </li>
-            </ul>
-        </td>
-    </tr>
-    <tr>
-        <td>
-            <a href="#iconFile3">iconFile</a>
-        </td>
-        <td>File</td>
-        <td>
-            The path to the application icon file.
-            <ul>
-                <li>
-                    <em>User property</em>
-                    : winter.app.iconFile
                 </li>
             </ul>
         </td>
@@ -4800,21 +4434,6 @@ $ docker load --input target/&lt;image&gt;.tar
     </tr>
     <tr>
         <td>
-            <a href="#mainClass3">mainClass</a>
-        </td>
-        <td>String</td>
-        <td>
-            The main class to use to build the image. If not specified, a main class is automatically selected.
-            <ul>
-                <li>
-                    <em>User property</em>
-                    : winter.image.mainClass
-                </li>
-            </ul>
-        </td>
-    </tr>
-    <tr>
-        <td>
             <a href="#manDirectory3">manDirectory</a>
         </td>
         <td>File</td>
@@ -4828,21 +4447,6 @@ $ docker load --input target/&lt;image&gt;.tar
                 <li>
                     <em>Default</em>
                     : ${project.basedir}/src/main/man/
-                </li>
-            </ul>
-        </td>
-    </tr>
-    <tr>
-        <td>
-            <a href="#module3">module</a>
-        </td>
-        <td>String</td>
-        <td>
-            The module containing the main class of the application. If not specified, the project's module is selected.
-            <ul>
-                <li>
-                    <em>User property</em>
-                    : winter.app.module
                 </li>
             </ul>
         </td>
@@ -4878,6 +4482,21 @@ $ docker load --input target/&lt;image&gt;.tar
     </tr>
     <tr>
         <td>
+            <a href="#projectMainClass3">projectMainClass</a>
+        </td>
+        <td>String</td>
+        <td>
+            The main class in the project module to use when building the project JMOD package.
+            <ul>
+                <li>
+                    <em>User property</em>
+                    : winter.runtime.projectMainClass
+                </li>
+            </ul>
+        </td>
+    </tr>
+    <tr>
+        <td>
             <a href="#registry2">registry</a>
         </td>
         <td>String</td>
@@ -4902,6 +4521,25 @@ $ docker load --input target/&lt;image&gt;.tar
                 <li>
                     <em>User property</em>
                     : winter.container.repository
+                </li>
+            </ul>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <a href="#resolveProjectMainClass3">resolveProjectMainClass</a>
+        </td>
+        <td>boolean</td>
+        <td>
+            Resolve the project main class when not specified explicitly.
+            <ul>
+                <li>
+                    <em>User property</em>
+                    : winter.runtime.projectMainClass
+                </li>
+                <li>
+                    <em>Default</em>
+                    : false
                 </li>
             </ul>
         </td>
@@ -5039,21 +4677,6 @@ $ docker load --input target/&lt;image&gt;.tar
     </tr>
     <tr>
         <td>
-            <a href="#vmOptions3">vmOptions</a>
-        </td>
-        <td>String</td>
-        <td>
-            The VM options to use when executing the application.
-            <ul>
-                <li>
-                    <em>User property</em>
-                    : winter.app.vmOptions
-                </li>
-            </ul>
-        </td>
-    </tr>
-    <tr>
-        <td>
             <a href="#volumes2">volumes</a>
         </td>
         <td>Set</td>
@@ -5096,25 +4719,6 @@ The options to prepend before any other options when invoking the JVM in the res
 - **User property**: winter.image.addOptions
 
 
-##### &lt;addUnnamedModules&gt;
-
-Adds the unnamed modules when running the application.
-
-- **Type**: boolean
-- **Required**: no
-- **User property**: winter.app.addUnnamedModules
-- **Default**: true
-
-
-##### &lt;arguments&gt;
-
-The default arguments to pass to the application.
-
-- **Type**: java.lang.String
-- **Required**: no
-- **User property**: winter.app.arguments
-
-
 ##### &lt;attach&gt;
 
 Attach the resulting image archives to the project to install them in the local Maven repository and deploy them to remote repositories.
@@ -5127,7 +4731,7 @@ Attach the resulting image archives to the project to install them in the local 
 
 ##### &lt;automaticLaunchers&gt;
 
-Enables the automatic generation of launchers based on the main classes extracted from the application module.
+Enables the automatic generation of launchers based on the main classes extracted from the application module. If enabled, a launcher is generated for all main classes other than the main launcher.
 
 - **Type**: boolean
 - **Required**: no
@@ -5227,6 +4831,16 @@ Scope to exclude. An Empty string indicates no scopes (default).
 - **User property**: winter.image.excludeScope
 
 
+##### &lt;executable&gt;
+
+The executable in the application image to use as image entry point. The specified name should correspond to a declared application image launchers or the project artifact id if no launcher was specified.
+
+- **Type**: java.lang.String
+- **Required**: yes
+- **User property**: winter.app.executable
+- **Default**: ${project.artifactId}
+
+
 ##### &lt;formats&gt;
 
 A list of archive formats to generate (eg. zip, tar.gz...)
@@ -5244,15 +4858,6 @@ The base container image.
 - **Required**: yes
 - **User property**: winter.container.from
 - **Default**: debian:buster-slim
-
-
-##### &lt;iconFile&gt;
-
-The path to the application icon file.
-
-- **Type**: java.io.File
-- **Required**: no
-- **User property**: winter.app.iconFile
 
 
 ##### &lt;ignoreSigningInformation&gt;
@@ -5388,15 +4993,6 @@ MacOS specific configuration.
 - **Required**: no
 
 
-##### &lt;mainClass&gt;
-
-The main class to use to build the image. If not specified, a main class is automatically selected.
-
-- **Type**: java.lang.String
-- **Required**: no
-- **User property**: winter.image.mainClass
-
-
 ##### &lt;manDirectory&gt;
 
 A directory containing man pages that will be copied to the resulting image.
@@ -5405,25 +5001,6 @@ A directory containing man pages that will be copied to the resulting image.
 - **Required**: no
 - **User property**: winter.image.manDirectory
 - **Default**: ${project.basedir}/src/main/man/
-
-
-##### &lt;module&gt;
-
-The module containing the main class of the application. If not specified, the project's module is selected.
-
-- **Type**: java.lang.String
-- **Required**: no
-- **User property**: winter.app.module
-
-
-##### &lt;name&gt;
-
-The application name which corresponds to the name of the executable and root directory of the resulting package.
-
-- **Type**: java.lang.String
-- **Required**: yes
-- **User property**: winter.app.name
-- **Default**: ${project.artifactId}
 
 
 ##### &lt;overWriteIfNewer&gt;
@@ -5444,6 +5021,15 @@ The ports exposed by the container at runtime defined as: port_number [ '/' udp/
 - **Required**: no
 
 
+##### &lt;projectMainClass&gt;
+
+The main class in the project module to use when building the project JMOD package.
+
+- **Type**: java.lang.String
+- **Required**: no
+- **User property**: winter.runtime.projectMainClass
+
+
 ##### &lt;registry&gt;
 
 The registry part of the target image reference defined as: ${registry}/${repository}/${name}:${project.version}
@@ -5460,6 +5046,16 @@ The repository part of the target image reference defined as: ${registry}/${repo
 - **Type**: java.lang.String
 - **Required**: no
 - **User property**: winter.container.repository
+
+
+##### &lt;resolveProjectMainClass&gt;
+
+Resolve the project main class when not specified explicitly.
+
+- **Type**: boolean
+- **Required**: no
+- **User property**: winter.runtime.projectMainClass
+- **Default**: false
 
 
 ##### &lt;resourceDirectory&gt;
@@ -5535,15 +5131,6 @@ Select the HotSpot VM in the output image defined as: 'client' / 'server' / 'min
 - **Type**: java.lang.String
 - **Required**: no
 - **User property**: winter.image.vm
-
-
-##### &lt;vmOptions&gt;
-
-The VM options to use when executing the application.
-
-- **Type**: java.lang.String
-- **Required**: no
-- **User property**: winter.app.vmOptions
 
 
 ##### &lt;volumes&gt;
@@ -5908,21 +5495,6 @@ A runtime image is a custom Java runtime containing a set of modules and their d
     </tr>
     <tr>
         <td>
-            <a href="#mainClass4">mainClass</a>
-        </td>
-        <td>String</td>
-        <td>
-            The main class to use to build the image. If not specified, a main class is automatically selected.
-            <ul>
-                <li>
-                    <em>User property</em>
-                    : winter.image.mainClass
-                </li>
-            </ul>
-        </td>
-    </tr>
-    <tr>
-        <td>
             <a href="#manDirectory4">manDirectory</a>
         </td>
         <td>File</td>
@@ -5955,6 +5527,40 @@ A runtime image is a custom Java runtime containing a set of modules and their d
                 <li>
                     <em>Default</em>
                     : true
+                </li>
+            </ul>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <a href="#projectMainClass4">projectMainClass</a>
+        </td>
+        <td>String</td>
+        <td>
+            The main class in the project module to use when building the project JMOD package.
+            <ul>
+                <li>
+                    <em>User property</em>
+                    : winter.runtime.projectMainClass
+                </li>
+            </ul>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <a href="#resolveProjectMainClass4">resolveProjectMainClass</a>
+        </td>
+        <td>boolean</td>
+        <td>
+            Resolve the project main class when not specified explicitly.
+            <ul>
+                <li>
+                    <em>User property</em>
+                    : winter.runtime.projectMainClass
+                </li>
+                <li>
+                    <em>Default</em>
+                    : false
                 </li>
             </ul>
         </td>
@@ -6234,15 +5840,6 @@ A directory containing legal notices that will be copied to the resulting image.
 - **Default**: ${project.basedir}/src/main/legal/
 
 
-##### &lt;mainClass&gt;
-
-The main class to use to build the image. If not specified, a main class is automatically selected.
-
-- **Type**: java.lang.String
-- **Required**: no
-- **User property**: winter.image.mainClass
-
-
 ##### &lt;manDirectory&gt;
 
 A directory containing man pages that will be copied to the resulting image.
@@ -6261,6 +5858,25 @@ Overwrite dependencies that don't exist or are older than the source.
 - **Required**: no
 - **User property**: winter.image.overWriteIfNewer
 - **Default**: true
+
+
+##### &lt;projectMainClass&gt;
+
+The main class in the project module to use when building the project JMOD package.
+
+- **Type**: java.lang.String
+- **Required**: no
+- **User property**: winter.runtime.projectMainClass
+
+
+##### &lt;resolveProjectMainClass&gt;
+
+Resolve the project main class when not specified explicitly.
+
+- **Type**: boolean
+- **Required**: no
+- **User property**: winter.runtime.projectMainClass
+- **Default**: false
 
 
 ##### &lt;skip&gt;
@@ -6481,7 +6097,7 @@ Runs the project application.
     </tr>
     <tr>
         <td>
-            <a href="#addUnnamedModules4">addUnnamedModules</a>
+            <a href="#addUnnamedModules">addUnnamedModules</a>
         </td>
         <td>boolean</td>
         <td>
@@ -6500,7 +6116,7 @@ Runs the project application.
     </tr>
     <tr>
         <td>
-            <a href="#arguments4">arguments</a>
+            <a href="#arguments">arguments</a>
         </td>
         <td>String</td>
         <td>
@@ -6563,7 +6179,7 @@ Runs the project application.
     </tr>
     <tr>
         <td>
-            <a href="#mainClass5">mainClass</a>
+            <a href="#mainClass">mainClass</a>
         </td>
         <td>String</td>
         <td>
@@ -6631,7 +6247,7 @@ Runs the project application.
     </tr>
     <tr>
         <td>
-            <a href="#vmOptions4">vmOptions</a>
+            <a href="#vmOptions">vmOptions</a>
         </td>
         <td>String</td>
         <td>
@@ -6805,7 +6421,7 @@ This goal is used together with the stop goal in the pre-integration-test and po
     </tr>
     <tr>
         <td>
-            <a href="#addUnnamedModules5">addUnnamedModules</a>
+            <a href="#addUnnamedModules1">addUnnamedModules</a>
         </td>
         <td>boolean</td>
         <td>
@@ -6824,7 +6440,7 @@ This goal is used together with the stop goal in the pre-integration-test and po
     </tr>
     <tr>
         <td>
-            <a href="#arguments5">arguments</a>
+            <a href="#arguments1">arguments</a>
         </td>
         <td>String</td>
         <td>
@@ -6872,7 +6488,7 @@ This goal is used together with the stop goal in the pre-integration-test and po
     </tr>
     <tr>
         <td>
-            <a href="#mainClass6">mainClass</a>
+            <a href="#mainClass1">mainClass</a>
         </td>
         <td>String</td>
         <td>
@@ -6959,7 +6575,7 @@ This goal is used together with the stop goal in the pre-integration-test and po
     </tr>
     <tr>
         <td>
-            <a href="#vmOptions5">vmOptions</a>
+            <a href="#vmOptions1">vmOptions</a>
         </td>
         <td>String</td>
         <td>

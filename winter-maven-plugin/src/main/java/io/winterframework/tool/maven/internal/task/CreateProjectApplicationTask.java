@@ -62,27 +62,15 @@ public class CreateProjectApplicationTask extends Task<Void> {
 	private final ProjectModule projectModule;
 	private final Path launchersPath;
 	
-	private String name;
-	
 	private Optional<String> copyright = Optional.empty();
 	
 	private Optional<String> description = Optional.empty();
 	
 	private Optional<String> vendor = Optional.empty();
 	
-	private Optional<Path> iconPath = Optional.empty();
-	
 	private Optional<Path> licensePath = Optional.empty();
 	
 	private Optional<Path> resourcePath = Optional.empty();
-	
-	private Optional<String> arguments = Optional.empty();
-	
-	private Optional<String> vmOptions = Optional.empty();
-	
-	private Optional<String> module = Optional.empty();
-	
-	private Optional<String> mainClass = Optional.empty();
 	
 	private Optional<String> installDirectory = Optional.empty();
 	
@@ -95,8 +83,6 @@ public class CreateProjectApplicationTask extends Task<Void> {
 	private boolean automaticLaunchers;
 	
 	private List<Launcher> launchers;
-	
-	private boolean addUnnamedModules;
 
 	public CreateProjectApplicationTask(AbstractMojo mojo, ToolProvider jpackage, ProjectModule projectModule, Path launchersPath) {
 		super(mojo);
@@ -148,12 +134,73 @@ public class CreateProjectApplicationTask extends Task<Void> {
 			jpackage_args.add("--dest");
 			jpackage_args.add(packagePath.getParent().toString());
 			
+			final Launcher mainLauncher;
+			if(this.launchers != null && !this.launchers.isEmpty()) {
+				mainLauncher = this.launchers.remove(0);
+			}
+			else {
+				mainLauncher = new Launcher();
+				mainLauncher.setName(this.projectModule.getArtifact().getArtifactId());
+			}
+			
+			mainLauncher.setModule(mainLauncher.getModule().orElse(this.projectModule.getModuleName()));
+			mainLauncher.setMainClass(mainLauncher.getMainClass().or(() -> {
+					if(mainLauncher.getModule().get().equals(this.projectModule.getModuleName())) {
+						try {
+							return this.projectModule.getDefaultMainClass().map(defaultMainClass -> {
+								if(this.verbose) {
+									this.getLog().info(" - no main class specified for main launcher " + mainLauncher.getName() + ", defaulting to " + defaultMainClass);
+								}
+								return defaultMainClass;
+							});
+						} 
+						catch (ClassNotFoundException | IOException e) {
+							if(this.verbose) {
+								this.getLog().warn("Could not find project main class", e);
+							}
+						}
+					}
+					return Optional.empty();
+				}).orElseThrow(() -> new TaskExecutionException("Main launcher class is missing"))
+			);
+			
+			jpackage_args.add("--name");
+			jpackage_args.add(mainLauncher.getName());
+			
 			jpackage_args.add("--app-version");
 			jpackage_args.add(this.projectModule.getModuleVersion());
 			
-			jpackage_args.add("--name");
-			jpackage_args.add(this.name);
+			mainLauncher.getIconPath().ifPresent(value -> {
+				if(Files.exists(value)) {
+					jpackage_args.add("--icon");
+					jpackage_args.add(value.toString());
+				}
+				else if(this.verbose) {
+					this.getLog().warn(" - ignoring icon " + value.toString() + " which does not exist");
+				}
+			});
+			
+			jpackage_args.add("--module");
 
+			jpackage_args.add(mainLauncher.getModule().get() + "/" + mainLauncher.getMainClass().get());
+			
+			Optional<String> addUnnamedVmOption = mainLauncher.isAddUnnamedModules() ? Optional.ofNullable(this.projectModule.getModuleDependencies().stream()
+					.filter(dependency -> !dependency.isNamed())
+					.map(DependencyModule::getModuleName).collect(Collectors.joining(","))
+				)
+				.filter(StringUtils::isNotEmpty)
+				.map(unnamedModules -> "--add-modules " + unnamedModules) : Optional.empty();
+			
+			if(addUnnamedVmOption.isPresent() || mainLauncher.getVmOptions().isPresent()) {
+				jpackage_args.add("--java-options");
+				jpackage_args.add(Stream.concat(addUnnamedVmOption.stream(), mainLauncher.getVmOptions().stream()).collect(Collectors.joining(" ")));
+			}
+			
+			mainLauncher.getArguments().map(this::sanitizeArguments).ifPresent(value -> {
+				jpackage_args.add("--arguments");
+				jpackage_args.add(value);
+			});
+			
 			this.copyright.ifPresent(value -> {
 				jpackage_args.add("--copyright");
 				jpackage_args.add(value);
@@ -165,15 +212,6 @@ public class CreateProjectApplicationTask extends Task<Void> {
 			this.vendor.ifPresent(value -> {
 				jpackage_args.add("--vendor");
 				jpackage_args.add(value);
-			});
-			this.iconPath.ifPresent(value -> {
-				if(Files.exists(value)) {
-					jpackage_args.add("--icon");
-					jpackage_args.add(value.toString());
-				}
-				else if(this.verbose) {
-					this.getLog().warn(" - ignoring icon " + value.toString() + " which does not exist");
-				}
 			});
 			this.licensePath.ifPresent(value -> {
 				if(Files.exists(value)) {
@@ -198,73 +236,33 @@ public class CreateProjectApplicationTask extends Task<Void> {
 				jpackage_args.add(value);
 			});
 			
-			jpackage_args.add("--module");
-
-			final String moduleName = this.module.orElse(this.projectModule.getModuleName());
-			final String moduleMainClass = this.mainClass.or(() -> {
-				if(moduleName.equals(this.projectModule.getModuleName())) {
-					try {
-						return this.projectModule.getDefaultMainClass().map(defaultMainClass -> {
-							if(this.verbose) {
-								this.getLog().info(" - no main class specified, defaulting to " + defaultMainClass);
-							}
-							return defaultMainClass;
-						});
-					} 
-					catch (ClassNotFoundException | IOException e) {
-						if(this.verbose) {
-							this.getLog().warn("Could not find project main class", e);
-						}
-					}
-				}
-				return Optional.empty();
-			}).orElseThrow(() -> new TaskExecutionException("Main project class is missing"));
-			
-			jpackage_args.add(moduleName + "/" + moduleMainClass);
-			
-			this.arguments.map(this::sanitizeArguments).ifPresent(value -> {
-				jpackage_args.add("--arguments");
-				jpackage_args.add(value);
-			});
-			
-			Optional<String> addUnnamedVmOption = this.addUnnamedModules ? Optional.ofNullable(this.projectModule.getModuleDependencies().stream()
-					.filter(dependency -> !dependency.isNamed())
-					.map(DependencyModule::getModuleName).collect(Collectors.joining(","))
-				)
-				.filter(StringUtils::isNotEmpty)
-				.map(unnamedModules -> "--add-modules " + unnamedModules) : Optional.empty();
-			
-			if(addUnnamedVmOption.isPresent() || this.vmOptions.isPresent()) {
-				jpackage_args.add("--java-options");
-				jpackage_args.add(Stream.concat(addUnnamedVmOption.stream(), this.vmOptions.stream()).collect(Collectors.joining(" ")));
-			}
-			
 			if(this.launchers != null && !this.launchers.isEmpty()) {
 				try {
 					Files.createDirectories(this.launchersPath);
 					for(Launcher launcher : this.launchers) {
 						Properties launcherProperties = new Properties();
 						
-						final String launcherModuleName = launcher.getModule().orElse(this.projectModule.getModuleName());
-						final String launcherModuleMainClass = launcher.getMainClass().or(() -> {
-							if(moduleName.equals(this.projectModule.getModuleName())) {
-								try {
-									return this.projectModule.getDefaultMainClass().map(defaultMainClass -> {
+						launcher.setModule(launcher.getModule().orElse(this.projectModule.getModuleName()));
+						launcher.setMainClass(launcher.getMainClass().or(() -> {
+								if(launcher.getModule().get().equals(this.projectModule.getModuleName())) {
+									try {
+										return this.projectModule.getDefaultMainClass().map(defaultMainClass -> {
+											if(this.verbose) {
+												this.getLog().info(" - no main class specified for launcher " + launcher.getName() + ", defaulting to " + defaultMainClass);
+											}
+											return defaultMainClass;
+										});
+									} 
+									catch (ClassNotFoundException | IOException e) {
 										if(this.verbose) {
-											this.getLog().info(" - no main class specified for launcher " + launcher.getName() + ", defaulting to " + defaultMainClass);
+											this.getLog().warn("Could not find project main class", e);
 										}
-										return defaultMainClass;
-									});
-								} 
-								catch (ClassNotFoundException | IOException e) {
-									if(this.verbose) {
-										this.getLog().warn("Could not find project main class", e);
 									}
 								}
-							}
-							return Optional.empty();
-						}).orElseThrow(() -> new TaskExecutionException("Main launcher class is missing: " + launcher.getName()));
-						launcherProperties.put("module", launcherModuleName + "/" + launcherModuleMainClass);
+								return Optional.empty();
+							}).orElseThrow(() -> new TaskExecutionException("Main launcher class is missing: " + launcher.getName()))
+						);
+						launcherProperties.put("module", launcher.getModule().get() + "/" + launcher.getMainClass().get());
 						
 						launcher.getArguments().map(this::sanitizeArguments).ifPresent(value -> {
 							launcherProperties.put("arguments", value);
@@ -300,10 +298,9 @@ public class CreateProjectApplicationTask extends Task<Void> {
 			if(this.automaticLaunchers) {
 				try {
 					Files.createDirectories(this.launchersPath);
-					
-					// Add launchers for module main classes that haven't been added yet 
+					// Add launchers for project module main classes other than the main launcher
 					for(String mainClass : this.projectModule.getMainClasses()) {
-						if(!moduleMainClass.equals(mainClass)) {
+						if(!mainLauncher.getModule().get().equals(this.projectModule.getModuleName()) || !mainLauncher.getMainClass().get().equals(mainClass)) {
 							String launcherName = mainClass;
 							int classSimpleNameIndex = launcherName.lastIndexOf('.');
 							if(classSimpleNameIndex > 0) {
@@ -446,7 +443,7 @@ public class CreateProjectApplicationTask extends Task<Void> {
 						this.getLog().info(" - jpackage " + filtered_jpackage_args.stream().collect(Collectors.joining(" ")));			
 					}
 					if(this.jpackage.run(this.verbose ? this.getOutStream() : new NullPrintStream(), this.getErrStream(), filtered_jpackage_args.stream().toArray(String[]::new)) == 0) {
-						Files.move(packagePath.getParent().resolve(this.name), packagePath);
+						Files.move(packagePath.getParent().resolve(mainLauncher.getName()), packagePath);
 					}
 					else {
 						throw new TaskExecutionException("Error creating project application, activate '-Dwinter.verbose=true' to display full log");
@@ -485,15 +482,7 @@ public class CreateProjectApplicationTask extends Task<Void> {
 		}
 		return null;
 	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
+	
 	public Optional<String> getCopyright() {
 		return copyright;
 	}
@@ -518,14 +507,6 @@ public class CreateProjectApplicationTask extends Task<Void> {
 		this.vendor = vendor;
 	}
 
-	public Optional<Path> getIconPath() {
-		return iconPath;
-	}
-
-	public void setIconPath(Optional<Path> iconPath) {
-		this.iconPath = iconPath;
-	}
-
 	public Optional<Path> getLicensePath() {
 		return licensePath;
 	}
@@ -540,38 +521,6 @@ public class CreateProjectApplicationTask extends Task<Void> {
 
 	public void setResourcePath(Optional<Path> resourcePath) {
 		this.resourcePath = resourcePath;
-	}
-
-	public Optional<String> getArguments() {
-		return arguments;
-	}
-
-	public void setArguments(Optional<String> arguments) {
-		this.arguments = arguments;
-	}
-
-	public Optional<String> getVmOptions() {
-		return vmOptions;
-	}
-
-	public void setVmOptions(Optional<String> vmOptions) {
-		this.vmOptions = vmOptions;
-	}
-
-	public Optional<String> getModule() {
-		return module;
-	}
-
-	public void setModule(Optional<String> module) {
-		this.module = module;
-	}
-
-	public Optional<String> getMainClass() {
-		return mainClass;
-	}
-
-	public void setMainClass(Optional<String> mainClass) {
-		this.mainClass = mainClass;
 	}
 
 	public Optional<String> getInstallDirectory() {
@@ -622,14 +571,6 @@ public class CreateProjectApplicationTask extends Task<Void> {
 		this.launchers = launchers;
 	}
 	
-	public boolean isAddUnnamedModules() {
-		return addUnnamedModules;
-	}
-
-	public void setAddUnnamedModules(boolean addUnnamedModules) {
-		this.addUnnamedModules = addUnnamedModules;
-	}
-
 	public static class LinuxConfiguration {
 		
 		/**
@@ -975,22 +916,22 @@ public class CreateProjectApplicationTask extends Task<Void> {
 		private String arguments;
 		
 		/**
-		 * The application launcher version.
-		 */
-		@Parameter(required = false)
-		private String appVersion;
-		
-		/**
 		 * The path to the application launcher icon file. 
 		 */
 		@Parameter(required = false)
 		private File iconFile;
 		
 		/**
+		 * The application launcher version.
+		 */
+		@Parameter(required = false)
+		private String appVersion;
+		
+		/**
 		 * Adds the unnamed modules when running the launcher.
 		 */
-		@Parameter(defaultValue = "true", required = false)
-		protected boolean addUnnamedModules;
+		@Parameter(defaultValue = "true", required = true)
+		private boolean addUnnamedModules = true;
 
 		public String getName() {
 			return name;
@@ -1032,14 +973,6 @@ public class CreateProjectApplicationTask extends Task<Void> {
 			this.arguments = arguments;
 		}
 
-		public Optional<String> getAppVersion() {
-			return Optional.ofNullable(this.appVersion).filter(StringUtils::isNotEmpty);
-		}
-
-		public void setAppVersion(String appVersion) {
-			this.appVersion = appVersion;
-		}
-
 		public Optional<Path> getIconPath() {
 			return Optional.ofNullable(this.iconFile).map(file -> file.toPath().toAbsolutePath());
 		}
@@ -1048,6 +981,14 @@ public class CreateProjectApplicationTask extends Task<Void> {
 			this.iconFile = iconFile;
 		}
 
+		public Optional<String> getAppVersion() {
+			return Optional.ofNullable(this.appVersion).filter(StringUtils::isNotEmpty);
+		}
+
+		public void setAppVersion(String appVersion) {
+			this.appVersion = appVersion;
+		}
+		
 		public boolean isAddUnnamedModules() {
 			return addUnnamedModules;
 		}

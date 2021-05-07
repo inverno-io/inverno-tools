@@ -77,7 +77,7 @@ public class CreateProjectContainerImageTask extends Task<Void> {
 	
 	private Target target;
 	private String from;
-	private String name;
+	private String executable;
 	
 	private Optional<String> registry;
 	private Optional<String> repository;
@@ -127,7 +127,7 @@ public class CreateProjectContainerImageTask extends Task<Void> {
 			try {
 				FileEntriesLayer layer = FileEntriesLayer.builder().addEntryRecursive(
 						this.projectModule.getApplicationImagePath(), 
-						AbsoluteUnixPath.get("/" + this.name), 
+						AbsoluteUnixPath.get("/" + this.projectModule.getArtifact().getArtifactId()), 
 						this.getFilePermissionsProvider(),
 						this.getModificationTimeProvider(),
 						this.getOwnershipProvider()
@@ -138,7 +138,7 @@ public class CreateProjectContainerImageTask extends Task<Void> {
 					.setCreationTime(Instant.now())
 					.setFormat(this.imageFormat.orElse(ImageFormat.OCI))
 					.addFileEntriesLayer(layer)
-					.setEntrypoint("/" + this.name + "/bin/" + this.name)
+					.setEntrypoint("/" + this.projectModule.getArtifact().getArtifactId() + "/bin/" + this.executable)
 					.addExposedPort(Port.tcp(8080));
 
 				
@@ -202,7 +202,7 @@ public class CreateProjectContainerImageTask extends Task<Void> {
 	
 	protected Containerizer getContainerizer() throws InvalidImageReferenceException, TaskExecutionException {
 		// <registry>/<repository>:<tag>
-		String imageReference = registry.orElse("") + this.repository.map(value -> value += "/").orElse("") + this.name + ":" + this.projectModule.getModuleVersion();
+		String imageReference = registry.orElse("") + this.repository.map(value -> value += "/").orElse("") + this.projectModule.getArtifact().getArtifactId() + ":" + this.projectModule.getModuleVersion();
 		
 		Containerizer containerizer;
 		switch(this.target) {
@@ -298,12 +298,12 @@ public class CreateProjectContainerImageTask extends Task<Void> {
 		this.from = from;
 	}
 	
-	public String getName() {
-		return name;
+	public String getExecutable() {
+		return executable;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setExecutable(String exectuable) {
+		this.executable = exectuable;
 	}
 
 	public Optional<String> getRegistry() {
