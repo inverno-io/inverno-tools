@@ -15,7 +15,7 @@ The Winter Maven plugin can be used to run a modular application project or buil
 
 The `winter:run` goal is used to execute the modular application defined in the project from the command line.
 
-```
+```plaintext
 $ mvn winter:run
 ```
 
@@ -23,7 +23,7 @@ The application is first *modularized* which means that any non-modular dependen
 
 The application is executed in a forked process, application arguments can be passed on the command line:
 
-```
+```plaintext
 $ mvn winter:run -Dwinter.run.arguments='--some.configuration=\"hello\"'
 ```
 
@@ -35,13 +35,13 @@ $ mvn winter:run -Dwinter.run.arguments='--some.configuration=\"hello\"'
 
 In order to debug the application, we need to specify the appropriate options to the JVM:
 
-```
+```plaintext
 $ mvn winter:run -Dwinter.exec.vmOptions="-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=8000"
 ```
 
 By default the plugin will detect the main class of the application, but it is also possible to specify it explicitly in case multiple main classes exist in the project module.
 
-```
+```plaintext
 $ mvn winter:run -Dwinter.exec.mainClass=io.winterframework.example.Main
 ```
 
@@ -55,30 +55,30 @@ They are bound to the `pre-integration-test` and `pre-integration-test` phases r
 
 ```xml
 <project>
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>io.winterframework.tool</groupId>
-				<artifactId>winter-maven-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>start</id>
-						<phase>pre-integration-test</phase>
-						<goals>
-							<goal>start</goal>
-						</goals>
-					</execution>
-					<execution>
-						<id>stop</id>
-						<phase>post-integration-test</phase>
-						<goals>
-							<goal>stop</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-		</plugins>
-	</build>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>io.winterframework.tool</groupId>
+                <artifactId>winter-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>start</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>start</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>stop</id>
+                        <phase>post-integration-test</phase>
+                        <goals>
+                            <goal>stop</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 </project>
 ```
 
@@ -90,33 +90,33 @@ The `winter:build-runtime` goal uses `jlink` tool to assemble the project module
 
 ```xml
 <project>
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>io.winterframework.tool</groupId>
-				<artifactId>winter-maven-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>build-project-runtime</id>
-						<phase>package</phase>
-						<goals>
-							<goal>build-runtime</goal>
-						</goals>
-						<configuration>
-							<vm>server</vm>
-							<addModules>jdk.jdwp.agent,jdk.crypto.ec</addModules>
-							<vmOptions>-Xms2G -Xmx2G -XX:+UseNUMA -XX:+UseParallelGC</vmOptions>
-							<formats>
-								<format>zip</format>
-								<format>tar.gz</format>
-								<format>tar.bz2</format>
-							</formats>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-		</plugins>
-	</build>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>io.winterframework.tool</groupId>
+                <artifactId>winter-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>build-project-runtime</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>build-runtime</goal>
+                        </goals>
+                        <configuration>
+                            <vm>server</vm>
+                            <addModules>jdk.jdwp.agent,jdk.crypto.ec</addModules>
+                            <vmOptions>-Xms2G -Xmx2G -XX:+UseNUMA -XX:+UseParallelGC</vmOptions>
+                            <formats>
+                                <format>zip</format>
+                                <format>tar.gz</format>
+                                <format>tar.bz2</format>
+                            </formats>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 </project>
 ```
 
@@ -130,39 +130,39 @@ An application image is built using the `winter:build-app` goal which basically 
 
 ```xml
 <project>
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>io.winterframework.tool</groupId>
-				<artifactId>winter-maven-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>build-application</id>
-						<phase>package</phase>
-						<goals>
-							<goal>build-app</goal>
-						</goals>
-						<configuration>
-							<vm>server</vm>
-							<addModules>jdk.jdwp.agent,jdk.crypto.ec</addModules>
-							<vmOptions>-Xms2G -Xmx2G -XX:+UseNUMA -XX:+UseParallelGC</vmOptions>
-							<formats>
-								<format>zip</format>
-								<format>deb</format>
-							</formats>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-		</plugins>
-	</build>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>io.winterframework.tool</groupId>
+                <artifactId>winter-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>build-application</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>build-app</goal>
+                        </goals>
+                        <configuration>
+                            <vm>server</vm>
+                            <addModules>jdk.jdwp.agent,jdk.crypto.ec</addModules>
+                            <vmOptions>-Xms2G -Xmx2G -XX:+UseNUMA -XX:+UseParallelGC</vmOptions>
+                            <formats>
+                                <format>zip</format>
+                                <format>deb</format>
+                            </formats>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 </project>
 ```
 
-The `winter:build-app` goal is very similar to the `winter:build-runtime` goal except that the resulting image provides an application launcher and it is packaged in a platform-specific format. For instance, we can generate a `.deb` on a Linux platform or a `.exe` or `.msi` on a Windows platform or a `.dmg` on a MacOS platform. The resulting package can be installed on these platform in a standard way.
+The `winter:build-app` goal is very similar to the `winter:build-runtime` goal except that the resulting image provides an application launcher and it can be packaged in a platform-specific format. For instance, we can generate a `.deb` on a Linux platform or a `.exe` or `.msi` on a Windows platform or a `.dmg` on a MacOS platform. The resulting package can be installed on these platforms in a standard way.
 
 > This goal uses `jpackage` tool which is an incubating feature in JDK&lt;16, if you intend to build an application image with an old JDK, you'll need to explicitly add the `jdk.incubator.jpackage` in `MAVEN_OPTS`:
-> ```
+> ```plaintext
 > $ export MAVEN_OPTS="--add-modules jdk.incubator.jpackage"
 > ```
 
@@ -172,29 +172,29 @@ A container image can be built in a TAR archive using the `winter:build-image-ta
 
 ```xml
 <project>
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>io.winterframework.tool</groupId>
-				<artifactId>winter-maven-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>build-image-tar</id>
-						<phase>package</phase>
-						<goals>
-							<goal>build-image-tar</goal>
-						</goals>
-						<configuration>
-							<vm>server</vm>
-							<addModules>jdk.jdwp.agent,jdk.crypto.ec</addModules>
-							<vmOptions>-Xms2G -Xmx2G -XX:+UseNUMA -XX:+UseParallelGC</vmOptions>
-							<repository>example</repository>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-		</plugins>
-	</build>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>io.winterframework.tool</groupId>
+                <artifactId>winter-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>build-image-tar</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>build-image-tar</goal>
+                        </goals>
+                        <configuration>
+                            <vm>server</vm>
+                            <addModules>jdk.jdwp.agent,jdk.crypto.ec</addModules>
+                            <vmOptions>-Xms2G -Xmx2G -XX:+UseNUMA -XX:+UseParallelGC</vmOptions>
+                            <repository>example</repository>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 </project>
 ```
 
@@ -202,12 +202,12 @@ The resulting image reference is defined by `${registry}/${repository}/${name}:$
 
 The resulting image can then be loaded in a docker daemon:
 
-```
+```plaintext
 $ docker load --input target/example-1.0.0-SNAPSHOT-container_linux_amd64.tar
 ```
 
 > As for `build-app` goal, this goal uses `jpackage` tool so if you intend to use a JDK&lt;16 you'll need to explicitly add the `jdk.incubator.jpackage` in `MAVEN_OPTS`:
-> ```
+> ```plaintext
 > $ export MAVEN_OPTS="--add-modules jdk.incubator.jpackage"
 > ```
 
@@ -217,36 +217,36 @@ The `winter:build-image-docker` goal is used to build a container image and depl
 
 ```xml
 <project>
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>io.winterframework.tool</groupId>
-				<artifactId>winter-maven-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>build-image-docker</id>
-						<phase>package</phase>
-						<goals>
-							<goal>build-image-docker</goal>
-						</goals>
-						<configuration>
-							<vm>server</vm>
-							<addModules>jdk.jdwp.agent,jdk.crypto.ec</addModules>
-							<vmOptions>-Xms2G -Xmx2G -XX:+UseNUMA -XX:+UseParallelGC</vmOptions>
-							<repository>example</repository>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-		</plugins>
-	</build>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>io.winterframework.tool</groupId>
+                <artifactId>winter-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>build-image-docker</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>build-image-docker</goal>
+                        </goals>
+                        <configuration>
+                            <vm>server</vm>
+                            <addModules>jdk.jdwp.agent,jdk.crypto.ec</addModules>
+                            <vmOptions>-Xms2G -Xmx2G -XX:+UseNUMA -XX:+UseParallelGC</vmOptions>
+                            <repository>example</repository>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 </project>
 ```
 
 By default the `docker` command is used but it is possible to specify the path to the Docker CLI in the `winter.container.docker.executable` parameter. 
 
 > As for `build-app` goal, this goal uses `jpackage` tool so if you intend to use a JDK&lt;16 you'll need to explicitly add the `jdk.incubator.jpackage` in `MAVEN_OPTS`:
-> ```
+> ```plaintext
 > $ export MAVEN_OPTS="--add-modules jdk.incubator.jpackage"
 > ```
 
@@ -256,39 +256,39 @@ The `winter:build-image` goal builds a container image and deploy it to a remote
 
 ```xml
 <project>
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>io.winterframework.tool</groupId>
-				<artifactId>winter-maven-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>build-image-docker</id>
-						<phase>package</phase>
-						<goals>
-							<goal>build-image-docker</goal>
-						</goals>
-						<configuration>
-							<vm>server</vm>
-							<addModules>jdk.jdwp.agent,jdk.crypto.ec</addModules>
-							<vmOptions>-Xms2G -Xmx2G -XX:+UseNUMA -XX:+UseParallelGC</vmOptions>
-							<registryUsername>user</registryUsername>
-							<registryPassword>password</registryPassword>
-							<registry>gcr.io</registry>
-							<repository>example</repository>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-		</plugins>
-	</build>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>io.winterframework.tool</groupId>
+                <artifactId>winter-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>build-image-docker</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>build-image-docker</goal>
+                        </goals>
+                        <configuration>
+                            <vm>server</vm>
+                            <addModules>jdk.jdwp.agent,jdk.crypto.ec</addModules>
+                            <vmOptions>-Xms2G -Xmx2G -XX:+UseNUMA -XX:+UseParallelGC</vmOptions>
+                            <registryUsername>user</registryUsername>
+                            <registryPassword>password</registryPassword>
+                            <registry>gcr.io</registry>
+                            <repository>example</repository>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 </project>
 ```
 
 By default the registry points to the Docker hub `registry-1.docker.io` but another registry can be specified, `gcr.io` in our example.
 
 > As for `build-app` goal, this goal uses `jpackage` tool so if you intend to use a JDK&lt;16 you'll need to explicitly add the `jdk.incubator.jpackage` in `MAVEN_OPTS`:
-> ```
+> ```plaintext
 > $ export MAVEN_OPTS="--add-modules jdk.incubator.jpackage"
 > ```
 
@@ -479,7 +479,7 @@ A project application package is a native self-contained Java application includ
                 </li>
                 <li>
                     <em>Default</em>
-                    : true
+                    : false
                 </li>
             </ul>
         </td>
@@ -1101,7 +1101,7 @@ Enables the automatic generation of launchers based on the main classes extracte
 - **Type**: boolean
 - **Required**: no
 - **User property**: winter.app.automaticLaunchers
-- **Default**: true
+- **Default**: false
 
 
 ##### &lt;bindServices&gt;
@@ -1641,7 +1641,7 @@ Builds a container image and publishes it to a registry.
                 </li>
                 <li>
                     <em>Default</em>
-                    : true
+                    : false
                 </li>
             </ul>
         </td>
@@ -2392,7 +2392,7 @@ Enables the automatic generation of launchers based on the main classes extracte
 - **Type**: boolean
 - **Required**: no
 - **User property**: winter.app.automaticLaunchers
-- **Default**: true
+- **Default**: false
 
 
 ##### &lt;bindServices&gt;
@@ -3028,7 +3028,7 @@ Builds a Docker container image to a local Docker daemon.
                 </li>
                 <li>
                     <em>Default</em>
-                    : true
+                    : false
                 </li>
             </ul>
         </td>
@@ -3774,7 +3774,7 @@ Enables the automatic generation of launchers based on the main classes extracte
 - **Type**: boolean
 - **Required**: no
 - **User property**: winter.app.automaticLaunchers
-- **Default**: true
+- **Default**: false
 
 
 ##### &lt;bindServices&gt;
@@ -4411,7 +4411,7 @@ $ docker load --input target/&lt;image&gt;.tar
                 </li>
                 <li>
                     <em>Default</em>
-                    : true
+                    : false
                 </li>
             </ul>
         </td>
@@ -5132,7 +5132,7 @@ Enables the automatic generation of launchers based on the main classes extracte
 - **Type**: boolean
 - **Required**: no
 - **User property**: winter.app.automaticLaunchers
-- **Default**: true
+- **Default**: false
 
 
 ##### &lt;bindServices&gt;
