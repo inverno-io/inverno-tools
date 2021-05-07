@@ -17,7 +17,6 @@ package io.winterframework.tool.maven.internal;
 
 import org.junit.jupiter.api.Test;
 
-import io.winterframework.tool.maven.internal.ProgressBar;
 import io.winterframework.tool.maven.internal.ProgressBar.Step;
 
 /**
