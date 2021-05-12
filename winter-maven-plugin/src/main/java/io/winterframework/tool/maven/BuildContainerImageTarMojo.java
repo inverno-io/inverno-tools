@@ -19,6 +19,7 @@ import java.nio.file.Path;
 
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.plugins.annotations.Execute;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.ResolutionScope;
@@ -42,6 +43,7 @@ import io.winterframework.tool.maven.internal.task.CreateProjectContainerImageTa
  * @since 1.0
  */
 @Mojo(name = "build-image-tar", defaultPhase = LifecyclePhase.PACKAGE, requiresProject = true, requiresDependencyCollection = ResolutionScope.COMPILE_PLUS_RUNTIME, requiresDependencyResolution = ResolutionScope.COMPILE_PLUS_RUNTIME)
+@Execute(phase = LifecyclePhase.PACKAGE)
 public class BuildContainerImageTarMojo extends AbstractContainerImageMojo {
 
 	@Override

@@ -116,7 +116,7 @@ public abstract class AbstractContainerImageMojo extends BuildApplicationMojo {
 	@Override
 	protected void doExecute() throws MojoExecutionException, MojoFailureException {
 		if(this.jpackage == null) {
-			throw new MojoExecutionException("'jdk.jpackage' module is missing, before JDK 16 it must be activated explicitly: export MAVEN_OPTS=\"--add-modules jdk.incubator.jpackage\"");
+			throw new MojoExecutionException("'jdk.jpackage' module is missing, before JDK 16 it must be activated explicitly: MAVEN_OPTS=\"--add-modules jdk.incubator.jpackage\"");
 		}
 		try {
 			Set<DependencyModule> dependencies = this.getResolveDependenciesTask().call();

@@ -89,7 +89,7 @@ public abstract class AbstractExecMojo extends AbstractWinterMojo {
 	/**
 	 * The VM options to use when executing the application.
 	 */
-	@Parameter(property = "winter.exec.vmOptions", required = false)
+	@Parameter(property = "winter.exec.vmOptions", defaultValue = "-Dorg.apache.logging.log4j.simplelog.level=INFO -Dorg.apache.logging.log4j.level=INFO", required = false)
 	protected String vmOptions;
 	
 	/**
