@@ -161,7 +161,7 @@ An application image is built using the `winter:build-app` goal which basically 
 
 The `winter:build-app` goal is very similar to the `winter:build-runtime` goal except that the resulting image provides an application launcher and it can be packaged in a platform-specific format. For instance, we can generate a `.deb` on a Linux platform or a `.exe` or `.msi` on a Windows platform or a `.dmg` on a MacOS platform. The resulting package can be installed on these platforms in a standard way.
 
-> This goal uses `jpackage` tool which is an incubating feature in JDK&lt;16, if you intend to build an application image with an old JDK, you'll need to explicitly add the `jdk.incubator.jpackage` in `MAVEN_OPTS`:
+> This goal uses `jpackage` tool which is an incubating feature in JDK&lt;16, if you intend to build an application image with an old JDK, you'll need to explicitly add the `jdk.incubator.jpackage` module in `MAVEN_OPTS`:
 > ```plaintext
 > $ export MAVEN_OPTS="--add-modules jdk.incubator.jpackage"
 > ```
@@ -206,7 +206,7 @@ The resulting image can then be loaded in a docker daemon:
 $ docker load --input target/example-1.0.0-SNAPSHOT-container_linux_amd64.tar
 ```
 
-> As for `build-app` goal, this goal uses `jpackage` tool so if you intend to use a JDK&lt;16 you'll need to explicitly add the `jdk.incubator.jpackage` in `MAVEN_OPTS`:
+> As for `build-app` goal, this goal uses `jpackage` tool so if you intend to use a JDK&lt;16 you'll need to explicitly add the `jdk.incubator.jpackage` module in `MAVEN_OPTS`:
 > ```plaintext
 > $ export MAVEN_OPTS="--add-modules jdk.incubator.jpackage"
 > ```
@@ -245,7 +245,7 @@ The `winter:build-image-docker` goal is used to build a container image and depl
 
 By default the `docker` command is used but it is possible to specify the path to the Docker CLI in the `winter.container.docker.executable` parameter. 
 
-> As for `build-app` goal, this goal uses `jpackage` tool so if you intend to use a JDK&lt;16 you'll need to explicitly add the `jdk.incubator.jpackage` in `MAVEN_OPTS`:
+> As for `build-app` goal, this goal uses `jpackage` tool so if you intend to use a JDK&lt;16 you'll need to explicitly add the `jdk.incubator.jpackage` module in `MAVEN_OPTS`:
 > ```plaintext
 > $ export MAVEN_OPTS="--add-modules jdk.incubator.jpackage"
 > ```
@@ -287,7 +287,7 @@ The `winter:build-image` goal builds a container image and deploy it to a remote
 
 By default the registry points to the Docker hub `registry-1.docker.io` but another registry can be specified, `gcr.io` in our example.
 
-> As for `build-app` goal, this goal uses `jpackage` tool so if you intend to use a JDK&lt;16 you'll need to explicitly add the `jdk.incubator.jpackage` in `MAVEN_OPTS`:
+> As for `build-app` goal, this goal uses `jpackage` tool so if you intend to use a JDK&lt;16 you'll need to explicitly add the `jdk.incubator.jpackage` module in `MAVEN_OPTS`:
 > ```plaintext
 > $ export MAVEN_OPTS="--add-modules jdk.incubator.jpackage"
 > ```
@@ -6257,6 +6257,10 @@ Runs the project application.
                     <em>User property</em>
                     : winter.exec.vmOptions
                 </li>
+                <li>
+                    <em>Default</em>
+                    : -Dorg.apache.logging.log4j.simplelog.level=INFO -Dorg.apache.logging.log4j.level=INFO
+                </li>
             </ul>
         </td>
     </tr>
@@ -6377,6 +6381,7 @@ The VM options to use when executing the application.
 - **Type**: java.lang.String
 - **Required**: no
 - **User property**: winter.exec.vmOptions
+- **Default**: -Dorg.apache.logging.log4j.simplelog.level=INFO -Dorg.apache.logging.log4j.level=INFO
 
 
 ##### &lt;workingDirectory&gt;
@@ -6585,6 +6590,10 @@ This goal is used together with the stop goal in the pre-integration-test and po
                     <em>User property</em>
                     : winter.exec.vmOptions
                 </li>
+                <li>
+                    <em>Default</em>
+                    : -Dorg.apache.logging.log4j.simplelog.level=INFO -Dorg.apache.logging.log4j.level=INFO
+                </li>
             </ul>
         </td>
     </tr>
@@ -6706,6 +6715,7 @@ The VM options to use when executing the application.
 - **Type**: java.lang.String
 - **Required**: no
 - **User property**: winter.exec.vmOptions
+- **Default**: -Dorg.apache.logging.log4j.simplelog.level=INFO -Dorg.apache.logging.log4j.level=INFO
 
 
 ##### &lt;workingDirectory&gt;
