@@ -19,7 +19,7 @@ The [Winter Maven Plugin][winter-tool-maven-plugin] provides specific goals to:
 - build native an application image containing an application and all its dependencies into an easy to install platform dependent package (eg. `.deb`, `.rpm`, `.dmg`, `.exe`, `.msi`...).
 - build docker or OCI images of an application into a tarball, a Docker daemon or a container image registry.
 
-The plugin requires [JDK][jdk] 9 or later and [Apache Maven][maven] 3.6.0 or later.
+The plugin requires [JDK][jdk] 14 or later and [Apache Maven][maven] 3.6.0 or later.
 
 ## Building Winter framework tools
 

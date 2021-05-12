@@ -162,7 +162,7 @@ An application image is built using the `winter:build-app` goal which basically 
 
 The `winter:build-app` goal is very similar to the `winter:build-runtime` goal except that the resulting image provides an application launcher and it can be packaged in a platform-specific format. For instance, we can generate a `.deb` on a Linux platform or a `.exe` or `.msi` on a Windows platform or a `.dmg` on a MacOS platform. The resulting package can be installed on these platforms in a standard way.
 
-<xsl:text disable-output-escaping="yes"><![CDATA[>]]></xsl:text> This goal uses `jpackage` tool which is an incubating feature in JDK&lt;16, if you intend to build an application image with an old JDK, you'll need to explicitly add the `jdk.incubator.jpackage` in `MAVEN_OPTS`:
+<xsl:text disable-output-escaping="yes"><![CDATA[>]]></xsl:text> This goal uses `jpackage` tool which is an incubating feature in JDK&lt;16, if you intend to build an application image with an old JDK, you'll need to explicitly add the `jdk.incubator.jpackage` module in `MAVEN_OPTS`:
 <xsl:text disable-output-escaping="yes"><![CDATA[>]]></xsl:text> ```plaintext
 <xsl:text disable-output-escaping="yes"><![CDATA[>]]></xsl:text> $ export MAVEN_OPTS="--add-modules jdk.incubator.jpackage"
 <xsl:text disable-output-escaping="yes"><![CDATA[>]]></xsl:text> ```
@@ -207,7 +207,7 @@ The resulting image can then be loaded in a docker daemon:
 $ docker load --input target/example-1.0.0-SNAPSHOT-container_linux_amd64.tar
 ```
 
-<xsl:text disable-output-escaping="yes"><![CDATA[>]]></xsl:text> As for `build-app` goal, this goal uses `jpackage` tool so if you intend to use a JDK&lt;16 you'll need to explicitly add the `jdk.incubator.jpackage` in `MAVEN_OPTS`:
+<xsl:text disable-output-escaping="yes"><![CDATA[>]]></xsl:text> As for `build-app` goal, this goal uses `jpackage` tool so if you intend to use a JDK&lt;16 you'll need to explicitly add the `jdk.incubator.jpackage` module in `MAVEN_OPTS`:
 <xsl:text disable-output-escaping="yes"><![CDATA[>]]></xsl:text> ```plaintext
 <xsl:text disable-output-escaping="yes"><![CDATA[>]]></xsl:text> $ export MAVEN_OPTS="--add-modules jdk.incubator.jpackage"
 <xsl:text disable-output-escaping="yes"><![CDATA[>]]></xsl:text> ```
@@ -246,7 +246,7 @@ The `winter:build-image-docker` goal is used to build a container image and depl
 
 By default the `docker` command is used but it is possible to specify the path to the Docker CLI in the `winter.container.docker.executable` parameter. 
 
-<xsl:text disable-output-escaping="yes"><![CDATA[>]]></xsl:text> As for `build-app` goal, this goal uses `jpackage` tool so if you intend to use a JDK&lt;16 you'll need to explicitly add the `jdk.incubator.jpackage` in `MAVEN_OPTS`:
+<xsl:text disable-output-escaping="yes"><![CDATA[>]]></xsl:text> As for `build-app` goal, this goal uses `jpackage` tool so if you intend to use a JDK&lt;16 you'll need to explicitly add the `jdk.incubator.jpackage` module in `MAVEN_OPTS`:
 <xsl:text disable-output-escaping="yes"><![CDATA[>]]></xsl:text> ```plaintext
 <xsl:text disable-output-escaping="yes"><![CDATA[>]]></xsl:text> $ export MAVEN_OPTS="--add-modules jdk.incubator.jpackage"
 <xsl:text disable-output-escaping="yes"><![CDATA[>]]></xsl:text> ```
@@ -288,7 +288,7 @@ The `winter:build-image` goal builds a container image and deploy it to a remote
 
 By default the registry points to the Docker hub `registry-1.docker.io` but another registry can be specified, `gcr.io` in our example.
 
-<xsl:text disable-output-escaping="yes"><![CDATA[>]]></xsl:text> As for `build-app` goal, this goal uses `jpackage` tool so if you intend to use a JDK&lt;16 you'll need to explicitly add the `jdk.incubator.jpackage` in `MAVEN_OPTS`:
+<xsl:text disable-output-escaping="yes"><![CDATA[>]]></xsl:text> As for `build-app` goal, this goal uses `jpackage` tool so if you intend to use a JDK&lt;16 you'll need to explicitly add the `jdk.incubator.jpackage` module in `MAVEN_OPTS`:
 <xsl:text disable-output-escaping="yes"><![CDATA[>]]></xsl:text> ```plaintext
 <xsl:text disable-output-escaping="yes"><![CDATA[>]]></xsl:text> $ export MAVEN_OPTS="--add-modules jdk.incubator.jpackage"
 <xsl:text disable-output-escaping="yes"><![CDATA[>]]></xsl:text> ```
