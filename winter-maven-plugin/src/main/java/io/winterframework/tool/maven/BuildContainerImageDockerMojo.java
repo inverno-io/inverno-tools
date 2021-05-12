@@ -19,6 +19,7 @@ import java.io.File;
 import java.util.Map;
 import java.util.Optional;
 
+import org.apache.maven.plugins.annotations.Execute;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
@@ -38,6 +39,7 @@ import io.winterframework.tool.maven.internal.task.CreateProjectContainerImageTa
  * @since 1.0
  */
 @Mojo(name = "build-image-docker", defaultPhase = LifecyclePhase.INSTALL, requiresProject = true, requiresDependencyCollection = ResolutionScope.COMPILE_PLUS_RUNTIME, requiresDependencyResolution = ResolutionScope.COMPILE_PLUS_RUNTIME)
+@Execute(phase = LifecyclePhase.PACKAGE)
 public class BuildContainerImageDockerMojo extends AbstractContainerImageMojo {
 
 	/**

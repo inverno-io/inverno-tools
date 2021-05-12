@@ -24,10 +24,11 @@ import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.jar.JarEntry;
@@ -223,19 +224,22 @@ public class ModularizeDependenciesTask extends Task<Set<DependencyModule>> {
 			String version = Integer.toString(Runtime.version().major());
 			
 			String jdeps_modulePath = this.projectModule.getModuleDependencies().stream().map(d -> d.getSourcePath().toString()).collect(Collectors.joining(System.getProperty("path.separator")));
-			String[] jdeps_args = {
-				"--ignore-missing-deps", 
-				"--multi-release", version, 
-				"--module-path", jdeps_modulePath, 
-				"--generate-module-info", 
-				this.jmodsExplodedPath.toString(), 
-				dependency.getJmodPath().toString()
-			};
+			
+			List<String> jdeps_args = new LinkedList<>();
+			
+			jdeps_args.add("--ignore-missing-deps");
+			jdeps_args.add("--multi-release");
+			jdeps_args.add(version);
+			jdeps_args.add("--module-path");
+			jdeps_args.add(jdeps_modulePath);
+			jdeps_args.add("--generate-module-info");
+			jdeps_args.add(this.jmodsExplodedPath.toString());
+			jdeps_args.add(dependency.getJmodPath().toString());
 			
 			if(verbose) {
-				this.getLog().info("   - jdeps " + Arrays.stream(jdeps_args).collect(Collectors.joining(" ")));
+				this.getLog().info("   - jdeps " + jdeps_args.stream().collect(Collectors.joining(" ")));
 			}
-			if(this.jdeps.run(this.verbose ? this.getOutStream() : new NullPrintStream(), this.getErrStream(), jdeps_args) == 0) {
+			if(this.jdeps.run(this.verbose ? this.getOutStream() : new NullPrintStream(), this.getErrStream(), jdeps_args.stream().toArray(String[]::new)) == 0) {
 				Files.move(dependency.getExplodedJmodPath().resolve(Paths.get("versions", version, "module-info.java")), dependency.getModuleInfoPath());
 				Files.delete(dependency.getExplodedJmodPath().resolve(Paths.get("versions", version)));
 				Files.delete(dependency.getExplodedJmodPath().resolve(Paths.get("versions")));

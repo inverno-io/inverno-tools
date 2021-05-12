@@ -906,8 +906,8 @@ public class CreateProjectApplicationTask extends Task<Void> {
 		/**
 		 *  The VM options to use when executing the application launcher. 
 		 */
-		@Parameter(required = false)
-		private String vmOptions;
+		@Parameter(defaultValue = "-Dorg.apache.logging.log4j.simplelog.level=INFO -Dorg.apache.logging.log4j.level=INFO", required = false)
+		private String vmOptions = "-Dorg.apache.logging.log4j.simplelog.level=INFO -Dorg.apache.logging.log4j.level=INFO";
 		
 		/**
 		 * The default arguments to pass to the application launcher 

@@ -27,6 +27,7 @@ import java.util.Set;
 
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.plugins.annotations.Execute;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
@@ -59,6 +60,7 @@ import io.winterframework.tool.maven.internal.task.PackageModularizedDependencie
  * @since 1.0
  */
 @Mojo(name = "build-app", defaultPhase = LifecyclePhase.PACKAGE, requiresProject = true, requiresDependencyCollection = ResolutionScope.COMPILE_PLUS_RUNTIME, requiresDependencyResolution = ResolutionScope.COMPILE_PLUS_RUNTIME)
+@Execute(phase = LifecyclePhase.PACKAGE)
 public class BuildApplicationMojo extends BuildRuntimeMojo {
 
 	/**
@@ -142,7 +144,7 @@ public class BuildApplicationMojo extends BuildRuntimeMojo {
 	@Override
 	protected void doExecute() throws MojoExecutionException, MojoFailureException {
 		if(this.jpackage == null) {
-			throw new MojoExecutionException("'jdk.jpackage' module is missing, before JDK 16 it must be activated explicitly: export MAVEN_OPTS=\"--add-modules jdk.incubator.jpackage\"");
+			throw new MojoExecutionException("'jdk.jpackage' module is missing, before JDK 16 it must be activated explicitly: MAVEN_OPTS=\"--add-modules jdk.incubator.jpackage\"");
 		}
 		try {
 			Set<DependencyModule> dependencies = this.getResolveDependenciesTask().call();
