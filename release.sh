@@ -23,6 +23,7 @@ if (( $# > 0 ))
 		echo "===== Releasing: $1 ====="
 		mvn -o versions:update-parent -DgenerateBackupPoms=false
 		mvn versions:set -DgenerateBackupPoms=false -DnewVersion=$1
+		mvn clean prepare-package
 		git commit -a -m "Release $1"
 		git tag -a $1 -m "Release $1"
 		mvn clean deploy -Pio.winterframework.release
@@ -37,6 +38,7 @@ if (( $# == 2 ))
 		echo "===== New Snapshot: $2 ====="
 		mvn -o versions:update-parent -DgenerateBackupPoms=false -DallowSnapshots=true
 		mvn versions:set -DgenerateBackupPoms=false -DnewVersion=$2
+		mvn clean prepare-package
 		git commit -a -m "$2"
 fi
 
