@@ -332,11 +332,11 @@ A project application package is a native self-contained Java application includ
 
 #### Required parameters
 
-<table xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<table>
     <tr>
         <th>Name</th>
         <th>Type</th>
-        <th>Default</th>
+        <th>Description</th>
     </tr>
     <tr>
         <td>
@@ -376,7 +376,7 @@ A project application package is a native self-contained Java application includ
 
 #### Optional parameters
 
-<table xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<table>
     <tr>
         <th>Name</th>
         <th>Type</th>
@@ -1350,11 +1350,11 @@ Builds a container image and publishes it to a registry.
 
 #### Required parameters
 
-<table xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<table>
     <tr>
         <th>Name</th>
         <th>Type</th>
-        <th>Default</th>
+        <th>Description</th>
     </tr>
     <tr>
         <td>
@@ -1432,7 +1432,7 @@ Builds a container image and publishes it to a registry.
 
 #### Optional parameters
 
-<table xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<table>
     <tr>
         <th>Name</th>
         <th>Type</th>
@@ -2641,11 +2641,11 @@ Builds a Docker container image to a local Docker daemon.
 
 #### Required parameters
 
-<table xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<table>
     <tr>
         <th>Name</th>
         <th>Type</th>
-        <th>Default</th>
+        <th>Description</th>
     </tr>
     <tr>
         <td>
@@ -2723,7 +2723,7 @@ Builds a Docker container image to a local Docker daemon.
 
 #### Optional parameters
 
-<table xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<table>
     <tr>
         <th>Name</th>
         <th>Type</th>
@@ -3928,11 +3928,11 @@ $ docker load --input target/&lt;image&gt;.tar
 
 #### Required parameters
 
-<table xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<table>
     <tr>
         <th>Name</th>
         <th>Type</th>
-        <th>Default</th>
+        <th>Description</th>
     </tr>
     <tr>
         <td>
@@ -4010,7 +4010,7 @@ $ docker load --input target/&lt;image&gt;.tar
 
 #### Optional parameters
 
-<table xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<table>
     <tr>
         <th>Name</th>
         <th>Type</th>
@@ -5173,11 +5173,11 @@ A runtime image is a custom Java runtime containing a set of modules and their d
 
 #### Required parameters
 
-<table xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<table>
     <tr>
         <th>Name</th>
         <th>Type</th>
-        <th>Default</th>
+        <th>Description</th>
     </tr>
     <tr>
         <td>
@@ -5217,7 +5217,7 @@ A runtime image is a custom Java runtime containing a set of modules and their d
 
 #### Optional parameters
 
-<table xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<table>
     <tr>
         <th>Name</th>
         <th>Type</th>
@@ -5944,7 +5944,7 @@ Call mvn winter:help -Ddetail=true -Dgoal=&lt;goal-name&gt; to display parameter
 
 #### Optional parameters
 
-<table xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<table>
     <tr>
         <th>Name</th>
         <th>Type</th>
@@ -6089,7 +6089,7 @@ Runs the project application.
 
 #### Optional parameters
 
-<table xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<table>
     <tr>
         <th>Name</th>
         <th>Type</th>
@@ -6418,7 +6418,7 @@ This goal is used together with the stop goal in the pre-integration-test and po
 
 #### Optional parameters
 
-<table xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<table>
     <tr>
         <th>Name</th>
         <th>Type</th>
@@ -6750,7 +6750,7 @@ This goal is used together with the start goal in the pre-integration-test and p
 
 #### Optional parameters
 
-<table xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<table>
     <tr>
         <th>Name</th>
         <th>Type</th>

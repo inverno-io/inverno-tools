@@ -69,29 +69,28 @@
 
 #### Required parameters
 
-<table>
-	<tr>
-		<th>Name</th>
-		<th>Type</th>
-		<th>Default</th>
-	</tr>
+<xsl:element name="table" namespace="">
+	<xsl:element name="tr" namespace="">
+		<xsl:element name="th" namespace="">Name</xsl:element>
+		<xsl:element name="th" namespace="">Type</xsl:element>
+		<xsl:element name="th" namespace="">Description</xsl:element>
+	</xsl:element>
 	<xsl:apply-templates select="parameters/parameter[required = 'true']" mode="overview"/>
-</table>
-
+</xsl:element>
 </xsl:if>
 
 <xsl:if test="parameters/parameter[required = 'false']">
 
 #### Optional parameters
 
-<table>
-	<tr>
-		<th>Name</th>
-		<th>Type</th>
-		<th>Description</th>
-	</tr>
+<xsl:element name="table" namespace="">
+	<xsl:element name="tr" namespace="">
+		<xsl:element name="th" namespace="">Name</xsl:element>
+		<xsl:element name="th" namespace="">Type</xsl:element>
+		<xsl:element name="th" namespace="">Description</xsl:element>
+	</xsl:element>
 	<xsl:apply-templates select="parameters/parameter[required = 'false']" mode="overview"/>
-</table>
+</xsl:element>
 
 </xsl:if>
 
@@ -108,21 +107,21 @@
 <xsl:variable name="parameterHref"><xsl:call-template name="getParameterHref"><xsl:with-param name="parameter" select="."/></xsl:call-template></xsl:variable>
 <xsl:variable name="userProperty"><xsl:call-template name="getUserProperty"><xsl:with-param name="parameter" select="."/></xsl:call-template></xsl:variable>
 <xsl:variable name="defaultValue"><xsl:call-template name="getDefaultValue"><xsl:with-param name="parameter" select="."/></xsl:call-template></xsl:variable>
-<tr>
-	<td><a href="{$parameterHref}"><xsl:value-of select="name"/></a></td>
-	<td><xsl:call-template name="getSimpleName"><xsl:with-param name="typeName" select="type"/></xsl:call-template></td>
-	<td>
-<xsl:call-template name="getSummary"><xsl:with-param name="description" select="description"/></xsl:call-template>
-<ul>
-<xsl:if test="string-length($userProperty) &gt; 0">
-<li><em>User property</em>: <xsl:value-of select="$userProperty"/></li>
-</xsl:if>
-<xsl:if test="string-length($defaultValue) &gt; 0">
-<li><em>Default</em>: <xsl:value-of select="$defaultValue"/></li>
-</xsl:if>
-</ul>
-	</td>
-</tr>
+<xsl:element name="tr" namespace="">
+	<xsl:element name="td" namespace=""><xsl:element name="a" namespace=""><xsl:attribute name="href"><xsl:value-of select="$parameterHref"/></xsl:attribute><xsl:value-of select="name"/></xsl:element></xsl:element>
+	<xsl:element name="td" namespace=""><xsl:call-template name="getSimpleName"><xsl:with-param name="typeName" select="type"/></xsl:call-template></xsl:element>
+	<xsl:element name="td" namespace="">
+		<xsl:call-template name="getSummary"><xsl:with-param name="description" select="description"/></xsl:call-template>
+		<xsl:element name="ul" namespace="">
+		<xsl:if test="string-length($userProperty) &gt; 0">
+		<xsl:element name="li" namespace=""><xsl:element name="em" namespace="">User property</xsl:element>: <xsl:value-of select="$userProperty"/></xsl:element>
+		</xsl:if>
+		<xsl:if test="string-length($defaultValue) &gt; 0">
+		<xsl:element name="li" namespace=""><xsl:element name="em" namespace="">Default</xsl:element>: <xsl:value-of select="$defaultValue"/></xsl:element>
+		</xsl:if>
+		</xsl:element>
+	</xsl:element>
+</xsl:element>
 </xsl:template>
 
 <xsl:template match="parameter" mode="detail">
