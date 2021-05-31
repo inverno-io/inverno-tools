@@ -26,7 +26,7 @@ if (( $# > 0 ))
 		mvn clean prepare-package
 		git commit -a -m "Release $1"
 		git tag -a $1 -m "Release $1"
-		mvn clean deploy -Pio.winterframework.release
+		mvn clean deploy -Pio.inverno.release
 fi
 
 if (( $# == 2 ))

@@ -1,17 +1,17 @@
-[winter-tool-maven-plugin]: https://github.com/winterframework-io/winter-tools/tree/master/winter-maven-plugin
+[inverno-tool-maven-plugin]: https://github.com/inverno-io/inverno-tools/tree/master/inverno-maven-plugin
 
 [jdk]: https://jdk.java.net/
 [maven]: https://maven.apache.org/download.cgi
 [open-container-image]: https://github.com/opencontainers/image-spec
 [apache-license]: https://www.apache.org/licenses/LICENSE-2.0
 
-# Winter Tools
+# Inverno Tools
 
-The Winter framework provides tools for running and building modular Java applications and Winter applications in particular. It allows for instance to create native runtime and application images providing all the dependencies required to run a modular application. It is also possible to build Docker and [OCI][open-container-image] images.
+The Inverno framework provides tools for running and building modular Java applications and Inverno applications in particular. It allows for instance to create native runtime and application images providing all the dependencies required to run a modular application. It is also possible to build Docker and [OCI][open-container-image] images.
 
-## Winter Maven Plugin
+## Inverno Maven Plugin
 
-The [Winter Maven Plugin][winter-tool-maven-plugin] provides specific goals to:
+The [Inverno Maven Plugin][inverno-tool-maven-plugin] provides specific goals to:
 
 - run a modular Java application.
 - start/stop a modular Java application during the build process to execute integration tests.
@@ -21,9 +21,9 @@ The [Winter Maven Plugin][winter-tool-maven-plugin] provides specific goals to:
 
 The plugin requires [JDK][jdk] 14 or later and [Apache Maven][maven] 3.6.0 or later.
 
-## Building Winter framework tools
+## Building Inverno framework tools
 
-The Winter framework tools can be built using Maven and Java 9+ with the following command:
+The Inverno framework tools can be built using Maven and Java 9+ with the following command:
 
 ```plaintext
 $ mvn install
@@ -31,5 +31,5 @@ $ mvn install
 
 ## License
 
-The Winter Framework is released under version 2.0 of the [Apache License][apache-license].
+The Inverno Framework is released under version 2.0 of the [Apache License][apache-license].
 
