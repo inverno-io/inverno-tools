@@ -189,7 +189,7 @@ public class BuildRuntimeMojo extends AbstractImageMojo {
 		task.setLaunchers(this.launchers);
 		task.setStripDebug(this.stripDebug);
 		task.setStripNativeCommands(this.stripNativeCommands);
-		task.setVm(Optional.ofNullable(this.compress).filter(StringUtils::isNotEmpty));
+		task.setVm(Optional.ofNullable(this.vm).filter(StringUtils::isNotEmpty));
 		
 		task.setStep(step);
 		
