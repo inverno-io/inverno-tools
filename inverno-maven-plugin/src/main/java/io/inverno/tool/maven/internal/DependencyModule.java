@@ -44,6 +44,7 @@ public class DependencyModule implements ImageModule {
 	private final ModuleReference moduleReference;
 	private final Optional<Path> jmodsOverridePath;
 	private final Path jmodsExplodedPath;
+	private final Path jmodsUnnamedPath;
 	private final Path jmodsPath;
 	private final boolean marked;
 	
@@ -58,17 +59,19 @@ public class DependencyModule implements ImageModule {
 	 * @param moduleReference   the module reference
 	 * @param jmodsOverridePath the path to user-defined module descriptors
 	 * @param jmodsExplodedPath the path to exploded modules
+	 * @param jmodsUnnamedPath  the path to unnamed modules
 	 * @param jmodsPath         the path to modular and modularized modules
 	 * @param overWriteIfNewer  true to mark the dependency module if it's older
 	 *                          than the source
 	 * 
 	 * @throws IOException if an I/O error occurs while analyzing the dependency JAR
 	 */
-	public DependencyModule(Artifact artifact, ModuleReference moduleReference, Optional<Path> jmodsOverridePath, Path jmodsExplodedPath, Path jmodsPath, boolean overWriteIfNewer) throws IOException {
+	public DependencyModule(Artifact artifact, ModuleReference moduleReference, Optional<Path> jmodsOverridePath, Path jmodsExplodedPath, Path jmodsUnnamedPath, Path jmodsPath, boolean overWriteIfNewer) throws IOException {
 		this.artifact = artifact;
 		this.moduleReference = moduleReference;
 		this.jmodsOverridePath = jmodsOverridePath;
 		this.jmodsExplodedPath = jmodsExplodedPath;
+		this.jmodsUnnamedPath = jmodsUnnamedPath;
 		this.jmodsPath = jmodsPath;
 		
 		// if the module is not "named" the name should be groupId.artifactId...
@@ -151,6 +154,22 @@ public class DependencyModule implements ImageModule {
 	 */
 	public Path getSourcePath() {
 		return this.artifact.getFile().toPath();
+	}
+	
+	/**
+	 * <p>
+	 * Returns the path to the unnamed source JAR.
+	 * </p>
+	 * 
+	 * <p>
+	 * This jar file is a copy of the source path whose manifest has been updated
+	 * with an Automatic-Module-Name field.
+	 * </p>
+	 * 
+	 * @return the path to the unnamed JAR
+	 */
+	public Path getUnnamedPath() {
+		return this.jmodsUnnamedPath.resolve(this.getModuleName() + "-" + this.getModuleVersion() + ".jar");
 	}
 	
 	/**

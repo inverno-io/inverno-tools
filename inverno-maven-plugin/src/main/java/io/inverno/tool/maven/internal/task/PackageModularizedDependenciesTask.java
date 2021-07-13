@@ -16,8 +16,17 @@
 package io.inverno.tool.maven.internal.task;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.URI;
+import java.nio.file.FileSystem;
+import java.nio.file.FileSystems;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Arrays;
+import java.util.Map;
+import java.util.jar.Attributes;
+import java.util.jar.Manifest;
 import java.util.spi.ToolProvider;
 import java.util.stream.Collectors;
 
@@ -82,26 +91,26 @@ public class PackageModularizedDependenciesTask extends Task<Void> {
 	}
 	
 	private void packageDependency(DependencyModule dependency) throws TaskExecutionException {
-		try {
-			Files.delete(dependency.getExplodedJmodPath().resolve("module-info.java"));
-			
-			String[] jar_args = {
-				"--create",
-				"--no-manifest",
-				"--file", dependency.getJmodPath().toString(),
-				"--module-version", dependency.getModuleVersion(),
-				"-C", dependency.getExplodedJmodPath().toString(),
-				"."
-			};
-			
-			if(this.verbose) {
-				this.getLog().info("   - jar " + Arrays.stream(jar_args).collect(Collectors.joining(" ")));
-			}
-			
-			if(this.jar.run(this.verbose ? this.getOutStream() : new NullPrintStream(), this.getErrStream(), jar_args) != 0) {
-				throw new TaskExecutionException("Error packaging dependency " + dependency + ", activate '-Dinverno.verbose=true' to display full jar log");
-			}
-		} 
+		String[] jar_args = {
+			"--create",
+			"--no-manifest",
+			"--file", dependency.getJmodPath().toString(),
+			"--module-version", dependency.getModuleVersion(),
+			"-C", dependency.getExplodedJmodPath().toString(),
+			"."
+		};
+		
+		if(this.verbose) {
+			this.getLog().info("   - jar " + Arrays.stream(jar_args).collect(Collectors.joining(" ")));
+		}
+		
+		if(this.jar.run(this.verbose ? this.getOutStream() : new NullPrintStream(), this.getErrStream(), jar_args) != 0) {
+			throw new TaskExecutionException("Error packaging dependency " + dependency + ", activate '-Dinverno.verbose=true' to display full jar log");
+		}
+		
+		try(FileSystem jarFs = FileSystems.newFileSystem(URI.create("jar:" + dependency.getJmodPath().toUri()), Map.of())) {
+			Files.deleteIfExists(jarFs.getPath("module-info.java"));
+		}
 		catch (IOException e) {
 			throw new TaskExecutionException("Error packaging dependency " + dependency, e);
 		}

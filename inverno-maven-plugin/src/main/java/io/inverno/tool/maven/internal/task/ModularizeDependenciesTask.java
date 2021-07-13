@@ -16,6 +16,8 @@
 package io.inverno.tool.maven.internal.task;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.URI;
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -31,8 +33,10 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.jar.Attributes;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
+import java.util.jar.Manifest;
 import java.util.spi.ToolProvider;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -149,8 +153,38 @@ public class ModularizeDependenciesTask extends Task<Set<DependencyModule>> {
 	}
 	
 	private void unpackDependency(DependencyModule dependency) throws TaskExecutionException {
+		Path jarSourcePath = dependency.getSourcePath();
+		if(!dependency.isNamed()) {
+			if(this.verbose) {
+				this.getLog().info("   - setting Automatic-Module-Name in unnamed module JAR: " + dependency.getUnnamedPath());
+			}
+			
+			// copy to jmods-unnamed
+			try {
+				Files.copy(jarSourcePath, dependency.getUnnamedPath());
+				jarSourcePath = dependency.getUnnamedPath();
+				// Set Automatic-Module-Name
+				
+				try(FileSystem jarFs = FileSystems.newFileSystem(URI.create("jar:" + jarSourcePath.toUri()), Map.of())) {
+					Path manifestPath = jarFs.getPath("META-INF", "MANIFEST.MF");
+					
+					try (InputStream is = Files.newInputStream(manifestPath)) {
+						Manifest manifest = new Manifest(is);
+						Attributes mainAttributes = manifest.getMainAttributes();
+						mainAttributes.put(new Attributes.Name("Automatic-Module-Name"), dependency.getModuleName());
+						try (OutputStream jarOutput = Files.newOutputStream(manifestPath)) {
+				            manifest.write(jarOutput);
+				        }
+					}
+				}
+			}
+			catch(IOException e) {
+				throw new TaskExecutionException("Error copying unnamed dependency " + dependency + ", activate '-Dinverno.verbose=true' to display full log", e);
+			}
+		}
+		
 		Path explodedJmodPath = dependency.getExplodedJmodPath();
-		try(JarFile moduleJar = new JarFile(dependency.getSourcePath().toFile(), true, ZipFile.OPEN_READ, Runtime.version())) {
+		try(JarFile moduleJar = new JarFile(jarSourcePath.toFile(), true, ZipFile.OPEN_READ, Runtime.version())) {
 			boolean webjar = dependency.getModuleName().startsWith("org.webjars");
 			String webjarName = null;
 			if(webjar) {
@@ -223,7 +257,14 @@ public class ModularizeDependenciesTask extends Task<Set<DependencyModule>> {
 			
 			String version = Integer.toString(Runtime.version().major());
 			
-			String jdeps_modulePath = this.projectModule.getModuleDependencies().stream().map(d -> d.getSourcePath().toString()).collect(Collectors.joining(System.getProperty("path.separator")));
+			String jdeps_modulePath = this.projectModule.getModuleDependencies().stream().map(d -> {
+					if(d.isNamed()) {
+						return d.getSourcePath().toString();
+					}
+					else {
+						return d.getUnnamedPath().toString();
+					}
+				}).collect(Collectors.joining(System.getProperty("path.separator")));
 			
 			List<String> jdeps_args = new LinkedList<>();
 			

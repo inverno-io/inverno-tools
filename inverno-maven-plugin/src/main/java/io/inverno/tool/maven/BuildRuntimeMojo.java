@@ -116,7 +116,7 @@ public class BuildRuntimeMojo extends AbstractImageMojo {
 	}
 	
 	protected ResolveDependenciesTask getResolveDependenciesTask() {
-		ResolveDependenciesTask task = new ResolveDependenciesTask(this, this.project.getArtifacts(), this.jmodsOverridePath, this.jmodsExplodedPath, this.jmodsPath);
+		ResolveDependenciesTask task = new ResolveDependenciesTask(this, this.project.getArtifacts(), this.jmodsOverridePath, this.jmodsExplodedPath, this.jmodsUnnamedPath, this.jmodsPath);
 		
 		task.setOverWriteIfNewer(this.overWriteIfNewer);
 		task.setIncludeScope(this.includeScope);

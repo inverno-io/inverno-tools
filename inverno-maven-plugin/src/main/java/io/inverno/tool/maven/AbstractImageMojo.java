@@ -225,6 +225,7 @@ abstract class AbstractImageMojo extends AbstractInvernoMojo {
 
 	// target
 	protected Path jmodsExplodedPath;
+	protected Path jmodsUnnamedPath;
 	protected Path jmodsPath;
 	protected Path launchersPath;
 
@@ -288,6 +289,9 @@ abstract class AbstractImageMojo extends AbstractInvernoMojo {
 
 		this.jmodsExplodedPath = this.invernoBuildPath.resolve("jmods-exploded").toAbsolutePath();
 		Files.createDirectories(this.jmodsExplodedPath);
+		
+		this.jmodsUnnamedPath = this.invernoBuildPath.resolve("jmods-unnamed").toAbsolutePath();
+		Files.createDirectories(this.jmodsUnnamedPath);
 
 		this.jmodsPath = this.invernoBuildPath.resolve("jmods").toAbsolutePath();
 		Files.createDirectories(this.jmodsPath);

@@ -56,6 +56,7 @@ public class ResolveDependenciesTask extends Task<Set<DependencyModule>> {
 	private final Set<Artifact> artifacts;
 	private final Optional<Path> jmodsOverridePath;
 	private final Path jmodsExplodedPath;
+	private final Path jmodsUnnamedPath;
 	private final Path jmodsPath;
 
 	private boolean overWriteIfNewer;
@@ -75,11 +76,12 @@ public class ResolveDependenciesTask extends Task<Set<DependencyModule>> {
     private String includeGroupIds;
     private String excludeGroupIds;
 	
-	public ResolveDependenciesTask(AbstractMojo mojo, Set<Artifact> artifacts, Optional<Path> projectJModsOverridePath, Path jmodsExplodedPath, Path jmodsPath) {
+	public ResolveDependenciesTask(AbstractMojo mojo, Set<Artifact> artifacts, Optional<Path> projectJModsOverridePath, Path jmodsExplodedPath, Path jmodsUnnamedPath, Path jmodsPath) {
 		super(mojo);
 		this.artifacts = artifacts;
 		this.jmodsOverridePath = projectJModsOverridePath;
 		this.jmodsExplodedPath = jmodsExplodedPath;
+		this.jmodsUnnamedPath = jmodsUnnamedPath;
 		this.jmodsPath = jmodsPath;
 	}
 
@@ -113,7 +115,7 @@ public class ResolveDependenciesTask extends Task<Set<DependencyModule>> {
 
 			Set<DependencyModule> dependencies = new HashSet<>();
 			for(Artifact artifact : filteredArtifacts) {
-				dependencies.add(new DependencyModule(artifact, filteredModules.get(artifact.getFile().toPath()), this.jmodsOverridePath, this.jmodsExplodedPath, this.jmodsPath, this.overWriteIfNewer));
+				dependencies.add(new DependencyModule(artifact, filteredModules.get(artifact.getFile().toPath()), this.jmodsOverridePath, this.jmodsExplodedPath, this.jmodsUnnamedPath, this.jmodsPath, this.overWriteIfNewer));
 			}
 			
 			if(this.verbose) {

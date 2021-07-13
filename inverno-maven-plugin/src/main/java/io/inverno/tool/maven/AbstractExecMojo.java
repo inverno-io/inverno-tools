@@ -116,6 +116,7 @@ public abstract class AbstractExecMojo extends AbstractInvernoMojo {
 	
 	// target
 	protected Path jmodsExplodedPath;
+	protected Path jmodsUnnamedPath;
 	protected Path jmodsPath;
 	
 	/*
@@ -199,12 +200,15 @@ public abstract class AbstractExecMojo extends AbstractInvernoMojo {
 		this.jmodsExplodedPath = this.invernoBuildPath.resolve("jmods-exploded").toAbsolutePath();
 		Files.createDirectories(this.jmodsExplodedPath);
 		
+		this.jmodsUnnamedPath = this.invernoBuildPath.resolve("jmods-unnamed").toAbsolutePath();
+		Files.createDirectories(this.jmodsUnnamedPath);
+		
 		this.jmodsPath = this.invernoBuildPath.resolve("jmods").toAbsolutePath();
 		Files.createDirectories(this.jmodsPath);
 	}
 	
 	private ResolveDependenciesTask getResolveDependenciesTask() {
-		ResolveDependenciesTask task = new ResolveDependenciesTask(this, this.project.getArtifacts(), this.jmodsOverridePath, this.jmodsExplodedPath, this.jmodsPath);
+		ResolveDependenciesTask task = new ResolveDependenciesTask(this, this.project.getArtifacts(), this.jmodsOverridePath, this.jmodsExplodedPath, this.jmodsUnnamedPath, this.jmodsPath);
 		
 		task.setVerbose(this.verbose);
 		
