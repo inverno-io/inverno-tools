@@ -157,7 +157,7 @@ public abstract class AbstractContainerImageMojo extends BuildApplicationMojo {
 
 		if(this.launchers != null && !this.launchers.isEmpty()) {
 			task.setExecutable(this.launchers.stream()
-				.map(CreateProjectApplicationTask.Launcher::getName)
+				.map(launcher -> launcher.getName().orElse(this.projectModule.getArtifact().getArtifactId()))
 				.filter(launcherName -> launcherName.equals(this.executable))
 				.findAny()
 				.orElseThrow(() -> new IllegalArgumentException("Executable " + this.executable + " does not exist in project application image"))

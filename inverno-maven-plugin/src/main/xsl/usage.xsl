@@ -146,7 +146,12 @@ An application image is built using the `inverno:build-app` goal which basically
                         <configuration>
                             <vm>server</vm>
                             <addModules>jdk.jdwp.agent,jdk.crypto.ec</addModules>
-                            <vmOptions>-Xms2G -Xmx2G -XX:+UseNUMA -XX:+UseParallelGC</vmOptions>
+                            <launchers>
+                                <launcher>
+                                    <name>app</name>
+                                    <vmOptions>-Xms2G -Xmx2G -XX:+UseNUMA -XX:+UseParallelGC</vmOptions>
+                                </launcher>
+                            </launchers>
                             <formats>
                                 <format>zip</format>
                                 <format>deb</format>
@@ -188,7 +193,13 @@ A container image can be built in a TAR archive using the `inverno:build-image-t
                         <configuration>
                             <vm>server</vm>
                             <addModules>jdk.jdwp.agent,jdk.crypto.ec</addModules>
-                            <vmOptions>-Xms2G -Xmx2G -XX:+UseNUMA -XX:+UseParallelGC</vmOptions>
+                            <executable>app</executable>
+                            <launchers>
+                                <launcher>
+                                    <name>app</name>
+                                    <vmOptions>-Xms2G -Xmx2G -XX:+UseNUMA -XX:+UseParallelGC</vmOptions>
+                                </launcher>
+                            </launchers>
                             <repository>example</repository>
                         </configuration>
                     </execution>
@@ -233,7 +244,13 @@ The `inverno:build-image-docker` goal is used to build a container image and dep
                         <configuration>
                             <vm>server</vm>
                             <addModules>jdk.jdwp.agent,jdk.crypto.ec</addModules>
-                            <vmOptions>-Xms2G -Xmx2G -XX:+UseNUMA -XX:+UseParallelGC</vmOptions>
+                            <executable>app</executable>
+                            <launchers>
+                                <launcher>
+                                    <name>app</name>
+                                    <vmOptions>-Xms2G -Xmx2G -XX:+UseNUMA -XX:+UseParallelGC</vmOptions>
+                                </launcher>
+                            </launchers>
                             <repository>example</repository>
                         </configuration>
                     </execution>
@@ -272,7 +289,13 @@ The `inverno:build-image` goal builds a container image and deploy it to a remot
                         <configuration>
                             <vm>server</vm>
                             <addModules>jdk.jdwp.agent,jdk.crypto.ec</addModules>
-                            <vmOptions>-Xms2G -Xmx2G -XX:+UseNUMA -XX:+UseParallelGC</vmOptions>
+                            <executable>app</executable>
+                            <launchers>
+                                <launcher>
+                                    <name>app</name>
+                                    <vmOptions>-Xms2G -Xmx2G -XX:+UseNUMA -XX:+UseParallelGC</vmOptions>
+                                </launcher>
+                            </launchers>
                             <registryUsername>user</registryUsername>
                             <registryPassword>password</registryPassword>
                             <registry>gcr.io</registry>

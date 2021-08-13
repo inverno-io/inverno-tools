@@ -140,7 +140,6 @@ public class CreateProjectApplicationTask extends Task<Void> {
 			}
 			else {
 				mainLauncher = new Launcher();
-				mainLauncher.setName(this.projectModule.getArtifact().getArtifactId());
 			}
 			
 			mainLauncher.setModule(mainLauncher.getModule().orElse(this.projectModule.getModuleName()));
@@ -165,7 +164,7 @@ public class CreateProjectApplicationTask extends Task<Void> {
 			);
 			
 			jpackage_args.add("--name");
-			jpackage_args.add(mainLauncher.getName());
+			jpackage_args.add(mainLauncher.getName().orElse(this.projectModule.getArtifact().getArtifactId()));
 			
 			jpackage_args.add("--app-version");
 			jpackage_args.add(this.projectModule.getModuleVersion());
@@ -443,7 +442,7 @@ public class CreateProjectApplicationTask extends Task<Void> {
 						this.getLog().info(" - jpackage " + filtered_jpackage_args.stream().collect(Collectors.joining(" ")));			
 					}
 					if(this.jpackage.run(this.verbose ? this.getOutStream() : new NullPrintStream(), this.getErrStream(), filtered_jpackage_args.stream().toArray(String[]::new)) == 0) {
-						Files.move(packagePath.getParent().resolve(mainLauncher.getName()), packagePath);
+						Files.move(packagePath.getParent().resolve(mainLauncher.getName().orElse(this.projectModule.getArtifact().getArtifactId())), packagePath);
 					}
 					else {
 						throw new TaskExecutionException("Error creating project application, activate '-Dinverno.verbose=true' to display full log");
@@ -886,7 +885,7 @@ public class CreateProjectApplicationTask extends Task<Void> {
 		/**
 		 * The name of the application launcher.
 		 */
-		@Parameter(required = true)
+		@Parameter(required = false)
 		private String name;
 		
 		/**
@@ -933,8 +932,8 @@ public class CreateProjectApplicationTask extends Task<Void> {
 		@Parameter(defaultValue = "true", required = true)
 		private boolean addUnnamedModules = true;
 
-		public String getName() {
-			return name;
+		public Optional<String> getName() {
+			return Optional.ofNullable(this.name).filter(StringUtils::isNotEmpty);
 		}
 
 		public void setName(String name) {
