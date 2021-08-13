@@ -16,17 +16,12 @@
 package io.inverno.tool.maven.internal.task;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.URI;
 import java.nio.file.FileSystem;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.Map;
-import java.util.jar.Attributes;
-import java.util.jar.Manifest;
 import java.util.spi.ToolProvider;
 import java.util.stream.Collectors;
 
@@ -34,10 +29,10 @@ import org.apache.maven.plugin.AbstractMojo;
 
 import io.inverno.tool.maven.internal.DependencyModule;
 import io.inverno.tool.maven.internal.NullPrintStream;
+import io.inverno.tool.maven.internal.ProgressBar.Step;
 import io.inverno.tool.maven.internal.ProjectModule;
 import io.inverno.tool.maven.internal.Task;
 import io.inverno.tool.maven.internal.TaskExecutionException;
-import io.inverno.tool.maven.internal.ProgressBar.Step;
 
 /**
  * <p>
