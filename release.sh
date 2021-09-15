@@ -21,7 +21,7 @@ fi
 if (( $# > 0 ))
 	then
 		echo "===== Releasing: $1 ====="
-		mvn -o versions:update-parent -DgenerateBackupPoms=false
+		mvn -o versions:update-parent -DgenerateBackupPoms=false -DallowSnapshots=false
 		mvn versions:set -DgenerateBackupPoms=false -DnewVersion=$1
 		mvn clean prepare-package
 		git commit -a -m "Release $1"
