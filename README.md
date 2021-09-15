@@ -25,7 +25,7 @@ The plugin requires [JDK][jdk] 14 or later and [Apache Maven][maven] 3.6.0 or la
 
 ## Building Inverno framework tools
 
-The Inverno framework tools can be built using Maven and Java 9+ with the following command:
+The Inverno framework tools can be built using Maven and Java 11+ with the following command:
 
 ```plaintext
 $ mvn install
