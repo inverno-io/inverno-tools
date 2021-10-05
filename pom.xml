@@ -27,7 +27,7 @@
 	<version>1.3.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	
-	<name>inverno-mods-root</name>
+	<name>inverno-tools-root</name>
 	<description>The Inverno framework tools are a collection of tools for building Inverno modules and applications</description>
 	<inceptionYear>2020</inceptionYear>
 	<organization>
