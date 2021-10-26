@@ -239,7 +239,7 @@ public class ProjectModule implements ImageModule {
 				
 				while(pathsIterator.hasNext()) {
 					String className = moduleClassesPath.relativize(pathsIterator.next()).toString();
-					className = className.replace('/', '.').substring(0, className.length() - 6);
+					className = className.replace(java.io.File.separatorChar, '.').substring(0, className.length() - 6);
 					Class<?> cl = classLoader.loadClass(className);
 					try {
 						Method m = cl.getMethod("main", String[].class);
