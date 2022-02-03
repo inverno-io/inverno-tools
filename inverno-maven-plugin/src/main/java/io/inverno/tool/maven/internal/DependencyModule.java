@@ -77,7 +77,7 @@ public class DependencyModule implements ImageModule {
 		// if the module is not "named" the name should be groupId.artifactId...
 		// => we have to copy modules... NO
 		try(JarFile jarFile = new JarFile(new File(moduleReference.location().get()), true, ZipFile.OPEN_READ, Runtime.version())) {
-			this.named = jarFile.getEntry("module-info.class") != null || jarFile.getManifest().getMainAttributes().containsKey(new Attributes.Name("Automatic-Module-Name"));
+			this.named = jarFile.getEntry("module-info.class") != null || (jarFile.getManifest() != null && jarFile.getManifest().getMainAttributes().containsKey(new Attributes.Name("Automatic-Module-Name")));
 		}
 
 		Path jmodPath = this.getJmodPath();

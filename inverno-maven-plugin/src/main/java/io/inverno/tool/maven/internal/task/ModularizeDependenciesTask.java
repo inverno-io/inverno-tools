@@ -167,14 +167,21 @@ public class ModularizeDependenciesTask extends Task<Set<DependencyModule>> {
 				
 				try(FileSystem jarFs = FileSystems.newFileSystem(URI.create("jar:" + jarSourcePath.toUri()), Map.of())) {
 					Path manifestPath = jarFs.getPath("META-INF", "MANIFEST.MF");
-					
-					try (InputStream is = Files.newInputStream(manifestPath)) {
-						Manifest manifest = new Manifest(is);
-						Attributes mainAttributes = manifest.getMainAttributes();
-						mainAttributes.put(new Attributes.Name("Automatic-Module-Name"), dependency.getModuleName());
+					if(Files.exists(manifestPath)) {
+						try (InputStream is = Files.newInputStream(manifestPath)) {
+							Manifest manifest = new Manifest(is);
+							manifest.getMainAttributes().put(new Attributes.Name("Automatic-Module-Name"), dependency.getModuleName());
+							try (OutputStream jarOutput = Files.newOutputStream(manifestPath)) {
+								manifest.write(jarOutput);
+							}
+						}
+					}
+					else {
+						Manifest manifest = new Manifest();
+						manifest.getMainAttributes().put(new Attributes.Name("Automatic-Module-Name"), dependency.getModuleName());
 						try (OutputStream jarOutput = Files.newOutputStream(manifestPath)) {
-				            manifest.write(jarOutput);
-				        }
+							manifest.write(jarOutput);
+						}
 					}
 				}
 			}
