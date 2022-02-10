@@ -15,43 +15,21 @@
  */
 package io.inverno.tool.maven.internal.task;
 
+import com.google.cloud.tools.jib.api.*;
+import com.google.cloud.tools.jib.api.buildplan.*;
+import io.inverno.tool.maven.internal.Platform;
+import io.inverno.tool.maven.internal.ProgressBar.Step;
+import io.inverno.tool.maven.internal.ProjectModule;
+import io.inverno.tool.maven.internal.Task;
+import io.inverno.tool.maven.internal.TaskExecutionException;
+import org.apache.maven.plugin.AbstractMojo;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Instant;
-import java.util.Map;
-import java.util.NoSuchElementException;
-import java.util.Optional;
-import java.util.Scanner;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ExecutionException;
-
-import org.apache.maven.plugin.AbstractMojo;
-
-import com.google.cloud.tools.jib.api.CacheDirectoryCreationException;
-import com.google.cloud.tools.jib.api.Containerizer;
-import com.google.cloud.tools.jib.api.DockerDaemonImage;
-import com.google.cloud.tools.jib.api.InvalidImageReferenceException;
-import com.google.cloud.tools.jib.api.Jib;
-import com.google.cloud.tools.jib.api.JibContainerBuilder;
-import com.google.cloud.tools.jib.api.LogEvent;
-import com.google.cloud.tools.jib.api.RegistryException;
-import com.google.cloud.tools.jib.api.RegistryImage;
-import com.google.cloud.tools.jib.api.TarImage;
-import com.google.cloud.tools.jib.api.buildplan.AbsoluteUnixPath;
-import com.google.cloud.tools.jib.api.buildplan.FileEntriesLayer;
-import com.google.cloud.tools.jib.api.buildplan.FilePermissions;
-import com.google.cloud.tools.jib.api.buildplan.FilePermissionsProvider;
-import com.google.cloud.tools.jib.api.buildplan.ImageFormat;
-import com.google.cloud.tools.jib.api.buildplan.ModificationTimeProvider;
-import com.google.cloud.tools.jib.api.buildplan.OwnershipProvider;
-import com.google.cloud.tools.jib.api.buildplan.Port;
-
-import io.inverno.tool.maven.internal.Platform;
-import io.inverno.tool.maven.internal.ProjectModule;
-import io.inverno.tool.maven.internal.Task;
-import io.inverno.tool.maven.internal.TaskExecutionException;
-import io.inverno.tool.maven.internal.ProgressBar.Step;
 
 /**
  * <p>
@@ -127,7 +105,7 @@ public class CreateProjectContainerImageTask extends Task<Void> {
 			try {
 				FileEntriesLayer layer = FileEntriesLayer.builder().addEntryRecursive(
 						this.projectModule.getApplicationImagePath(), 
-						AbsoluteUnixPath.get("/" + this.projectModule.getArtifact().getArtifactId()), 
+						AbsoluteUnixPath.get("/opt/" + this.projectModule.getArtifact().getArtifactId()),
 						this.getFilePermissionsProvider(),
 						this.getModificationTimeProvider(),
 						this.getOwnershipProvider()
@@ -138,10 +116,10 @@ public class CreateProjectContainerImageTask extends Task<Void> {
 					.setCreationTime(Instant.now())
 					.setFormat(this.imageFormat.orElse(ImageFormat.OCI))
 					.addFileEntriesLayer(layer)
-					.setEntrypoint("/" + this.projectModule.getArtifact().getArtifactId() + "/bin/" + this.executable)
+					.setWorkingDirectory(AbsoluteUnixPath.get("/opt/" + this.projectModule.getArtifact().getArtifactId()))
+					.setEntrypoint("/opt/" + this.projectModule.getArtifact().getArtifactId() + "/bin/" + this.executable)
 					.addExposedPort(Port.tcp(8080));
 
-				
 				this.labels.ifPresent(labels -> {
 					builder.setLabels(labels);
 				});
