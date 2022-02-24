@@ -335,7 +335,7 @@ By default the registry points to the Docker hub `registry-1.docker.io` but anot
 
 **Full name:**
 
-io.inverno.tool:inverno-maven-plugin:1.2.4:build-app
+io.inverno.tool:inverno-maven-plugin:1.3.0-SNAPSHOT:build-app
 
 **Description:**
 
@@ -1355,7 +1355,7 @@ Windows specific configuration.
 
 **Full name:**
 
-io.inverno.tool:inverno-maven-plugin:1.2.4:build-image
+io.inverno.tool:inverno-maven-plugin:1.3.0-SNAPSHOT:build-image
 
 **Description:**
 
@@ -2646,7 +2646,7 @@ Windows specific configuration.
 
 **Full name:**
 
-io.inverno.tool:inverno-maven-plugin:1.2.4:build-image-docker
+io.inverno.tool:inverno-maven-plugin:1.3.0-SNAPSHOT:build-image-docker
 
 **Description:**
 
@@ -3931,7 +3931,7 @@ Windows specific configuration.
 
 **Full name:**
 
-io.inverno.tool:inverno-maven-plugin:1.2.4:build-image-tar
+io.inverno.tool:inverno-maven-plugin:1.3.0-SNAPSHOT:build-image-tar
 
 **Description:**
 
@@ -5176,7 +5176,7 @@ Windows specific configuration.
 
 **Full name:**
 
-io.inverno.tool:inverno-maven-plugin:1.2.4:build-runtime
+io.inverno.tool:inverno-maven-plugin:1.3.0-SNAPSHOT:build-runtime
 
 **Description:**
 
@@ -5954,7 +5954,7 @@ Select the HotSpot VM in the output image defined as: 'client' / 'server' / 'min
 
 **Full name:**
 
-io.inverno.tool:inverno-maven-plugin:1.2.4:help
+io.inverno.tool:inverno-maven-plugin:1.3.0-SNAPSHOT:help
 
 **Description:**
 
@@ -6094,7 +6094,7 @@ The maximum length of a display line, should be positive.
 
 **Full name:**
 
-io.inverno.tool:inverno-maven-plugin:1.2.4:run
+io.inverno.tool:inverno-maven-plugin:1.3.0-SNAPSHOT:run
 
 **Description:**
 
@@ -6421,7 +6421,7 @@ The working directory of the application.
 
 **Full name:**
 
-io.inverno.tool:inverno-maven-plugin:1.2.4:start
+io.inverno.tool:inverno-maven-plugin:1.3.0-SNAPSHOT:start
 
 **Description:**
 
@@ -6755,7 +6755,7 @@ The working directory of the application.
 
 **Full name:**
 
-io.inverno.tool:inverno-maven-plugin:1.2.4:stop
+io.inverno.tool:inverno-maven-plugin:1.3.0-SNAPSHOT:stop
 
 **Description:**
 
