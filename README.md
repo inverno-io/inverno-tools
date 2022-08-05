@@ -21,11 +21,11 @@ The [Inverno Maven Plugin][inverno-tool-maven-plugin] provides specific goals to
 - build native an application image containing an application and all its dependencies into an easy to install platform dependent package (eg. `.deb`, `.rpm`, `.dmg`, `.exe`, `.msi`...).
 - build docker or OCI images of an application into a tarball, a Docker daemon or a container image registry.
 
-The plugin requires [JDK][jdk] 14 or later and [Apache Maven][maven] 3.6.0 or later.
+The plugin requires [JDK][jdk] 15+ and [Apache Maven][maven] 3.6.0 or later.
 
 ## Building Inverno framework tools
 
-The Inverno framework tools can be built using Maven and Java 11+ with the following command:
+The Inverno framework tools can be built using Maven and [JDK][jdk] 15+ with the following command:
 
 ```plaintext
 $ mvn install
