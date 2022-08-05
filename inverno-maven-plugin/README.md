@@ -3937,7 +3937,8 @@ io.inverno.tool:inverno-maven-plugin:1.3.0-SNAPSHOT:build-image-tar
 
 Builds a container image to a TAR archive that can be later loaded into Docker:
 
-$ docker load --input target/&lt;image&gt;.tar 
+$ docker load --input target/{@literal&lt;image&gt;.tar 
+}
 
 
 **Attributes:**

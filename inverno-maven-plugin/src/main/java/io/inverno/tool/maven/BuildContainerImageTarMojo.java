@@ -33,11 +33,9 @@ import io.inverno.tool.maven.internal.task.CreateProjectContainerImageTask;
  * Builds a container image to a TAR archive that can be later loaded into Docker:
  * </p>
  * 
- * <blockquote>
- * <pre>
+ * <pre>{@code 
  * $ docker load --input target/{@literal<image>}.tar 
- * </pre>
- * </blockquote>
+ * }</pre>
  * 
  * @author <a href="mailto:jeremy.kuhn@inverno.io">Jeremy Kuhn</a>
  * @since 1.0
