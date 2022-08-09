@@ -15,24 +15,21 @@
  */
 package io.inverno.tool.maven;
 
+import io.inverno.tool.maven.internal.ProjectModule;
 import java.io.IOException;
 import java.lang.module.ModuleFinder;
 import java.lang.module.ModuleReference;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
-
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
-
-import io.inverno.tool.maven.internal.ProjectModule;
 
 /**
  * <p>
@@ -73,7 +70,7 @@ public class StopMojo extends AbstractInvernoMojo {
 	
 	@Override
 	public void doExecute() throws MojoExecutionException, MojoFailureException {
-			ModuleReference projectModuleReference = ModuleFinder.of(Paths.get(this.project.getBuild().getOutputDirectory())).findAll().stream().findFirst().get();
+			ModuleReference projectModuleReference = ModuleFinder.of(Path.of(this.project.getBuild().getOutputDirectory())).findAll().stream().findFirst().get();
 			ProjectModule projectModule = new ProjectModule(this.project, projectModuleReference.descriptor(), Set.of(), this.invernoBuildPath, this.jmodsPath, ProjectModule.Classifier.RUNTIME, Set.of());
 
 			this.getLog().info("Stopping project: " + projectModule + "...");

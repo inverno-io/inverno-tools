@@ -15,20 +15,7 @@
  */
 package io.inverno.tool.maven;
 
-import java.lang.module.ModuleFinder;
-import java.lang.module.ModuleReference;
-import java.nio.file.Paths;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
-
-import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugin.MojoFailureException;
-import org.apache.maven.plugins.annotations.Parameter;
-import org.codehaus.plexus.util.StringUtils;
-
 import com.google.cloud.tools.jib.api.buildplan.ImageFormat;
-
 import io.inverno.tool.maven.internal.DependencyModule;
 import io.inverno.tool.maven.internal.ProgressBar;
 import io.inverno.tool.maven.internal.ProjectModule;
@@ -39,6 +26,16 @@ import io.inverno.tool.maven.internal.task.CreateProjectJmodTask;
 import io.inverno.tool.maven.internal.task.CreateProjectRuntimeTask;
 import io.inverno.tool.maven.internal.task.ModularizeDependenciesTask;
 import io.inverno.tool.maven.internal.task.PackageModularizedDependenciesTask;
+import java.lang.module.ModuleFinder;
+import java.lang.module.ModuleReference;
+import java.nio.file.Path;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
+import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.plugins.annotations.Parameter;
+import org.codehaus.plexus.util.StringUtils;
 
 /**
  * <p>
@@ -121,7 +118,7 @@ public abstract class AbstractContainerImageMojo extends BuildApplicationMojo {
 		try {
 			Set<DependencyModule> dependencies = this.getResolveDependenciesTask().call();
 			
-			ModuleReference projectModuleReference = ModuleFinder.of(Paths.get(this.project.getBuild().getOutputDirectory())).findAll().stream().findFirst().get();
+			ModuleReference projectModuleReference = ModuleFinder.of(Path.of(this.project.getBuild().getOutputDirectory())).findAll().stream().findFirst().get();
 			this.projectModule = new ProjectModule(this.project, projectModuleReference.descriptor(), dependencies, this.invernoBuildPath, this.jmodsPath, ProjectModule.Classifier.CONTAINER, Set.of());
 			
 			this.getLog().info("Building project container image...");

@@ -15,18 +15,20 @@
  */
 package io.inverno.tool.maven.internal.task;
 
+import io.inverno.tool.maven.internal.DependencyModule;
+import io.inverno.tool.maven.internal.Task;
+import io.inverno.tool.maven.internal.TaskExecutionException;
+import io.inverno.tool.maven.internal.ProgressBar.Step;
 import java.io.IOException;
 import java.lang.module.ModuleFinder;
 import java.lang.module.ModuleReference;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.shared.artifact.filter.collection.ArtifactFilterException;
@@ -37,11 +39,6 @@ import org.apache.maven.shared.artifact.filter.collection.GroupIdFilter;
 import org.apache.maven.shared.artifact.filter.collection.ScopeFilter;
 import org.apache.maven.shared.artifact.filter.collection.TypeFilter;
 import org.codehaus.plexus.util.StringUtils;
-
-import io.inverno.tool.maven.internal.DependencyModule;
-import io.inverno.tool.maven.internal.Task;
-import io.inverno.tool.maven.internal.TaskExecutionException;
-import io.inverno.tool.maven.internal.ProgressBar.Step;
 
 /**
  * <p>
@@ -111,7 +108,7 @@ public class ResolveDependenciesTask extends Task<Set<DependencyModule>> {
 			Set<Artifact> filteredArtifacts = filter.filter(this.artifacts);
 			
 			ModuleFinder moduleFinder = ModuleFinder.of(filteredArtifacts.stream().map(artifact -> artifact.getFile().toPath()).toArray(Path[]::new));
-			Map<Path, ModuleReference> filteredModules = moduleFinder.findAll().stream().collect(Collectors.toMap(moduleRef -> Paths.get(moduleRef.location().get()), Function.identity()));
+			Map<Path, ModuleReference> filteredModules = moduleFinder.findAll().stream().collect(Collectors.toMap(moduleRef -> Path.of(moduleRef.location().get()), Function.identity()));
 
 			Set<DependencyModule> dependencies = new HashSet<>();
 			for(Artifact artifact : filteredArtifacts) {

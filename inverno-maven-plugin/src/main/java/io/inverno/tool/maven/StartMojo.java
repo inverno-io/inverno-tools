@@ -15,6 +15,7 @@
  */
 package io.inverno.tool.maven;
 
+import io.inverno.tool.maven.internal.ProjectModule;
 import java.io.IOException;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
@@ -25,15 +26,12 @@ import java.nio.file.WatchService;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
-
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.plugins.annotations.ResolutionScope;
-
-import io.inverno.tool.maven.internal.ProjectModule;
 
 /**
  * <p>

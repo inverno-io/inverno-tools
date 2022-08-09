@@ -17,15 +17,13 @@ package io.inverno.tool.maven;
 
 import java.io.IOException;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 
+import io.inverno.tool.maven.internal.ProgressBar;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
-
-import io.inverno.tool.maven.internal.ProgressBar;
 
 /**
  * <p>
@@ -69,7 +67,7 @@ public abstract class AbstractInvernoMojo extends AbstractMojo {
 	protected abstract void doExecute() throws MojoExecutionException, MojoFailureException;
 	
 	protected void initializePaths() throws IOException {
-		this.invernoBuildPath = Paths.get(this.project.getBuild().getDirectory(), "maven-inverno");
+		this.invernoBuildPath = Path.of(this.project.getBuild().getDirectory(), "maven-inverno");
 	}
 	
 	protected ProgressBar createProgressBar() {

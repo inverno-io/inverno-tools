@@ -15,10 +15,13 @@
  */
 package io.inverno.tool.maven.internal.task;
 
+import io.inverno.tool.maven.internal.NullPrintStream;
+import io.inverno.tool.maven.internal.ProjectModule;
+import io.inverno.tool.maven.internal.Task;
+import io.inverno.tool.maven.internal.TaskExecutionException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -29,15 +32,9 @@ import java.util.Set;
 import java.util.spi.ToolProvider;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.codehaus.plexus.util.StringUtils;
-
-import io.inverno.tool.maven.internal.NullPrintStream;
-import io.inverno.tool.maven.internal.ProjectModule;
-import io.inverno.tool.maven.internal.Task;
-import io.inverno.tool.maven.internal.TaskExecutionException;
 
 /**
  * <p>
@@ -136,7 +133,7 @@ public class CreateProjectRuntimeTask extends Task<Void> {
 				jlink_args.add(value);
 			});
 			
-			String javaModulePath = Paths.get(System.getProperty("java.home"), "jmods").toAbsolutePath().toString();
+			String javaModulePath = Path.of(System.getProperty("java.home"), "jmods").toAbsolutePath().toString();
 			String dependenciesModulePath = this.projectModule.getModuleDependencies().stream().map(dependencyModule -> dependencyModule.getJmodPath().toString()).collect(Collectors.joining(System.getProperty("path.separator")));
 			String projectModulePath = this.projectModule.getJmodPath().toString();
 			

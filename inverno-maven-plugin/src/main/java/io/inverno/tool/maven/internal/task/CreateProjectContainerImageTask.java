@@ -22,14 +22,13 @@ import io.inverno.tool.maven.internal.ProgressBar.Step;
 import io.inverno.tool.maven.internal.ProjectModule;
 import io.inverno.tool.maven.internal.Task;
 import io.inverno.tool.maven.internal.TaskExecutionException;
-import org.apache.maven.plugin.AbstractMojo;
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Instant;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
+import org.apache.maven.plugin.AbstractMojo;
 
 /**
  * <p>

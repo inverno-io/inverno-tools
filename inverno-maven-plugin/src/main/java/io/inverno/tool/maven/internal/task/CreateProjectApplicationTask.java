@@ -15,6 +15,13 @@
  */
 package io.inverno.tool.maven.internal.task;
 
+import io.inverno.tool.maven.internal.DependencyModule;
+import io.inverno.tool.maven.internal.NullPrintStream;
+import io.inverno.tool.maven.internal.Platform;
+import io.inverno.tool.maven.internal.ProgressBar.Step;
+import io.inverno.tool.maven.internal.ProjectModule;
+import io.inverno.tool.maven.internal.Task;
+import io.inverno.tool.maven.internal.TaskExecutionException;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -33,18 +40,9 @@ import java.util.Set;
 import java.util.spi.ToolProvider;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.codehaus.plexus.util.StringUtils;
-
-import io.inverno.tool.maven.internal.DependencyModule;
-import io.inverno.tool.maven.internal.NullPrintStream;
-import io.inverno.tool.maven.internal.Platform;
-import io.inverno.tool.maven.internal.ProgressBar.Step;
-import io.inverno.tool.maven.internal.ProjectModule;
-import io.inverno.tool.maven.internal.Task;
-import io.inverno.tool.maven.internal.TaskExecutionException;
 
 /**
  * <p>

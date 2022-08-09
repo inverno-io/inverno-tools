@@ -15,12 +15,15 @@
  */
 package io.inverno.tool.maven.internal.task;
 
+import io.inverno.tool.maven.internal.ProgressBar;
+import io.inverno.tool.maven.internal.ProjectModule;
+import io.inverno.tool.maven.internal.Task;
+import io.inverno.tool.maven.internal.TaskExecutionException;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.LinkOption;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.Iterator;
 import java.util.List;
@@ -30,7 +33,6 @@ import java.util.Set;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
 import org.apache.commons.compress.archivers.ArchiveEntry;
 import org.apache.commons.compress.archivers.ArchiveException;
 import org.apache.commons.compress.archivers.ArchiveOutputStream;
@@ -44,12 +46,6 @@ import org.apache.commons.compress.compressors.CompressorException;
 import org.apache.commons.compress.compressors.CompressorStreamFactory;
 import org.apache.maven.plugin.AbstractMojo;
 import org.codehaus.plexus.util.StringUtils;
-
-import io.inverno.tool.maven.internal.ProgressBar;
-import io.inverno.tool.maven.internal.ProjectModule;
-import io.inverno.tool.maven.internal.Task;
-import io.inverno.tool.maven.internal.TaskExecutionException;
-import io.inverno.tool.maven.internal.ProgressBar.Step;
 
 /**
  * <p>
@@ -76,7 +72,7 @@ public class CreateImageArchivesTask extends Task<Void> {
 	}
 	
 	@Override
-	public void setStep(Step step) {
+	public void setStep(ProgressBar.Step step) {
 		if(step != null) {
 			step.setDescription("Creating image archives..");
 		}
@@ -105,7 +101,7 @@ public class CreateImageArchivesTask extends Task<Void> {
 						Path imageSourcePath = imageSourcePathIterator.next();
 						Path imageTargetPath = this.imagePath.relativize(imageSourcePath);
 						if(StringUtils.isNotEmpty(this.prefix)) {
-							imageTargetPath = Paths.get(this.prefix).resolve(imageTargetPath);
+							imageTargetPath = Path.of(this.prefix).resolve(imageTargetPath);
 						}
 						ArchiveEntry imageArchiveEntry = this.createArchiveEntry(archiveOutput, imageSourcePath, imageTargetPath);
 						archiveOutput.putArchiveEntry(imageArchiveEntry);

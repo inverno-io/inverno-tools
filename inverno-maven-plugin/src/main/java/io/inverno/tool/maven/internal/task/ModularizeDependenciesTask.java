@@ -15,6 +15,12 @@
  */
 package io.inverno.tool.maven.internal.task;
 
+import io.inverno.tool.maven.internal.DependencyModule;
+import io.inverno.tool.maven.internal.NullPrintStream;
+import io.inverno.tool.maven.internal.ProjectModule;
+import io.inverno.tool.maven.internal.Task;
+import io.inverno.tool.maven.internal.TaskExecutionException;
+import io.inverno.tool.maven.internal.ProgressBar.Step;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -25,7 +31,6 @@ import java.nio.file.FileSystem;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -41,15 +46,7 @@ import java.util.spi.ToolProvider;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.zip.ZipFile;
-
 import org.apache.maven.plugin.AbstractMojo;
-
-import io.inverno.tool.maven.internal.DependencyModule;
-import io.inverno.tool.maven.internal.NullPrintStream;
-import io.inverno.tool.maven.internal.ProjectModule;
-import io.inverno.tool.maven.internal.Task;
-import io.inverno.tool.maven.internal.TaskExecutionException;
-import io.inverno.tool.maven.internal.ProgressBar.Step;
 
 /**
  * <p>
@@ -198,13 +195,13 @@ public class ModularizeDependenciesTask extends Task<Set<DependencyModule>> {
 				webjarName = dependency.getModuleName().substring(dependency.getArtifact().getGroupId().length() + 1);
 			}
 			
-			Path webjarResourcesPath = Paths.get("META-INF/resources/webjars/");
+			Path webjarResourcesPath = Path.of("META-INF/resources/webjars/");
 			if(this.verbose) {
 				this.getLog().info("   - unpacking " + (webjar ? "WebJar " : "") + dependency + " to " + explodedJmodPath);
 			}
 			
 			for(JarEntry jarEntry : moduleJar.stream().collect(Collectors.toList())) {
-				Path jarEntryPath = Paths.get(jarEntry.getName());
+				Path jarEntryPath = Path.of(jarEntry.getName());
 				Path targetEntry = explodedJmodPath.resolve(jarEntry.getName()).normalize();
 				if(webjar && jarEntryPath.startsWith(webjarResourcesPath) && jarEntryPath.getNameCount() > webjarResourcesPath.getNameCount()) {
 					if(jarEntryPath.getNameCount() == webjarResourcesPath.getNameCount() + 1) {
@@ -288,9 +285,9 @@ public class ModularizeDependenciesTask extends Task<Set<DependencyModule>> {
 				this.getLog().info("   - jdeps " + jdeps_args.stream().collect(Collectors.joining(" ")));
 			}
 			if(this.jdeps.run(this.verbose ? this.getOutStream() : new NullPrintStream(), this.getErrStream(), jdeps_args.stream().toArray(String[]::new)) == 0) {
-				Files.move(dependency.getExplodedJmodPath().resolve(Paths.get("versions", version, "module-info.java")), dependency.getModuleInfoPath());
-				Files.delete(dependency.getExplodedJmodPath().resolve(Paths.get("versions", version)));
-				Files.delete(dependency.getExplodedJmodPath().resolve(Paths.get("versions")));
+				Files.move(dependency.getExplodedJmodPath().resolve(Path.of("versions", version, "module-info.java")), dependency.getModuleInfoPath());
+				Files.delete(dependency.getExplodedJmodPath().resolve(Path.of("versions", version)));
+				Files.delete(dependency.getExplodedJmodPath().resolve(Path.of("versions")));
 			}
 			else {
 				throw new TaskExecutionException("Error generating module-info.java for " + dependency + ", activate '-Dinverno.verbose=true' to display full log");

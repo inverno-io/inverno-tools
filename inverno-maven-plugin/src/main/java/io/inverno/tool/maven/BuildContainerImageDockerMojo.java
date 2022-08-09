@@ -15,20 +15,17 @@
  */
 package io.inverno.tool.maven;
 
+import com.google.cloud.tools.jib.api.buildplan.ImageFormat;
+import io.inverno.tool.maven.internal.ProgressBar;
+import io.inverno.tool.maven.internal.task.CreateProjectContainerImageTask;
 import java.io.File;
 import java.util.Map;
 import java.util.Optional;
-
 import org.apache.maven.plugins.annotations.Execute;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.plugins.annotations.ResolutionScope;
-
-import com.google.cloud.tools.jib.api.buildplan.ImageFormat;
-
-import io.inverno.tool.maven.internal.ProgressBar;
-import io.inverno.tool.maven.internal.task.CreateProjectContainerImageTask;
 
 /**
  * <p>

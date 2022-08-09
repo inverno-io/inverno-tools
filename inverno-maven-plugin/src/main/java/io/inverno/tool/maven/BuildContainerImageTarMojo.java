@@ -15,18 +15,16 @@
  */
 package io.inverno.tool.maven;
 
+import io.inverno.tool.maven.internal.ProgressBar;
+import io.inverno.tool.maven.internal.ProjectModule.Classifier;
+import io.inverno.tool.maven.internal.task.CreateProjectContainerImageTask;
 import java.nio.file.Path;
-
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Execute;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.ResolutionScope;
-
-import io.inverno.tool.maven.internal.ProgressBar;
-import io.inverno.tool.maven.internal.ProjectModule.Classifier;
-import io.inverno.tool.maven.internal.task.CreateProjectContainerImageTask;
 
 /**
  * <p>

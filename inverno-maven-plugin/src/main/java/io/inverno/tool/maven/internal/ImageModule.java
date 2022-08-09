@@ -17,7 +17,6 @@ package io.inverno.tool.maven.internal;
 
 import java.lang.module.ModuleDescriptor;
 import java.nio.file.Path;
-
 import org.apache.maven.artifact.Artifact;
 
 /**

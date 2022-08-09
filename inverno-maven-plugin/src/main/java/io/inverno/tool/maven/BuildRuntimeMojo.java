@@ -1,22 +1,19 @@
+/*
+ * Copyright 2021 Jeremy KUHN
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package io.inverno.tool.maven;
-
-import java.io.File;
-import java.lang.module.ModuleFinder;
-import java.lang.module.ModuleReference;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.List;
-import java.util.Map.Entry;
-import java.util.Optional;
-import java.util.Set;
-
-import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugin.MojoFailureException;
-import org.apache.maven.plugins.annotations.LifecyclePhase;
-import org.apache.maven.plugins.annotations.Mojo;
-import org.apache.maven.plugins.annotations.Parameter;
-import org.apache.maven.plugins.annotations.ResolutionScope;
-import org.codehaus.plexus.util.StringUtils;
 
 import io.inverno.tool.maven.internal.DependencyModule;
 import io.inverno.tool.maven.internal.ProgressBar;
@@ -28,6 +25,21 @@ import io.inverno.tool.maven.internal.task.CreateProjectRuntimeTask;
 import io.inverno.tool.maven.internal.task.ModularizeDependenciesTask;
 import io.inverno.tool.maven.internal.task.PackageModularizedDependenciesTask;
 import io.inverno.tool.maven.internal.task.ResolveDependenciesTask;
+import java.io.File;
+import java.lang.module.ModuleFinder;
+import java.lang.module.ModuleReference;
+import java.nio.file.Path;
+import java.util.List;
+import java.util.Map.Entry;
+import java.util.Optional;
+import java.util.Set;
+import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.plugins.annotations.LifecyclePhase;
+import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.Parameter;
+import org.apache.maven.plugins.annotations.ResolutionScope;
+import org.codehaus.plexus.util.StringUtils;
 
 /**
  * <p>
@@ -81,7 +93,7 @@ public class BuildRuntimeMojo extends AbstractImageMojo {
 		try {
 			Set<DependencyModule> dependencies = this.getResolveDependenciesTask().call();
 			
-			ModuleReference projectModuleReference = ModuleFinder.of(Paths.get(this.project.getBuild().getOutputDirectory())).findAll().stream().findFirst().get();
+			ModuleReference projectModuleReference = ModuleFinder.of(Path.of(this.project.getBuild().getOutputDirectory())).findAll().stream().findFirst().get();
 			this.projectModule = new ProjectModule(this.project, projectModuleReference.descriptor(), dependencies, this.invernoBuildPath, this.jmodsPath, ProjectModule.Classifier.RUNTIME, this.formats);
 
 			this.getLog().info("Building runtime image: " + this.projectModule.getRuntimeImagePath() + "...");

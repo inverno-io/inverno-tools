@@ -15,22 +15,19 @@
  */
 package io.inverno.tool.maven.internal.task;
 
-import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
-import org.apache.maven.plugin.AbstractMojo;
-import org.codehaus.plexus.util.StringUtils;
-
 import io.inverno.tool.maven.internal.ProjectModule;
 import io.inverno.tool.maven.internal.Task;
 import io.inverno.tool.maven.internal.TaskExecutionException;
 import io.inverno.tool.maven.internal.DependencyModule;
 import io.inverno.tool.maven.internal.ProgressBar.Step;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import org.apache.maven.plugin.AbstractMojo;
+import org.codehaus.plexus.util.StringUtils;
 
 /**
  * <p>
@@ -55,7 +52,7 @@ public class ExecuteProjectTask extends Task<Process> {
 	public ExecuteProjectTask(AbstractMojo mojo, ProjectModule projectModule) {
 		super(mojo);
 		this.projectModule = projectModule;
-		this.javaCommand = Paths.get(System.getProperty("java.home"), "bin", "java").toAbsolutePath().toString();
+		this.javaCommand = Path.of(System.getProperty("java.home"), "bin", "java").toAbsolutePath().toString();
 	}
 	
 	@Override

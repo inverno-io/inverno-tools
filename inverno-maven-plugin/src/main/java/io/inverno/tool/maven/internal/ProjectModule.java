@@ -23,7 +23,6 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.nio.file.attribute.FileTime;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -33,7 +32,6 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.project.MavenProject;
 
@@ -145,11 +143,11 @@ public class ProjectModule implements ImageModule {
 		this.jmodsPath = jmodsPath;
 		this.classifier = classifier;
 		
-		this.moduleArchivesPaths = formats.stream().collect(Collectors.toMap(Function.identity(), format -> Paths.get(this.project.getBuild().getDirectory()).toAbsolutePath().resolve(this.project.getBuild().getFinalName() + "-" + this.classifier.getClassifier() + "." + format)));
+		this.moduleArchivesPaths = formats.stream().collect(Collectors.toMap(Function.identity(), format -> Path.of(this.project.getBuild().getDirectory()).toAbsolutePath().resolve(this.project.getBuild().getFinalName() + "-" + this.classifier.getClassifier() + "." + format)));
 		
 		Path jmodPath = this.getJmodPath();
 		if(Files.exists(jmodPath)) {
-			Path classesDirectory = Paths.get(this.project.getBuild().getOutputDirectory());
+			Path classesDirectory = Path.of(this.project.getBuild().getOutputDirectory());
 			try(Stream<Path> walk = Files.walk(classesDirectory)) {
 				FileTime jmodLastModified = Files.getLastModifiedTime(jmodPath);
 				for(Iterator<Path> pathIterator = walk.iterator(); pathIterator.hasNext();) {
@@ -224,7 +222,7 @@ public class ProjectModule implements ImageModule {
 	public Set<String> getMainClasses() throws IOException, ClassNotFoundException {
 		if(this.mainClasses == null) {
 			this.mainClasses = new HashSet<>();
-			Path moduleClassesPath = Paths.get(this.project.getBuild().getOutputDirectory());
+			Path moduleClassesPath = Path.of(this.project.getBuild().getOutputDirectory());
 			
 			Set<URL> urls = new HashSet<>();
 			for(DependencyModule d : this.moduleDependencies) {
@@ -291,7 +289,7 @@ public class ProjectModule implements ImageModule {
 	 * @return the path to the project module classes
 	 */
 	public Path getClassesPath() {
-		return Paths.get(this.project.getBuild().getOutputDirectory()).toAbsolutePath();
+		return Path.of(this.project.getBuild().getOutputDirectory()).toAbsolutePath();
 	}
 	
 	/**
@@ -302,7 +300,7 @@ public class ProjectModule implements ImageModule {
 	 * @return the path to the runtime image
 	 */
 	public Path getRuntimeImagePath() {
-		return this.invernoBuildPath.resolve(Paths.get(Classifier.RUNTIME.getClassifier(), this.project.getBuild().getFinalName()));
+		return this.invernoBuildPath.resolve(Path.of(Classifier.RUNTIME.getClassifier(), this.project.getBuild().getFinalName()));
 	}
 	
 	/**
@@ -313,7 +311,7 @@ public class ProjectModule implements ImageModule {
 	 * @return the path to the application image
 	 */
 	public Path getApplicationImagePath() {
-		return this.invernoBuildPath.resolve(Paths.get(Classifier.APPLICATION.getClassifier(), this.project.getBuild().getFinalName()));
+		return this.invernoBuildPath.resolve(Path.of(Classifier.APPLICATION.getClassifier(), this.project.getBuild().getFinalName()));
 	}
 	
 	/**
@@ -324,7 +322,7 @@ public class ProjectModule implements ImageModule {
 	 * @return the path to the container image tar archive.
 	 */
 	public Path getContainerImageTarPath() {
-		return Paths.get(this.project.getBuild().getDirectory()).toAbsolutePath().resolve(this.project.getBuild().getFinalName() + "-" + this.classifier.getClassifier() + ".tar");
+		return Path.of(this.project.getBuild().getDirectory()).toAbsolutePath().resolve(this.project.getBuild().getFinalName() + "-" + this.classifier.getClassifier() + ".tar");
 	}
 	
 	/**

@@ -22,12 +22,10 @@ import java.lang.module.ModuleDescriptor.Version;
 import java.lang.module.ModuleReference;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Optional;
 import java.util.jar.Attributes;
 import java.util.jar.JarFile;
 import java.util.zip.ZipFile;
-
 import org.apache.maven.artifact.Artifact;
 
 /**
@@ -193,7 +191,7 @@ public class DependencyModule implements ImageModule {
 	 * @return the path to the module overrides
 	 */
 	public Optional<Path> getOverriddenModuleInfoPath() {
-		return this.jmodsOverridePath.map(path -> path.resolve(Paths.get(this.getModuleName(), "module-info.java"))).filter(Files::exists);
+		return this.jmodsOverridePath.map(path -> path.resolve(Path.of(this.getModuleName(), "module-info.java"))).filter(Files::exists);
 	}
 	
 	/**
@@ -209,7 +207,7 @@ public class DependencyModule implements ImageModule {
 	 * @return the path to the module descriptor in the exploded path
 	 */
 	public Path getModuleInfoPath() {
-		return this.jmodsExplodedPath.resolve(Paths.get(this.getModuleName(), "module-info.java"));
+		return this.jmodsExplodedPath.resolve(Path.of(this.getModuleName(), "module-info.java"));
 	}
 	
 	@Override

@@ -15,19 +15,17 @@
  */
 package io.inverno.tool.maven.internal.task;
 
-import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.spi.ToolProvider;
-import java.util.stream.Collectors;
-
-import org.apache.maven.plugin.AbstractMojo;
-
 import io.inverno.tool.maven.internal.DependencyModule;
 import io.inverno.tool.maven.internal.ProjectModule;
 import io.inverno.tool.maven.internal.Task;
 import io.inverno.tool.maven.internal.TaskExecutionException;
 import io.inverno.tool.maven.internal.ProgressBar.Step;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.spi.ToolProvider;
+import java.util.stream.Collectors;
+import org.apache.maven.plugin.AbstractMojo;
 
 /**
  * <p>

@@ -15,8 +15,9 @@
  */
 package io.inverno.tool.maven;
 
+import io.inverno.tool.maven.internal.ProjectModule;
+import io.inverno.tool.maven.internal.task.ExecuteProjectTask;
 import java.util.Optional;
-
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Execute;
@@ -25,9 +26,6 @@ import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.plugins.annotations.ResolutionScope;
 import org.codehaus.plexus.util.StringUtils;
-
-import io.inverno.tool.maven.internal.ProjectModule;
-import io.inverno.tool.maven.internal.task.ExecuteProjectTask;
 
 /**
  * <p>
