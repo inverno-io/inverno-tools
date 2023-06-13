@@ -245,7 +245,7 @@ public class ModularizeDependenciesTask extends Task<Set<DependencyModule>> {
 			try (FileSystem fs = FileSystems.newFileSystem(dependencyJarURI, Map.of("create", "false"));URLClassLoader classLoader = new URLClassLoader(urls.stream().toArray(URL[]::new));) {
 				Path services = fs.getPath("META-INF", "services").toAbsolutePath();
 				if(Files.exists(services)) {
-					for(Path servicePath : Files.list(services).toArray(Path[]::new)) {
+					for(Path servicePath : Files.list(services).filter(Files::isRegularFile).toArray(Path[]::new)) {
 						try {
 							classLoader.loadClass(servicePath.getFileName().toString());
 						} 
