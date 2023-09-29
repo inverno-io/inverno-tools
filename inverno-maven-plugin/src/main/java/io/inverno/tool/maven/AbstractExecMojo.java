@@ -29,6 +29,7 @@ import java.lang.module.ModuleFinder;
 import java.lang.module.ModuleReference;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.List;
 import java.util.Optional;
 import java.util.ServiceLoader;
 import java.util.Set;
@@ -106,6 +107,12 @@ public abstract class AbstractExecMojo extends AbstractInvernoMojo {
 	 */
 	@Parameter(property = "inverno.run.workingDirectory", defaultValue = "${project.build.directory}/maven-inverno/working", required = false)
 	protected File workingDirectory;
+	
+	/**
+	 * A list of module-info.java overrides that will be merged into the module-info.java generated for automatic modules.
+	 */
+	@Parameter(required = false)
+	protected List<ModularizeDependenciesTask.ModuleInfoOverride> jmodsOverrides;
 	
 	// src
 	protected Optional<Path> jmodsOverridePath;
@@ -188,6 +195,7 @@ public abstract class AbstractExecMojo extends AbstractInvernoMojo {
 	
 	protected abstract void handleProcess(ProjectModule projectModule, Process proc) throws MojoExecutionException, MojoFailureException;
 	
+	@Override
 	protected void initializePaths() throws IOException {
 		super.initializePaths();
 		
@@ -217,6 +225,7 @@ public abstract class AbstractExecMojo extends AbstractInvernoMojo {
 		
 		task.setVerbose(this.verbose);
 		task.setStep(step);
+		task.setJmodsOverrides(Optional.ofNullable(this.jmodsOverrides).filter(overrides -> !overrides.isEmpty()));
 		
 		return task;
 	}

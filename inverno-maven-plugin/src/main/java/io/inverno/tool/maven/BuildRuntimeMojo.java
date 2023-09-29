@@ -166,6 +166,7 @@ public class BuildRuntimeMojo extends AbstractImageMojo {
 		
 		task.setVerbose(this.verbose);
 		task.setStep(step);
+		task.setJmodsOverrides(Optional.ofNullable(this.jmodsOverrides).filter(overrides -> !overrides.isEmpty()));
 		
 		return task;
 	}

@@ -21,6 +21,11 @@ import io.inverno.tool.maven.internal.ProjectModule;
 import io.inverno.tool.maven.internal.Task;
 import io.inverno.tool.maven.internal.TaskExecutionException;
 import io.inverno.tool.maven.internal.ProgressBar.Step;
+import io.inverno.tool.maven.internal.parser.ModuleInfoParser;
+import io.inverno.tool.maven.internal.parser.ParseException;
+import io.inverno.tool.maven.internal.parser.StreamProvider;
+import io.inverno.tool.maven.internal.spi.ModuleInfo;
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -31,22 +36,30 @@ import java.nio.file.FileSystem;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.jar.Attributes;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.jar.Manifest;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.spi.ToolProvider;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.zip.ZipFile;
 import org.apache.maven.plugin.AbstractMojo;
+import org.apache.maven.plugins.annotations.Parameter;
 
 /**
  * <p>
@@ -62,11 +75,15 @@ public class ModularizeDependenciesTask extends Task<Set<DependencyModule>> {
 	private final ProjectModule projectModule;
 	private final Path jmodsExplodedPath;
 	
+	private Optional<Map<String, ModularizeDependenciesTask.ModuleInfoOverride>> jmodsOverrides;
+	
 	public ModularizeDependenciesTask(AbstractMojo mojo, ToolProvider jdeps, ProjectModule projectModule, Path jmodsExplodedPath) {
 		super(mojo);
 		this.jdeps = jdeps;
 		this.projectModule = projectModule;
 		this.jmodsExplodedPath = jmodsExplodedPath;
+		
+		this.jmodsOverrides = jmodsOverrides = Optional.empty();
 	}
 	
 	@Override
@@ -77,6 +94,11 @@ public class ModularizeDependenciesTask extends Task<Set<DependencyModule>> {
 		super.setStep(step);
 	}
 
+	public void setJmodsOverrides(Optional<List<ModularizeDependenciesTask.ModuleInfoOverride>> jmodsOverrides) {
+		this.jmodsOverrides = jmodsOverrides
+			.map(overrides -> overrides.stream().collect(Collectors.toMap(ModularizeDependenciesTask.ModuleInfoOverride::getName, Function.identity())));
+	}
+	
 	@Override
 	protected Set<DependencyModule> execute() throws TaskExecutionException {
 		if(this.projectModule.getModuleDependencies().stream().anyMatch(DependencyModule::isMarked)) {
@@ -202,7 +224,7 @@ public class ModularizeDependenciesTask extends Task<Set<DependencyModule>> {
 			
 			for(JarEntry jarEntry : moduleJar.stream().collect(Collectors.toList())) {
 				Path jarEntryPath = Path.of(jarEntry.getName());
-				Path targetEntry = explodedJmodPath.resolve(jarEntry.getName()).normalize();
+				Path targetEntry;
 				if(webjar && jarEntryPath.startsWith(webjarResourcesPath) && jarEntryPath.getNameCount() > webjarResourcesPath.getNameCount()) {
 					if(jarEntryPath.getNameCount() == webjarResourcesPath.getNameCount() + 1) {
 						continue;
@@ -270,6 +292,8 @@ public class ModularizeDependenciesTask extends Task<Set<DependencyModule>> {
 					}
 				}).collect(Collectors.joining(System.getProperty("path.separator")));
 			
+			Optional<ModularizeDependenciesTask.ModuleInfoOverride> jmodOverride = this.jmodsOverrides.map(overrides -> overrides.get(dependency.getModuleName()));
+			
 			List<String> jdeps_args = new LinkedList<>();
 			
 			jdeps_args.add("--ignore-missing-deps");
@@ -277,7 +301,12 @@ public class ModularizeDependenciesTask extends Task<Set<DependencyModule>> {
 			jdeps_args.add(version);
 			jdeps_args.add("--module-path");
 			jdeps_args.add(jdeps_modulePath);
-			jdeps_args.add("--generate-module-info");
+			if(jmodOverride.map(override -> override.isOpen()).orElse(false)) {
+				jdeps_args.add("--generate-open-module");
+			}
+			else {
+				jdeps_args.add("--generate-module-info");
+			}
 			jdeps_args.add(this.jmodsExplodedPath.toString());
 			jdeps_args.add(dependency.getJmodPath().toString());
 			
@@ -288,6 +317,10 @@ public class ModularizeDependenciesTask extends Task<Set<DependencyModule>> {
 				Files.move(dependency.getExplodedJmodPath().resolve(Path.of("versions", version, "module-info.java")), dependency.getModuleInfoPath());
 				Files.delete(dependency.getExplodedJmodPath().resolve(Path.of("versions", version)));
 				Files.delete(dependency.getExplodedJmodPath().resolve(Path.of("versions")));
+				
+				if(jmodOverride.isPresent()) {
+					this.overrideModuleInfo(dependency, jmodOverride.get());
+				}
 			}
 			else {
 				throw new TaskExecutionException("Error generating module-info.java for " + dependency + ", activate '-Dinverno.verbose=true' to display full log");
@@ -295,6 +328,184 @@ public class ModularizeDependenciesTask extends Task<Set<DependencyModule>> {
 		}
 		catch (IOException e) {
 			throw new TaskExecutionException("Error generating module-info.java for " + dependency + ", activate '-Dinverno.verbose=true' to display full log", e);
+		}
+	}
+	
+	private void overrideModuleInfo(DependencyModule dependency, ModuleInfo moduleInfoOverride) throws TaskExecutionException {
+		if(verbose) {
+			this.getLog().info("   - overriding module-info.java");
+		}
+		ModuleInfo moduleInfo;
+		try(BufferedReader moduleInfoReader = Files.newBufferedReader(dependency.getModuleInfoPath())) {
+			moduleInfo = new ModuleInfoParser(new StreamProvider(moduleInfoReader)).ModuleInfo();
+
+			// Requires
+			Map<String, ModuleInfo.RequiresDirective> overriddenRequiresByName = moduleInfoOverride.getRequires().stream()
+				.collect(Collectors.toMap(ModuleInfo.RequiresDirective::getModule, Function.identity()));
+			ListIterator<ModuleInfo.RequiresDirective> requiresIterator = moduleInfo.getRequires().listIterator();
+			while(requiresIterator.hasNext()) {
+				if(overriddenRequiresByName.containsKey(requiresIterator.next().getModule())) {
+					requiresIterator.remove();
+				}
+			}
+			moduleInfo.getRequires().addAll(moduleInfoOverride.getRequires());
+
+			// Exports
+			Map<String, ModuleInfo.ExportsDirective> overriddenExportsByName = moduleInfoOverride.getExports().stream()
+				.collect(Collectors.toMap(ModuleInfo.ExportsDirective::getPackage, Function.identity()));
+			ListIterator<ModuleInfo.ExportsDirective> exportsIterator = moduleInfo.getExports().listIterator();
+			while(exportsIterator.hasNext()) {
+				if(overriddenExportsByName.containsKey(exportsIterator.next().getPackage())) {
+					exportsIterator.remove();
+				}
+			}
+			moduleInfo.getExports().addAll(moduleInfoOverride.getExports());
+
+			// Opens
+			Map<String, ModuleInfo.OpensDirective> overriddenOpensByName = moduleInfoOverride.getOpens().stream()
+				.collect(Collectors.toMap(ModuleInfo.OpensDirective::getPackage, Function.identity()));
+			ListIterator<ModuleInfo.OpensDirective> opensIterator = moduleInfo.getOpens().listIterator();
+			while(opensIterator.hasNext()) {
+				if(overriddenOpensByName.containsKey(opensIterator.next().getPackage())) {
+					opensIterator.remove();
+				}
+			}
+			moduleInfo.getOpens().addAll(moduleInfoOverride.getOpens());
+			
+			// Uses
+			Map<String, ModuleInfo.UsesDirective> overriddenUsesByName = moduleInfoOverride.getUses().stream()
+				.collect(Collectors.toMap(ModuleInfo.UsesDirective::getType, Function.identity()));
+			ListIterator<ModuleInfo.UsesDirective> usesIterator = moduleInfo.getUses().listIterator();
+			while(opensIterator.hasNext()) {
+				if(overriddenUsesByName.containsKey(usesIterator.next().getType())) {
+					usesIterator.remove();
+				}
+			}
+			moduleInfo.getUses().addAll(moduleInfoOverride.getUses());
+			
+			// Provides
+			Map<String, ModuleInfo.ProvidesDirective> overriddenProvidesByName = moduleInfoOverride.getProvides().stream()
+				.collect(Collectors.toMap(ModuleInfo.ProvidesDirective::getType, Function.identity()));
+			ListIterator<ModuleInfo.ProvidesDirective> providesIterator = moduleInfo.getProvides().listIterator();
+			while(providesIterator.hasNext()) {
+				if(overriddenProvidesByName.containsKey(providesIterator.next().getType())) {
+					providesIterator.remove();
+				}
+			}
+			moduleInfo.getProvides().addAll(moduleInfoOverride.getProvides());
+		}
+		catch(IOException | ParseException e) {
+			throw new TaskExecutionException("Error overriding module-info.java for " + dependency + ", activate '-Dinverno.verbose=true' to display full log", e);
+		}
+		
+		try {
+			Files.write(dependency.getModuleInfoPath(), moduleInfo.toString().getBytes(), StandardOpenOption.WRITE, StandardOpenOption.TRUNCATE_EXISTING);
+		} 
+		catch(IOException e) {
+			throw new TaskExecutionException("Error overriding module-info.java for " + dependency + ", activate '-Dinverno.verbose=true' to display full log", e);
+		}
+	}
+	
+	public static class ModuleInfoOverride extends ModuleInfo {
+		
+		@Parameter(required = true)
+		public void setName(String name) {
+			this.name = name;
+		}
+
+		@Parameter(required = false)
+		public void setOpen(boolean open) {
+			this.open = open;
+		}
+
+		@Parameter(required = false)
+		public void setRequires(List<ModuleInfoOverride.RequiresDirective> requires) {
+			this.requires = new ArrayList<>(requires);
+		}
+
+		@Parameter(required = false)
+		public void setExports(List<ModuleInfoOverride.ExportsDirective> exports) {
+			this.exports = new ArrayList<>(exports);
+		}
+
+		@Parameter(required = false)
+		public void setOpens(List<ModuleInfoOverride.OpensDirective> opens) {
+			this.opens = new ArrayList<>(opens);
+		}
+
+		@Parameter(required = false)
+		public void setUses(List<ModuleInfoOverride.UsesDirective> uses) {
+			this.uses = new ArrayList<>(uses);
+		}
+
+		@Parameter(required = false)
+		public void setProvides(List<ModuleInfoOverride.ProvidesDirective> provides) {
+			this.provides = new ArrayList<>(provides);
+		}
+		
+		public static class RequiresDirective extends ModuleInfo.RequiresDirective {
+
+			@Parameter(required = true)
+			public void setModule(String moduleName) {
+				this.moduleName = moduleName;
+			}
+
+			@Parameter(name="static", required = false)
+			public void setStatic(boolean isStatic) {
+				this.isStatic = isStatic;
+			}
+
+			@Parameter(name="transitive", required = false)
+			public void setTransitive(boolean isTransitive) {
+				this.isTransitive = isTransitive;
+			}
+		}
+		
+		public static class ExportsDirective extends ModuleInfo.ExportsDirective {
+			
+			@Parameter(required = true)
+			public void setPackage(String packageName) {
+				this.packageName = packageName;
+			}
+			
+			@Parameter(required = false)
+			public void setTo(List<String> to) {
+				this.to = to;
+			}
+		}
+		
+		public static class OpensDirective extends ModuleInfo.OpensDirective {
+			
+			@Parameter(required = true)
+			public void setPackage(String packageName) {
+				this.packageName = packageName;
+			}
+
+			@Parameter(required = false)
+			public void setTo(List<String> to) {
+				this.to = to;
+			}
+		}
+		
+		public static class UsesDirective extends ModuleInfo.UsesDirective {
+			
+			@Parameter(required = true)
+			public void setType(String typeName) {
+				this.typeName = typeName;
+			}
+		}
+		
+		public static class ProvidesDirective extends ModuleInfo.ProvidesDirective {
+			
+			@Parameter(required = true)
+			public void setType(String typeName) {
+				this.typeName = typeName;
+			}
+
+			@Parameter(name="with", required = true)
+			public void setWith(List<String> with) {
+				this.with = with;
+			}
 		}
 	}
 }

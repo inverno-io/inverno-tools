@@ -28,7 +28,7 @@ import org.apache.maven.plugins.annotations.ResolutionScope;
 
 /**
  * <p>
- * Builds a container image to a TAR archive that can be later loaded into Docker:
+ * Builds a container image to a TAR archive that can be later loaded into Docker.
  * </p>
  * 
  * <pre>{@code 

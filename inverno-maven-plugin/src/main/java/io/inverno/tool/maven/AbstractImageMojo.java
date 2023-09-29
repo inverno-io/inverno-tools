@@ -15,10 +15,12 @@
  */
 package io.inverno.tool.maven;
 
+import io.inverno.tool.maven.internal.task.ModularizeDependenciesTask;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.List;
 import java.util.Optional;
 import java.util.ServiceLoader;
 import java.util.Set;
@@ -215,6 +217,12 @@ abstract class AbstractImageMojo extends AbstractInvernoMojo {
 	 */
 	@Parameter(property = "inverno.image.attach", defaultValue = "true", required = true)
 	protected boolean attach = true;
+	
+	/**
+	 * A list of module-info.java overrides that will be merged into the module-info.java generated for automatic modules.
+	 */
+	@Parameter(required = false)
+	protected List<ModularizeDependenciesTask.ModuleInfoOverride> jmodsOverrides;
 
 	// src
 	protected Optional<Path> jmodsOverridePath;

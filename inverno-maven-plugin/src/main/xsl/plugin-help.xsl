@@ -149,9 +149,23 @@
 
 </xsl:template>
 
+<!--<xsl:template name="getSummary">
+<xsl:param name="description"/>
+<xsl:choose>
+<xsl:when test="contains($description, '&#xa;')"><xsl:value-of select="substring-before($description, '&#xa;')"/></xsl:when>
+<xsl:otherwise><xsl:value-of select="$description"/></xsl:otherwise>
+</xsl:choose>
+</xsl:template>-->
+
 <xsl:template name="getSummary">
 <xsl:param name="description"/>
 <xsl:choose>
+<xsl:when test="$description = ''"></xsl:when>
+<xsl:when test="starts-with($description, '&#xa;')">
+<xsl:call-template name="getSummary">
+<xsl:with-param name="description" select="substring-after($description, '&#xa;')"/>
+</xsl:call-template>
+</xsl:when>
 <xsl:when test="contains($description, '&#xa;')"><xsl:value-of select="substring-before($description, '&#xa;')"/></xsl:when>
 <xsl:otherwise><xsl:value-of select="$description"/></xsl:otherwise>
 </xsl:choose>

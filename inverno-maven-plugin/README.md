@@ -324,9 +324,9 @@ By default the registry points to the Docker hub `registry-1.docker.io` but anot
 - [inverno:build-app](#invernobuild-app) Builds the project application package.
 - [inverno:build-image](#invernobuild-image) Builds a container image and publishes it to a registry.
 - [inverno:build-image-docker](#invernobuild-image-docker) Builds a Docker container image to a local Docker daemon.
-- [inverno:build-image-tar](#invernobuild-image-tar) Builds a container image to a TAR archive that can be later loaded into Docker:
+- [inverno:build-image-tar](#invernobuild-image-tar) Builds a container image to a TAR archive that can be later loaded into Docker.
 - [inverno:build-runtime](#invernobuild-runtime) Builds the project runtime image.
-- [inverno:help](#invernohelp) Display help information on inverno-maven-plugin.
+- [inverno:help](#invernohelp) Display help information on inverno-maven-plugin. 
 - [inverno:run](#invernorun) Runs the project application.
 - [inverno:start](#invernostart) Starts the project application without blocking the Maven build.
 - [inverno:stop](#invernostop) Stops the project application that has been previously started using the start goal.
@@ -338,6 +338,7 @@ By default the registry points to the Docker hub `registry-1.docker.io` but anot
 io.inverno.tool:inverno-maven-plugin:1.4.0-SNAPSHOT:build-app
 
 **Description:**
+
 
 Builds the project application package.
 
@@ -384,7 +385,7 @@ A project application package is a native self-contained Java application includ
         <td>
             <a href="#formats">formats</a>
         </td>
-        <td>Set</td>
+        <td>String&gt;</td>
         <td>
             A list of archive formats to generate (eg. zip, tar.gz...)
             <ul>
@@ -671,7 +672,7 @@ A project application package is a native self-contained Java application includ
         </td>
         <td>String</td>
         <td>
-            Scope to include. An Empty string indicates all scopes (default). The scopes being interpreted are the scopes as Maven sees them, not as specified in the pom. In summary:
+            Scope to include. An Empty string indicates all scopes (default). The scopes being interpreted are the scopes as Maven sees them, not as specified in the pom. In summary: 
             <ul>
                 <li>
                     <em>User property</em>
@@ -686,7 +687,7 @@ A project application package is a native self-contained Java application includ
         </td>
         <td>String</td>
         <td>
-            Absolute path of the installation directory of the application on OS X or Linux. Relative sub-path of the installation location of the application such as 'Program Files' or 'AppData' on Windows.
+            Absolute path of the installation directory of the application on OS X or Linux. Relative sub-path of the installation location of the application such as "Program Files" or "AppData" on Windows.
             <ul>
                 <li>
                     <em>User property</em>
@@ -716,9 +717,19 @@ A project application package is a native self-contained Java application includ
     </tr>
     <tr>
         <td>
+            <a href="#jmodsOverrides">jmodsOverrides</a>
+        </td>
+        <td>ModuleInfoOverride&gt;</td>
+        <td>
+            A list of module-info.java overrides that will be merged into the module-info.java generated for automatic modules.
+            <ul/>
+        </td>
+    </tr>
+    <tr>
+        <td>
             <a href="#launchers">launchers</a>
         </td>
-        <td>List</td>
+        <td>Launcher&gt;</td>
         <td>
             A list of extra launchers to include in the resulting application.
             <ul/>
@@ -966,7 +977,7 @@ A project application package is a native self-contained Java application includ
         </td>
         <td>String</td>
         <td>
-            Select the HotSpot VM in the output image defined as: 'client' / 'server' / 'minimal' / 'all'
+            Select the HotSpot VM in the output image defined as: "client" / "server" / "minimal" / "all"
             <ul>
                 <li>
                     <em>User property</em>
@@ -1117,7 +1128,7 @@ Scope to exclude. An Empty string indicates no scopes (default).
 
 A list of archive formats to generate (eg. zip, tar.gz...)
 
-- **Type**: java.util.Set
+- **Type**: java.util.Set&lt;java.lang.String&gt;
 - **Required**: yes
 - **Default**: zip
 
@@ -1161,13 +1172,12 @@ Comma separated list of GroupIds to include. Empty String indicates include ever
 
 ##### &lt;includeScope&gt;
 
-Scope to include. An Empty string indicates all scopes (default). The scopes being interpreted are the scopes as Maven sees them, not as specified in the pom. In summary:
--	runtime scope gives runtime and compile dependencies,
--	compile scope gives compile, provided, and system dependencies,
--	test (default) scope gives all dependencies,
--	provided scope just gives provided dependencies,
--	system scope just gives system dependencies.
-
+Scope to include. An Empty string indicates all scopes (default). The scopes being interpreted are the scopes as Maven sees them, not as specified in the pom. In summary: 
+* runtime scope gives runtime and compile dependencies, 
+* compile scope gives compile, provided, and system dependencies, 
+* test (default) scope gives all dependencies, 
+* provided scope just gives provided dependencies, 
+* system scope just gives system dependencies. 
 
 - **Type**: java.lang.String
 - **Required**: no
@@ -1176,7 +1186,7 @@ Scope to include. An Empty string indicates all scopes (default). The scopes bei
 
 ##### &lt;installDirectory&gt;
 
-Absolute path of the installation directory of the application on OS X or Linux. Relative sub-path of the installation location of the application such as 'Program Files' or 'AppData' on Windows.
+Absolute path of the installation directory of the application on OS X or Linux. Relative sub-path of the installation location of the application such as "Program Files" or "AppData" on Windows.
 
 - **Type**: java.lang.String
 - **Required**: no
@@ -1193,11 +1203,19 @@ A directory containing module descriptors to use to modularize unnamed dependenc
 - **Default**: ${project.basedir}/src/jmods/
 
 
+##### &lt;jmodsOverrides&gt;
+
+A list of module-info.java overrides that will be merged into the module-info.java generated for automatic modules.
+
+- **Type**: java.util.List&lt;io.inverno.tool.maven.internal.task.ModularizeDependenciesTask$ModuleInfoOverride&gt;
+- **Required**: no
+
+
 ##### &lt;launchers&gt;
 
 A list of extra launchers to include in the resulting application.
 
-- **Type**: java.util.List
+- **Type**: java.util.List&lt;io.inverno.tool.maven.internal.task.CreateProjectApplicationTask$Launcher&gt;
 - **Required**: no
 
 
@@ -1336,7 +1354,7 @@ Enables verbose logging.
 
 ##### &lt;vm&gt;
 
-Select the HotSpot VM in the output image defined as: 'client' / 'server' / 'minimal' / 'all'
+Select the HotSpot VM in the output image defined as: "client" / "server" / "minimal" / "all"
 
 - **Type**: java.lang.String
 - **Required**: no
@@ -1358,6 +1376,7 @@ Windows specific configuration.
 io.inverno.tool:inverno-maven-plugin:1.4.0-SNAPSHOT:build-image
 
 **Description:**
+
 
 Builds a container image and publishes it to a registry.
 
@@ -1421,7 +1440,7 @@ Builds a container image and publishes it to a registry.
         <td>
             <a href="#formats1">formats</a>
         </td>
-        <td>Set</td>
+        <td>String&gt;</td>
         <td>
             A list of archive formats to generate (eg. zip, tar.gz...)
             <ul>
@@ -1601,7 +1620,7 @@ Builds a container image and publishes it to a registry.
         <td>
             <a href="#environment">environment</a>
         </td>
-        <td>Map</td>
+        <td>String&gt;</td>
         <td>
             The container's environment variables.
             <ul/>
@@ -1756,7 +1775,7 @@ Builds a container image and publishes it to a registry.
         </td>
         <td>String</td>
         <td>
-            Scope to include. An Empty string indicates all scopes (default). The scopes being interpreted are the scopes as Maven sees them, not as specified in the pom. In summary:
+            Scope to include. An Empty string indicates all scopes (default). The scopes being interpreted are the scopes as Maven sees them, not as specified in the pom. In summary: 
             <ul>
                 <li>
                     <em>User property</em>
@@ -1771,7 +1790,7 @@ Builds a container image and publishes it to a registry.
         </td>
         <td>String</td>
         <td>
-            Absolute path of the installation directory of the application on OS X or Linux. Relative sub-path of the installation location of the application such as 'Program Files' or 'AppData' on Windows.
+            Absolute path of the installation directory of the application on OS X or Linux. Relative sub-path of the installation location of the application such as "Program Files" or "AppData" on Windows.
             <ul>
                 <li>
                     <em>User property</em>
@@ -1801,9 +1820,19 @@ Builds a container image and publishes it to a registry.
     </tr>
     <tr>
         <td>
+            <a href="#jmodsOverrides1">jmodsOverrides</a>
+        </td>
+        <td>ModuleInfoOverride&gt;</td>
+        <td>
+            A list of module-info.java overrides that will be merged into the module-info.java generated for automatic modules.
+            <ul/>
+        </td>
+    </tr>
+    <tr>
+        <td>
             <a href="#labels">labels</a>
         </td>
-        <td>Map</td>
+        <td>String&gt;</td>
         <td>
             The labels to apply to the container image.
             <ul/>
@@ -1813,7 +1842,7 @@ Builds a container image and publishes it to a registry.
         <td>
             <a href="#launchers1">launchers</a>
         </td>
-        <td>List</td>
+        <td>Launcher&gt;</td>
         <td>
             A list of extra launchers to include in the resulting application.
             <ul/>
@@ -1919,9 +1948,9 @@ Builds a container image and publishes it to a registry.
         <td>
             <a href="#ports">ports</a>
         </td>
-        <td>Set</td>
+        <td>String&gt;</td>
         <td>
-            The ports exposed by the container at runtime defined as: port_number [ '/' udp/tcp ]
+            The ports exposed by the container at runtime defined as: port_number [ "/" udp/tcp ] 
             <ul/>
         </td>
     </tr>
@@ -2093,7 +2122,7 @@ Builds a container image and publishes it to a registry.
         </td>
         <td>String</td>
         <td>
-            The user and group used to run the container defined as: user / uid [ ':' group / gid ]
+            The user and group used to run the container defined as: user / uid [ ":" group / gid ]
             <ul/>
         </td>
     </tr>
@@ -2141,7 +2170,7 @@ Builds a container image and publishes it to a registry.
         </td>
         <td>String</td>
         <td>
-            Select the HotSpot VM in the output image defined as: 'client' / 'server' / 'minimal' / 'all'
+            Select the HotSpot VM in the output image defined as: "client" / "server" / "minimal" / "all"
             <ul>
                 <li>
                     <em>User property</em>
@@ -2154,7 +2183,7 @@ Builds a container image and publishes it to a registry.
         <td>
             <a href="#volumes">volumes</a>
         </td>
-        <td>Set</td>
+        <td>String&gt;</td>
         <td>
             The container's mount points.
             <ul/>
@@ -2266,7 +2295,7 @@ The description of the application.
 
 The container's environment variables.
 
-- **Type**: java.util.Map
+- **Type**: java.util.Map&lt;java.lang.String, java.lang.String&gt;
 - **Required**: no
 
 
@@ -2320,7 +2349,7 @@ The executable in the application image to use as image entry point. The specifi
 
 A list of archive formats to generate (eg. zip, tar.gz...)
 
-- **Type**: java.util.Set
+- **Type**: java.util.Set&lt;java.lang.String&gt;
 - **Required**: yes
 - **Default**: zip
 
@@ -2384,13 +2413,12 @@ Comma separated list of GroupIds to include. Empty String indicates include ever
 
 ##### &lt;includeScope&gt;
 
-Scope to include. An Empty string indicates all scopes (default). The scopes being interpreted are the scopes as Maven sees them, not as specified in the pom. In summary:
--	runtime scope gives runtime and compile dependencies,
--	compile scope gives compile, provided, and system dependencies,
--	test (default) scope gives all dependencies,
--	provided scope just gives provided dependencies,
--	system scope just gives system dependencies.
-
+Scope to include. An Empty string indicates all scopes (default). The scopes being interpreted are the scopes as Maven sees them, not as specified in the pom. In summary: 
+* runtime scope gives runtime and compile dependencies, 
+* compile scope gives compile, provided, and system dependencies, 
+* test (default) scope gives all dependencies, 
+* provided scope just gives provided dependencies, 
+* system scope just gives system dependencies. 
 
 - **Type**: java.lang.String
 - **Required**: no
@@ -2399,7 +2427,7 @@ Scope to include. An Empty string indicates all scopes (default). The scopes bei
 
 ##### &lt;installDirectory&gt;
 
-Absolute path of the installation directory of the application on OS X or Linux. Relative sub-path of the installation location of the application such as 'Program Files' or 'AppData' on Windows.
+Absolute path of the installation directory of the application on OS X or Linux. Relative sub-path of the installation location of the application such as "Program Files" or "AppData" on Windows.
 
 - **Type**: java.lang.String
 - **Required**: no
@@ -2416,11 +2444,19 @@ A directory containing module descriptors to use to modularize unnamed dependenc
 - **Default**: ${project.basedir}/src/jmods/
 
 
+##### &lt;jmodsOverrides&gt;
+
+A list of module-info.java overrides that will be merged into the module-info.java generated for automatic modules.
+
+- **Type**: java.util.List&lt;io.inverno.tool.maven.internal.task.ModularizeDependenciesTask$ModuleInfoOverride&gt;
+- **Required**: no
+
+
 ##### &lt;labels&gt;
 
 The labels to apply to the container image.
 
-- **Type**: java.util.Map
+- **Type**: java.util.Map&lt;java.lang.String, java.lang.String&gt;
 - **Required**: no
 
 
@@ -2428,7 +2464,7 @@ The labels to apply to the container image.
 
 A list of extra launchers to include in the resulting application.
 
-- **Type**: java.util.List
+- **Type**: java.util.List&lt;io.inverno.tool.maven.internal.task.CreateProjectApplicationTask$Launcher&gt;
 - **Required**: no
 
 
@@ -2490,9 +2526,9 @@ Overwrite dependencies that don't exist or are older than the source.
 
 ##### &lt;ports&gt;
 
-The ports exposed by the container at runtime defined as: port_number [ '/' udp/tcp ]
+The ports exposed by the container at runtime defined as: port_number [ "/" udp/tcp ] 
 
-- **Type**: java.util.Set
+- **Type**: java.util.Set&lt;java.lang.String&gt;
 - **Required**: no
 
 
@@ -2591,7 +2627,7 @@ Strip native command (eg. java...) from the resulting image.
 
 ##### &lt;user&gt;
 
-The user and group used to run the container defined as: user / uid [ ':' group / gid ]
+The user and group used to run the container defined as: user / uid [ ":" group / gid ]
 
 - **Type**: java.lang.String
 - **Required**: no
@@ -2619,7 +2655,7 @@ Enables verbose logging.
 
 ##### &lt;vm&gt;
 
-Select the HotSpot VM in the output image defined as: 'client' / 'server' / 'minimal' / 'all'
+Select the HotSpot VM in the output image defined as: "client" / "server" / "minimal" / "all"
 
 - **Type**: java.lang.String
 - **Required**: no
@@ -2630,7 +2666,7 @@ Select the HotSpot VM in the output image defined as: 'client' / 'server' / 'min
 
 The container's mount points.
 
-- **Type**: java.util.Set
+- **Type**: java.util.Set&lt;java.lang.String&gt;
 - **Required**: no
 
 
@@ -2649,6 +2685,7 @@ Windows specific configuration.
 io.inverno.tool:inverno-maven-plugin:1.4.0-SNAPSHOT:build-image-docker
 
 **Description:**
+
 
 Builds a Docker container image to a local Docker daemon.
 
@@ -2712,7 +2749,7 @@ Builds a Docker container image to a local Docker daemon.
         <td>
             <a href="#formats2">formats</a>
         </td>
-        <td>Set</td>
+        <td>String&gt;</td>
         <td>
             A list of archive formats to generate (eg. zip, tar.gz...)
             <ul>
@@ -2892,7 +2929,7 @@ Builds a Docker container image to a local Docker daemon.
         <td>
             <a href="#dockerEnvironment">dockerEnvironment</a>
         </td>
-        <td>Map</td>
+        <td>String&gt;</td>
         <td>
             The Docker environment variables used by the Docker CLI executable.
             <ul/>
@@ -2917,7 +2954,7 @@ Builds a Docker container image to a local Docker daemon.
         <td>
             <a href="#environment1">environment</a>
         </td>
-        <td>Map</td>
+        <td>String&gt;</td>
         <td>
             The container's environment variables.
             <ul/>
@@ -3072,7 +3109,7 @@ Builds a Docker container image to a local Docker daemon.
         </td>
         <td>String</td>
         <td>
-            Scope to include. An Empty string indicates all scopes (default). The scopes being interpreted are the scopes as Maven sees them, not as specified in the pom. In summary:
+            Scope to include. An Empty string indicates all scopes (default). The scopes being interpreted are the scopes as Maven sees them, not as specified in the pom. In summary: 
             <ul>
                 <li>
                     <em>User property</em>
@@ -3087,7 +3124,7 @@ Builds a Docker container image to a local Docker daemon.
         </td>
         <td>String</td>
         <td>
-            Absolute path of the installation directory of the application on OS X or Linux. Relative sub-path of the installation location of the application such as 'Program Files' or 'AppData' on Windows.
+            Absolute path of the installation directory of the application on OS X or Linux. Relative sub-path of the installation location of the application such as "Program Files" or "AppData" on Windows.
             <ul>
                 <li>
                     <em>User property</em>
@@ -3117,9 +3154,19 @@ Builds a Docker container image to a local Docker daemon.
     </tr>
     <tr>
         <td>
+            <a href="#jmodsOverrides2">jmodsOverrides</a>
+        </td>
+        <td>ModuleInfoOverride&gt;</td>
+        <td>
+            A list of module-info.java overrides that will be merged into the module-info.java generated for automatic modules.
+            <ul/>
+        </td>
+    </tr>
+    <tr>
+        <td>
             <a href="#labels1">labels</a>
         </td>
-        <td>Map</td>
+        <td>String&gt;</td>
         <td>
             The labels to apply to the container image.
             <ul/>
@@ -3129,7 +3176,7 @@ Builds a Docker container image to a local Docker daemon.
         <td>
             <a href="#launchers2">launchers</a>
         </td>
-        <td>List</td>
+        <td>Launcher&gt;</td>
         <td>
             A list of extra launchers to include in the resulting application.
             <ul/>
@@ -3235,9 +3282,9 @@ Builds a Docker container image to a local Docker daemon.
         <td>
             <a href="#ports1">ports</a>
         </td>
-        <td>Set</td>
+        <td>String&gt;</td>
         <td>
-            The ports exposed by the container at runtime defined as: port_number [ '/' udp/tcp ]
+            The ports exposed by the container at runtime defined as: port_number [ "/" udp/tcp ] 
             <ul/>
         </td>
     </tr>
@@ -3379,7 +3426,7 @@ Builds a Docker container image to a local Docker daemon.
         </td>
         <td>String</td>
         <td>
-            The user and group used to run the container defined as: user / uid [ ':' group / gid ]
+            The user and group used to run the container defined as: user / uid [ ":" group / gid ]
             <ul/>
         </td>
     </tr>
@@ -3427,7 +3474,7 @@ Builds a Docker container image to a local Docker daemon.
         </td>
         <td>String</td>
         <td>
-            Select the HotSpot VM in the output image defined as: 'client' / 'server' / 'minimal' / 'all'
+            Select the HotSpot VM in the output image defined as: "client" / "server" / "minimal" / "all"
             <ul>
                 <li>
                     <em>User property</em>
@@ -3440,7 +3487,7 @@ Builds a Docker container image to a local Docker daemon.
         <td>
             <a href="#volumes1">volumes</a>
         </td>
-        <td>Set</td>
+        <td>String&gt;</td>
         <td>
             The container's mount points.
             <ul/>
@@ -3552,7 +3599,7 @@ The description of the application.
 
 The Docker environment variables used by the Docker CLI executable.
 
-- **Type**: java.util.Map
+- **Type**: java.util.Map&lt;java.lang.String, java.lang.String&gt;
 - **Required**: no
 
 
@@ -3569,7 +3616,7 @@ The path to the Docker CLI executable used to load the image in the Docker daemo
 
 The container's environment variables.
 
-- **Type**: java.util.Map
+- **Type**: java.util.Map&lt;java.lang.String, java.lang.String&gt;
 - **Required**: no
 
 
@@ -3623,7 +3670,7 @@ The executable in the application image to use as image entry point. The specifi
 
 A list of archive formats to generate (eg. zip, tar.gz...)
 
-- **Type**: java.util.Set
+- **Type**: java.util.Set&lt;java.lang.String&gt;
 - **Required**: yes
 - **Default**: zip
 
@@ -3687,13 +3734,12 @@ Comma separated list of GroupIds to include. Empty String indicates include ever
 
 ##### &lt;includeScope&gt;
 
-Scope to include. An Empty string indicates all scopes (default). The scopes being interpreted are the scopes as Maven sees them, not as specified in the pom. In summary:
--	runtime scope gives runtime and compile dependencies,
--	compile scope gives compile, provided, and system dependencies,
--	test (default) scope gives all dependencies,
--	provided scope just gives provided dependencies,
--	system scope just gives system dependencies.
-
+Scope to include. An Empty string indicates all scopes (default). The scopes being interpreted are the scopes as Maven sees them, not as specified in the pom. In summary: 
+* runtime scope gives runtime and compile dependencies, 
+* compile scope gives compile, provided, and system dependencies, 
+* test (default) scope gives all dependencies, 
+* provided scope just gives provided dependencies, 
+* system scope just gives system dependencies. 
 
 - **Type**: java.lang.String
 - **Required**: no
@@ -3702,7 +3748,7 @@ Scope to include. An Empty string indicates all scopes (default). The scopes bei
 
 ##### &lt;installDirectory&gt;
 
-Absolute path of the installation directory of the application on OS X or Linux. Relative sub-path of the installation location of the application such as 'Program Files' or 'AppData' on Windows.
+Absolute path of the installation directory of the application on OS X or Linux. Relative sub-path of the installation location of the application such as "Program Files" or "AppData" on Windows.
 
 - **Type**: java.lang.String
 - **Required**: no
@@ -3719,11 +3765,19 @@ A directory containing module descriptors to use to modularize unnamed dependenc
 - **Default**: ${project.basedir}/src/jmods/
 
 
+##### &lt;jmodsOverrides&gt;
+
+A list of module-info.java overrides that will be merged into the module-info.java generated for automatic modules.
+
+- **Type**: java.util.List&lt;io.inverno.tool.maven.internal.task.ModularizeDependenciesTask$ModuleInfoOverride&gt;
+- **Required**: no
+
+
 ##### &lt;labels&gt;
 
 The labels to apply to the container image.
 
-- **Type**: java.util.Map
+- **Type**: java.util.Map&lt;java.lang.String, java.lang.String&gt;
 - **Required**: no
 
 
@@ -3731,7 +3785,7 @@ The labels to apply to the container image.
 
 A list of extra launchers to include in the resulting application.
 
-- **Type**: java.util.List
+- **Type**: java.util.List&lt;io.inverno.tool.maven.internal.task.CreateProjectApplicationTask$Launcher&gt;
 - **Required**: no
 
 
@@ -3793,9 +3847,9 @@ Overwrite dependencies that don't exist or are older than the source.
 
 ##### &lt;ports&gt;
 
-The ports exposed by the container at runtime defined as: port_number [ '/' udp/tcp ]
+The ports exposed by the container at runtime defined as: port_number [ "/" udp/tcp ] 
 
-- **Type**: java.util.Set
+- **Type**: java.util.Set&lt;java.lang.String&gt;
 - **Required**: no
 
 
@@ -3876,7 +3930,7 @@ Strip native command (eg. java...) from the resulting image.
 
 ##### &lt;user&gt;
 
-The user and group used to run the container defined as: user / uid [ ':' group / gid ]
+The user and group used to run the container defined as: user / uid [ ":" group / gid ]
 
 - **Type**: java.lang.String
 - **Required**: no
@@ -3904,7 +3958,7 @@ Enables verbose logging.
 
 ##### &lt;vm&gt;
 
-Select the HotSpot VM in the output image defined as: 'client' / 'server' / 'minimal' / 'all'
+Select the HotSpot VM in the output image defined as: "client" / "server" / "minimal" / "all"
 
 - **Type**: java.lang.String
 - **Required**: no
@@ -3915,7 +3969,7 @@ Select the HotSpot VM in the output image defined as: 'client' / 'server' / 'min
 
 The container's mount points.
 
-- **Type**: java.util.Set
+- **Type**: java.util.Set&lt;java.lang.String&gt;
 - **Required**: no
 
 
@@ -3935,11 +3989,9 @@ io.inverno.tool:inverno-maven-plugin:1.4.0-SNAPSHOT:build-image-tar
 
 **Description:**
 
-Builds a container image to a TAR archive that can be later loaded into Docker:
 
-$ docker load --input target/{@literal&lt;image&gt;.tar 
-}
-
+Builds a container image to a TAR archive that can be later loaded into Docker.
+$ docker load --input target/{@literal&lt;image&gt;.tar }
 
 **Attributes:**
 
@@ -4000,7 +4052,7 @@ $ docker load --input target/{@literal&lt;image&gt;.tar
         <td>
             <a href="#formats3">formats</a>
         </td>
-        <td>Set</td>
+        <td>String&gt;</td>
         <td>
             A list of archive formats to generate (eg. zip, tar.gz...)
             <ul>
@@ -4180,7 +4232,7 @@ $ docker load --input target/{@literal&lt;image&gt;.tar
         <td>
             <a href="#environment2">environment</a>
         </td>
-        <td>Map</td>
+        <td>String&gt;</td>
         <td>
             The container's environment variables.
             <ul/>
@@ -4335,7 +4387,7 @@ $ docker load --input target/{@literal&lt;image&gt;.tar
         </td>
         <td>String</td>
         <td>
-            Scope to include. An Empty string indicates all scopes (default). The scopes being interpreted are the scopes as Maven sees them, not as specified in the pom. In summary:
+            Scope to include. An Empty string indicates all scopes (default). The scopes being interpreted are the scopes as Maven sees them, not as specified in the pom. In summary: 
             <ul>
                 <li>
                     <em>User property</em>
@@ -4350,7 +4402,7 @@ $ docker load --input target/{@literal&lt;image&gt;.tar
         </td>
         <td>String</td>
         <td>
-            Absolute path of the installation directory of the application on OS X or Linux. Relative sub-path of the installation location of the application such as 'Program Files' or 'AppData' on Windows.
+            Absolute path of the installation directory of the application on OS X or Linux. Relative sub-path of the installation location of the application such as "Program Files" or "AppData" on Windows.
             <ul>
                 <li>
                     <em>User property</em>
@@ -4380,9 +4432,19 @@ $ docker load --input target/{@literal&lt;image&gt;.tar
     </tr>
     <tr>
         <td>
+            <a href="#jmodsOverrides3">jmodsOverrides</a>
+        </td>
+        <td>ModuleInfoOverride&gt;</td>
+        <td>
+            A list of module-info.java overrides that will be merged into the module-info.java generated for automatic modules.
+            <ul/>
+        </td>
+    </tr>
+    <tr>
+        <td>
             <a href="#labels2">labels</a>
         </td>
-        <td>Map</td>
+        <td>String&gt;</td>
         <td>
             The labels to apply to the container image.
             <ul/>
@@ -4392,7 +4454,7 @@ $ docker load --input target/{@literal&lt;image&gt;.tar
         <td>
             <a href="#launchers3">launchers</a>
         </td>
-        <td>List</td>
+        <td>Launcher&gt;</td>
         <td>
             A list of extra launchers to include in the resulting application.
             <ul/>
@@ -4498,9 +4560,9 @@ $ docker load --input target/{@literal&lt;image&gt;.tar
         <td>
             <a href="#ports2">ports</a>
         </td>
-        <td>Set</td>
+        <td>String&gt;</td>
         <td>
-            The ports exposed by the container at runtime defined as: port_number [ '/' udp/tcp ]
+            The ports exposed by the container at runtime defined as: port_number [ "/" udp/tcp ] 
             <ul/>
         </td>
     </tr>
@@ -4642,7 +4704,7 @@ $ docker load --input target/{@literal&lt;image&gt;.tar
         </td>
         <td>String</td>
         <td>
-            The user and group used to run the container defined as: user / uid [ ':' group / gid ]
+            The user and group used to run the container defined as: user / uid [ ":" group / gid ]
             <ul/>
         </td>
     </tr>
@@ -4690,7 +4752,7 @@ $ docker load --input target/{@literal&lt;image&gt;.tar
         </td>
         <td>String</td>
         <td>
-            Select the HotSpot VM in the output image defined as: 'client' / 'server' / 'minimal' / 'all'
+            Select the HotSpot VM in the output image defined as: "client" / "server" / "minimal" / "all"
             <ul>
                 <li>
                     <em>User property</em>
@@ -4703,7 +4765,7 @@ $ docker load --input target/{@literal&lt;image&gt;.tar
         <td>
             <a href="#volumes2">volumes</a>
         </td>
-        <td>Set</td>
+        <td>String&gt;</td>
         <td>
             The container's mount points.
             <ul/>
@@ -4815,7 +4877,7 @@ The description of the application.
 
 The container's environment variables.
 
-- **Type**: java.util.Map
+- **Type**: java.util.Map&lt;java.lang.String, java.lang.String&gt;
 - **Required**: no
 
 
@@ -4869,7 +4931,7 @@ The executable in the application image to use as image entry point. The specifi
 
 A list of archive formats to generate (eg. zip, tar.gz...)
 
-- **Type**: java.util.Set
+- **Type**: java.util.Set&lt;java.lang.String&gt;
 - **Required**: yes
 - **Default**: zip
 
@@ -4933,13 +4995,12 @@ Comma separated list of GroupIds to include. Empty String indicates include ever
 
 ##### &lt;includeScope&gt;
 
-Scope to include. An Empty string indicates all scopes (default). The scopes being interpreted are the scopes as Maven sees them, not as specified in the pom. In summary:
--	runtime scope gives runtime and compile dependencies,
--	compile scope gives compile, provided, and system dependencies,
--	test (default) scope gives all dependencies,
--	provided scope just gives provided dependencies,
--	system scope just gives system dependencies.
-
+Scope to include. An Empty string indicates all scopes (default). The scopes being interpreted are the scopes as Maven sees them, not as specified in the pom. In summary: 
+* runtime scope gives runtime and compile dependencies, 
+* compile scope gives compile, provided, and system dependencies, 
+* test (default) scope gives all dependencies, 
+* provided scope just gives provided dependencies, 
+* system scope just gives system dependencies. 
 
 - **Type**: java.lang.String
 - **Required**: no
@@ -4948,7 +5009,7 @@ Scope to include. An Empty string indicates all scopes (default). The scopes bei
 
 ##### &lt;installDirectory&gt;
 
-Absolute path of the installation directory of the application on OS X or Linux. Relative sub-path of the installation location of the application such as 'Program Files' or 'AppData' on Windows.
+Absolute path of the installation directory of the application on OS X or Linux. Relative sub-path of the installation location of the application such as "Program Files" or "AppData" on Windows.
 
 - **Type**: java.lang.String
 - **Required**: no
@@ -4965,11 +5026,19 @@ A directory containing module descriptors to use to modularize unnamed dependenc
 - **Default**: ${project.basedir}/src/jmods/
 
 
+##### &lt;jmodsOverrides&gt;
+
+A list of module-info.java overrides that will be merged into the module-info.java generated for automatic modules.
+
+- **Type**: java.util.List&lt;io.inverno.tool.maven.internal.task.ModularizeDependenciesTask$ModuleInfoOverride&gt;
+- **Required**: no
+
+
 ##### &lt;labels&gt;
 
 The labels to apply to the container image.
 
-- **Type**: java.util.Map
+- **Type**: java.util.Map&lt;java.lang.String, java.lang.String&gt;
 - **Required**: no
 
 
@@ -4977,7 +5046,7 @@ The labels to apply to the container image.
 
 A list of extra launchers to include in the resulting application.
 
-- **Type**: java.util.List
+- **Type**: java.util.List&lt;io.inverno.tool.maven.internal.task.CreateProjectApplicationTask$Launcher&gt;
 - **Required**: no
 
 
@@ -5039,9 +5108,9 @@ Overwrite dependencies that don't exist or are older than the source.
 
 ##### &lt;ports&gt;
 
-The ports exposed by the container at runtime defined as: port_number [ '/' udp/tcp ]
+The ports exposed by the container at runtime defined as: port_number [ "/" udp/tcp ] 
 
-- **Type**: java.util.Set
+- **Type**: java.util.Set&lt;java.lang.String&gt;
 - **Required**: no
 
 
@@ -5122,7 +5191,7 @@ Strip native command (eg. java...) from the resulting image.
 
 ##### &lt;user&gt;
 
-The user and group used to run the container defined as: user / uid [ ':' group / gid ]
+The user and group used to run the container defined as: user / uid [ ":" group / gid ]
 
 - **Type**: java.lang.String
 - **Required**: no
@@ -5150,7 +5219,7 @@ Enables verbose logging.
 
 ##### &lt;vm&gt;
 
-Select the HotSpot VM in the output image defined as: 'client' / 'server' / 'minimal' / 'all'
+Select the HotSpot VM in the output image defined as: "client" / "server" / "minimal" / "all"
 
 - **Type**: java.lang.String
 - **Required**: no
@@ -5161,7 +5230,7 @@ Select the HotSpot VM in the output image defined as: 'client' / 'server' / 'min
 
 The container's mount points.
 
-- **Type**: java.util.Set
+- **Type**: java.util.Set&lt;java.lang.String&gt;
 - **Required**: no
 
 
@@ -5180,6 +5249,7 @@ Windows specific configuration.
 io.inverno.tool:inverno-maven-plugin:1.4.0-SNAPSHOT:build-runtime
 
 **Description:**
+
 
 Builds the project runtime image.
 
@@ -5226,7 +5296,7 @@ A runtime image is a custom Java runtime containing a set of modules and their d
         <td>
             <a href="#formats4">formats</a>
         </td>
-        <td>Set</td>
+        <td>String&gt;</td>
         <td>
             A list of archive formats to generate (eg. zip, tar.gz...)
             <ul>
@@ -5460,7 +5530,7 @@ A runtime image is a custom Java runtime containing a set of modules and their d
         </td>
         <td>String</td>
         <td>
-            Scope to include. An Empty string indicates all scopes (default). The scopes being interpreted are the scopes as Maven sees them, not as specified in the pom. In summary:
+            Scope to include. An Empty string indicates all scopes (default). The scopes being interpreted are the scopes as Maven sees them, not as specified in the pom. In summary: 
             <ul>
                 <li>
                     <em>User property</em>
@@ -5490,9 +5560,19 @@ A runtime image is a custom Java runtime containing a set of modules and their d
     </tr>
     <tr>
         <td>
+            <a href="#jmodsOverrides4">jmodsOverrides</a>
+        </td>
+        <td>ModuleInfoOverride&gt;</td>
+        <td>
+            A list of module-info.java overrides that will be merged into the module-info.java generated for automatic modules.
+            <ul/>
+        </td>
+    </tr>
+    <tr>
+        <td>
             <a href="#launchers4">launchers</a>
         </td>
-        <td>List</td>
+        <td>Launcher&gt;</td>
         <td>
             A list of launchers to include in the resulting runtime.
             <ul/>
@@ -5667,7 +5747,7 @@ A runtime image is a custom Java runtime containing a set of modules and their d
         </td>
         <td>String</td>
         <td>
-            Select the HotSpot VM in the output image defined as: 'client' / 'server' / 'minimal' / 'all'
+            Select the HotSpot VM in the output image defined as: "client" / "server" / "minimal" / "all"
             <ul>
                 <li>
                     <em>User property</em>
@@ -5779,7 +5859,7 @@ Scope to exclude. An Empty string indicates no scopes (default).
 
 A list of archive formats to generate (eg. zip, tar.gz...)
 
-- **Type**: java.util.Set
+- **Type**: java.util.Set&lt;java.lang.String&gt;
 - **Required**: yes
 - **Default**: zip
 
@@ -5823,13 +5903,12 @@ Comma separated list of GroupIds to include. Empty String indicates include ever
 
 ##### &lt;includeScope&gt;
 
-Scope to include. An Empty string indicates all scopes (default). The scopes being interpreted are the scopes as Maven sees them, not as specified in the pom. In summary:
--	runtime scope gives runtime and compile dependencies,
--	compile scope gives compile, provided, and system dependencies,
--	test (default) scope gives all dependencies,
--	provided scope just gives provided dependencies,
--	system scope just gives system dependencies.
-
+Scope to include. An Empty string indicates all scopes (default). The scopes being interpreted are the scopes as Maven sees them, not as specified in the pom. In summary: 
+* runtime scope gives runtime and compile dependencies, 
+* compile scope gives compile, provided, and system dependencies, 
+* test (default) scope gives all dependencies, 
+* provided scope just gives provided dependencies, 
+* system scope just gives system dependencies. 
 
 - **Type**: java.lang.String
 - **Required**: no
@@ -5846,11 +5925,19 @@ A directory containing module descriptors to use to modularize unnamed dependenc
 - **Default**: ${project.basedir}/src/jmods/
 
 
+##### &lt;jmodsOverrides&gt;
+
+A list of module-info.java overrides that will be merged into the module-info.java generated for automatic modules.
+
+- **Type**: java.util.List&lt;io.inverno.tool.maven.internal.task.ModularizeDependenciesTask$ModuleInfoOverride&gt;
+- **Required**: no
+
+
 ##### &lt;launchers&gt;
 
 A list of launchers to include in the resulting runtime.
 
-- **Type**: java.util.List
+- **Type**: java.util.List&lt;io.inverno.tool.maven.internal.task.CreateProjectRuntimeTask$Launcher&gt;
 - **Required**: no
 
 
@@ -5944,7 +6031,7 @@ Enables verbose logging.
 
 ##### &lt;vm&gt;
 
-Select the HotSpot VM in the output image defined as: 'client' / 'server' / 'minimal' / 'all'
+Select the HotSpot VM in the output image defined as: "client" / "server" / "minimal" / "all"
 
 - **Type**: java.lang.String
 - **Required**: no
@@ -5959,7 +6046,7 @@ io.inverno.tool:inverno-maven-plugin:1.4.0-SNAPSHOT:help
 
 **Description:**
 
-Display help information on inverno-maven-plugin.
+Display help information on inverno-maven-plugin. 
 Call mvn inverno:help -Ddetail=true -Dgoal=&lt;goal-name&gt; to display parameter details.
 
 **Attributes:**
@@ -6099,6 +6186,7 @@ io.inverno.tool:inverno-maven-plugin:1.4.0-SNAPSHOT:run
 
 **Description:**
 
+
 Runs the project application.
 
 
@@ -6154,7 +6242,7 @@ Runs the project application.
         </td>
         <td>String</td>
         <td>
-            The command line arguments to pass to the application. This parameter overrides AbstractExecMojo.arguments when specified.
+            The command line arguments to pass to the application. This parameter overrides arguments when specified.
             <ul>
                 <li>
                     <em>User property</em>
@@ -6199,6 +6287,16 @@ Runs the project application.
                     : ${project.basedir}/src/jmods/
                 </li>
             </ul>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <a href="#jmodsOverrides5">jmodsOverrides</a>
+        </td>
+        <td>ModuleInfoOverride&gt;</td>
+        <td>
+            A list of module-info.java overrides that will be merged into the module-info.java generated for automatic modules.
+            <ul/>
         </td>
     </tr>
     <tr>
@@ -6333,7 +6431,7 @@ The arguments to pass to the application.
 
 ##### &lt;commandLineArguments&gt;
 
-The command line arguments to pass to the application. This parameter overrides AbstractExecMojo.arguments when specified.
+The command line arguments to pass to the application. This parameter overrides arguments when specified.
 
 - **Type**: java.lang.String
 - **Required**: no
@@ -6358,6 +6456,14 @@ A directory containing module descriptors to use to modularize unnamed dependenc
 - **Required**: no
 - **User property**: inverno.exec.jmodsOverrideDirectory
 - **Default**: ${project.basedir}/src/jmods/
+
+
+##### &lt;jmodsOverrides&gt;
+
+A list of module-info.java overrides that will be merged into the module-info.java generated for automatic modules.
+
+- **Type**: java.util.List&lt;io.inverno.tool.maven.internal.task.ModularizeDependenciesTask$ModuleInfoOverride&gt;
+- **Required**: no
 
 
 ##### &lt;mainClass&gt;
@@ -6425,6 +6531,7 @@ The working directory of the application.
 io.inverno.tool:inverno-maven-plugin:1.4.0-SNAPSHOT:start
 
 **Description:**
+
 
 Starts the project application without blocking the Maven build.
 
@@ -6513,6 +6620,16 @@ This goal is used together with the stop goal in the pre-integration-test and po
                     : ${project.basedir}/src/jmods/
                 </li>
             </ul>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <a href="#jmodsOverrides6">jmodsOverrides</a>
+        </td>
+        <td>ModuleInfoOverride&gt;</td>
+        <td>
+            A list of module-info.java overrides that will be merged into the module-info.java generated for automatic modules.
+            <ul/>
         </td>
     </tr>
     <tr>
@@ -6684,6 +6801,14 @@ A directory containing module descriptors to use to modularize unnamed dependenc
 - **Default**: ${project.basedir}/src/jmods/
 
 
+##### &lt;jmodsOverrides&gt;
+
+A list of module-info.java overrides that will be merged into the module-info.java generated for automatic modules.
+
+- **Type**: java.util.List&lt;io.inverno.tool.maven.internal.task.ModularizeDependenciesTask$ModuleInfoOverride&gt;
+- **Required**: no
+
+
 ##### &lt;mainClass&gt;
 
 The main class to use to run the application. If not specified, a main class is automatically selected.
@@ -6759,6 +6884,7 @@ The working directory of the application.
 io.inverno.tool:inverno-maven-plugin:1.4.0-SNAPSHOT:stop
 
 **Description:**
+
 
 Stops the project application that has been previously started using the start goal.
 
