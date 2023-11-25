@@ -82,6 +82,7 @@
 
 	<modules>
 		<module>inverno-maven-plugin</module>
+		<module>inverno-build-tools</module>
 	</modules>
 	
 	<profiles>
