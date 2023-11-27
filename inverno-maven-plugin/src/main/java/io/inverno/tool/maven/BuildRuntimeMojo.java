@@ -47,6 +47,9 @@ import org.apache.maven.project.MavenProjectHelper;
 @Mojo(name = "build-runtime", defaultPhase = LifecyclePhase.PACKAGE, requiresProject = true, requiresDependencyCollection = ResolutionScope.COMPILE_PLUS_RUNTIME, requiresDependencyResolution = ResolutionScope.COMPILE_PLUS_RUNTIME)
 public class BuildRuntimeMojo extends AbstractInvernoMojo {
 	
+	/**
+	 * The Maven project helper.
+	 */
 	@Component
 	protected MavenProjectHelper mavenProjectHelper;
 	

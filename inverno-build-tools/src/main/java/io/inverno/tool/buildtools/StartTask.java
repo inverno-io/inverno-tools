@@ -62,7 +62,7 @@ public interface StartTask extends ExecTask<Long, StartTask> {
 	 * 
 	 * <p>
 	 * Defaults to {@code 60000}.
-	 * <p>
+	 * </p>
 	 * 
 	 * @param timeout the timeout in milliseconds
 	 * 

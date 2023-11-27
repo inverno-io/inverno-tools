@@ -626,7 +626,7 @@ public class ModuleInfo {
 		/**
 		 * <p>
 		 * Creates a blank uses directive.
-		 * <p>
+		 * </p>
 		 */
 		public UsesDirective() {
 		}

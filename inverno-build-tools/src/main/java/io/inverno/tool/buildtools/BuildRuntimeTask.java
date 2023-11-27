@@ -69,7 +69,7 @@ public interface BuildRuntimeTask extends Task<Path, BuildRuntimeTask> {
 	 * 
 	 * @param compress the compress level
 	 * 
-	 * @return 
+	 * @return the task
 	 */
 	BuildRuntimeTask compress(String compress);
 	

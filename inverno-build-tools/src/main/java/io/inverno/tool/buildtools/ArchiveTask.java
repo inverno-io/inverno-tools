@@ -70,7 +70,7 @@ public interface ArchiveTask extends Task<Set<Path>, ArchiveTask> {
 	 * 
 	 * @param formats a list of archive formats
 	 * 
-	 * @return 
+	 * @return the task
 	 */
 	ArchiveTask formats(Set<String> formats);
 }

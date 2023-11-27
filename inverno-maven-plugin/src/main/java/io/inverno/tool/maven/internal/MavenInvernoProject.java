@@ -35,8 +35,12 @@ import org.apache.maven.shared.artifact.filter.collection.ScopeFilter;
 import org.apache.maven.shared.artifact.filter.collection.TypeFilter;
 
 /**
+ * <p>
+ * Maven specific {@link Project} implementation.
+ * </p>
  *
  * @author <a href="jeremy.kuhn@inverno.io">Jeremy Kuhn</a>
+ * @since 1.4
  */
 public class MavenInvernoProject extends Project {
 	
@@ -46,6 +50,14 @@ public class MavenInvernoProject extends Project {
 	
 	private final Set<MavenInvernoDependency> dependencies;
 	
+	/**
+	 * <p>
+	 * Creates a Maven Inverno project.
+	 * </p>
+	 * 
+	 * @param mavenProject the underlying Maven project
+	 * @param dependencies the project Maven dependencies
+	 */
 	private MavenInvernoProject(MavenProject mavenProject, Set<MavenInvernoDependency> dependencies) {
 		super(Path.of(mavenProject.getBuild().getDirectory()).toAbsolutePath(), Path.of(mavenProject.getBuild().getDirectory(), "maven-inverno").toAbsolutePath());
 		
@@ -53,6 +65,13 @@ public class MavenInvernoProject extends Project {
 		this.dependencies = dependencies;
 	}
 	
+	/**
+	 * <p>
+	 * Returns the underlying Maven project.
+	 * </p>
+	 * 
+	 * @return the underlying Maven project
+	 */
 	public MavenProject getMavenProject() {
 		return mavenProject;
 	}
@@ -82,6 +101,13 @@ public class MavenInvernoProject extends Project {
 		return this.mavenProject.getVersion();
 	}
 	
+	/**
+	 * <p>
+	 * Returns the path to the project pidfile.
+	 * </p>
+	 * 
+	 * @return the path to the pidfile
+	 */
 	public Path getPidfile() {
 		return this.getWorkingPath().resolve(this.getName() + ".pid").toAbsolutePath();
 	}
@@ -91,6 +117,14 @@ public class MavenInvernoProject extends Project {
 		return this.getGroup() + ":" + this.getName() + ":" + this.getVersion();
 	}
 	
+	/**
+	 * <p>
+	 * A Maven Inverno project builder.
+	 * </p>
+	 * 
+	 * @author <a href="jeremy.kuhn@inverno.io">Jeremy Kuhn</a>
+	 * @since 1.4
+	 */
 	public static class Builder {
 	
 		private final MavenProject mavenProject;
@@ -110,60 +144,190 @@ public class MavenInvernoProject extends Project {
 		private String includeGroupIds;
 		private String excludeGroupIds;
 
+		/**
+		 * <p>
+		 * Creates a Maven Inverno project builder.
+		 * </p>
+		 * 
+		 * @param mavenProject the underlying Maven project
+		 */
 		public Builder(MavenProject mavenProject) {
 			this.mavenProject = mavenProject;
 		}
 		
+		/**
+		 * <p>
+		 * Specifies the scope to include when resolving dependencies. 
+		 * </p>
+		 * 
+		 * <p>
+		 * The scopes being interpreted are the scopes as Maven sees them, not as specified in the pom. In summary:
+		 * </p>
+		 * 
+		 * <ul>
+		 * <li><code>runtime</code> scope gives runtime and compile dependencies,</li>
+		 * <li><code>compile</code> scope gives compile, provided, and system dependencies,</li>
+		 * <li><code>test</code> (default) scope gives all dependencies,</li>
+		 * <li><code>provided</code> scope just gives provided dependencies,</li>
+		 * <li><code>system</code> scope just gives system dependencies.</li>
+		 * </ul>
+		 * 
+		 * @param includeScope the scope to include
+		 * 
+		 * @return the builder
+		 */
 		public MavenInvernoProject.Builder includeScope(String includeScope) {
 			this.includeScope = includeScope;
 			return this;
 		}
 
+		/**
+		 * <p>
+		 * Specifies the scope to exclude when resolving dependencies. 
+		 * </p>
+		 * 
+		 * <p>
+		 * The scopes being interpreted are the scopes as Maven sees them, not as specified in the pom. In summary:
+		 * </p>
+		 * 
+		 * <ul>
+		 * <li><code>runtime</code> scope gives runtime and compile dependencies,</li>
+		 * <li><code>compile</code> scope gives compile, provided, and system dependencies,</li>
+		 * <li><code>test</code> (default) scope gives all dependencies,</li>
+		 * <li><code>provided</code> scope just gives provided dependencies,</li>
+		 * <li><code>system</code> scope just gives system dependencies.</li>
+		 * </ul>
+		 * 
+		 * @param excludeScope the scope to exclude
+		 * 
+		 * @return the builder
+		 */
 		public MavenInvernoProject.Builder excludeScope(String excludeScope) {
 			this.excludeScope = excludeScope;
 			return this;
 		}
 
+		/**
+		 * <p>
+		 * Specifies the types to include when resolving dependencies.
+		 * </p>
+		 * 
+		 * @param includeTypes a comma separated list of types to include
+		 * 
+		 * @return the builder
+		 */
 		public MavenInvernoProject.Builder includeTypes(String includeTypes) {
 			this.includeTypes = includeTypes;
 			return this;
 		}
 
+		/**
+		 * <p>
+		 * Specifies the types to exclude when resolving dependencies.
+		 * </p>
+		 * 
+		 * @param excludeTypes a comma separated list of types to exclude
+		 * 
+		 * @return the builder
+		 */
 		public MavenInvernoProject.Builder excludeTypes(String excludeTypes) {
 			this.excludeTypes = excludeTypes;
 			return this;
 		}
 
+		/**
+		 * <p>
+		 * Specifies the Classifiers to include.
+		 * </p>
+		 * 
+		 * @param includeClassifiers a comma separated list of Classifiers to include
+		 * 
+		 * @return the builder
+		 */
 		public MavenInvernoProject.Builder includeClassifiers(String includeClassifiers) {
 			this.includeClassifiers = includeClassifiers;
 			return this;
 		}
 
+		/**
+		 * <p>
+		 * Specifies the Classifiers to exclude.
+		 * </p>
+		 * 
+		 * @param excludeClassifiers a comma separated list of Classifiers to exclude
+		 * 
+		 * @return the builder
+		 */
 		public MavenInvernoProject.Builder excludeClassifiers(String excludeClassifiers) {
 			this.excludeClassifiers = excludeClassifiers;
 			return this;
 		}
 		
+		/**
+		 * <p>
+		 * Specifies the artifacts to include.
+		 * </p>
+		 * 
+		 * @param includeArtifactIds a comma separated list of artifact names to include
+		 * 
+		 * @return the builder
+		 */
 		public MavenInvernoProject.Builder includeArtifactIds(String includeArtifactIds) {
 			this.includeArtifactIds = includeArtifactIds;
 			return this;
 		}
 
+		/**
+		 * <p>
+		 * Specifies the artifacts to exclude.
+		 * </p>
+		 * 
+		 * @param excludeArtifactIds a comma separated list of artifact ids to exclude
+		 * 
+		 * @return the builder
+		 */
 		public MavenInvernoProject.Builder excludeArtifactIds(String excludeArtifactIds) {
 			this.excludeArtifactIds = excludeArtifactIds;
 			return this;
 		}
 
+		/**
+		 * <p>
+		 * Specifies the groups to include.
+		 * </p>
+		 * 
+		 * @param includeGroupIds a comma separated list of group ids to include
+		 * 
+		 * @return the builder
+		 */
 		public MavenInvernoProject.Builder includeGroupIds(String includeGroupIds) {
 			this.includeGroupIds = includeGroupIds;
 			return this;
 		}
 
+		/**
+		 * <p>
+		 * Specifies the groups to exclude.
+		 * </p>
+		 * 
+		 * @param excludeGroupIds a comma separated list of group ids to exclude
+		 * 
+		 * @return the builder
+		 */
 		public MavenInvernoProject.Builder excludeGroupIds(String excludeGroupIds) {
 			this.excludeGroupIds = excludeGroupIds;
 			return this;
 		}
 
+		/**
+		 * <p>
+		 * Resolves project dependencies and builds the Maven Inverno project.
+		 * </p>
+		 * 
+		 * @return the Maven Inverno project
+		 * 
+		 * @throws TaskExecutionException if there was an error resolving dependencies or building the project
+		 */
 		public MavenInvernoProject build() throws TaskExecutionException {
 			LOGGER.info("[ Resolving dependencies for {}... ]", this.mavenProject);
 			try {
@@ -191,6 +355,15 @@ public class MavenInvernoProject extends Project {
 			}
 		}
 
+		/**
+		 * <p>
+		 * Sanitizes the specified filter string.
+		 * </p>
+		 * 
+		 * @param str the filter string to sanitize
+		 * 
+		 * @return the sanitized string
+		 */
 		private static String cleanToBeTokenizedString(String str) {
 			String ret = "";
 			if (!StringUtils.isEmpty(str)) {

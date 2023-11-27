@@ -48,9 +48,15 @@ import org.apache.maven.project.MavenProject;
  */
 public abstract class AbstractInvernoMojo extends AbstractMojo {
 	
+	/**
+	 * The Maven project.
+	 */
 	@Parameter( defaultValue = "${project}", readonly = true, required = true )
 	protected MavenProject mavenProject;
 	
+	/**
+	 * The Mojo execution.
+	 */
 	@Parameter(defaultValue = "${mojoExecution}", readonly = true, required = true )
 	protected MojoExecution mojoExecution;
 	

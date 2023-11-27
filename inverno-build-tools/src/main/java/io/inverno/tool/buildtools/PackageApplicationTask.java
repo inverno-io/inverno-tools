@@ -488,7 +488,7 @@ public interface PackageApplicationTask extends Task<Set<Path>, PackageApplicati
 		 * 
 		 * <p>
 		 * A console launcher is needed for application requiring console interactions.
-		 * <p>
+		 * </p>
 		 * 
 		 * @return true to start the application with a console launcher, false otherwise
 		 */
@@ -535,7 +535,7 @@ public interface PackageApplicationTask extends Task<Set<Path>, PackageApplicati
 		 * Determines whether a shortcut should be created for the application.
 		 * </p>
 		 * 
-		 * @return 
+		 * @return true to create a shortcut, false otherwise
 		 */
 		boolean isShortcut();
 		
@@ -551,7 +551,7 @@ public interface PackageApplicationTask extends Task<Set<Path>, PackageApplicati
 		/**
 		 * <p>
 		 * Returns the URL of available application update information.
-		 * <p>
+		 * </p>
 		 * 
 		 * @return an optional returning the URL of available application update information or an empty optional
 		 */
@@ -584,7 +584,7 @@ public interface PackageApplicationTask extends Task<Set<Path>, PackageApplicati
 		 * 
 		 * <p>
 		 * Defaults to the project's name.
-		 * <p>
+		 * </p>
 		 * 
 		 * @return an optional returning the launcher name or an empty optional
 		 */

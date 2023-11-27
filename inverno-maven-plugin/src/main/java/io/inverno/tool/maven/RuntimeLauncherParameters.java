@@ -83,7 +83,7 @@ public class RuntimeLauncherParameters  implements BuildRuntimeTask.Launcher {
 	/**
 	 * <p>
 	 * Sets the canonical name of the main class executed with the runtime launcher.
-	 * <p>
+	 * </p>
 	 * 
 	 * @param mainClass the main class
 	 */

@@ -20,13 +20,24 @@ import java.nio.file.Path;
 import org.apache.maven.artifact.Artifact;
 
 /**
+ * <p>
+ * Maven specified {@link Dependency} implementation.
+ * </p>
  *
  * @author <a href="jeremy.kuhn@inverno.io">Jeremy Kuhn</a>
+ * @since 1.4
  */
 public class MavenInvernoDependency implements Dependency {
 
 	private final Artifact artifact;
 	
+	/**
+	 * <p>
+	 * Creates a Maven Inverno dependency.
+	 * </p>
+	 * 
+	 * @param artifact the artifact
+	 */
 	public MavenInvernoDependency(Artifact artifact) {
 		this.artifact = artifact;
 	}

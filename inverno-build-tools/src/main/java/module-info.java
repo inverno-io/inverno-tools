@@ -30,7 +30,7 @@
  * <li>Build an optimized Java runtime containing the project, its dependencies along with an optimized specific Java runtime.</li>
  * <li>Package the project application in optimized native delivrables</li>
  * <li>Create a container image of the project application as a TAR archive or load it to a local Docker daemon or deploy it to a remote image registry.</li>
- * </ul
+ * </ul>
  * 
  * <p>
  * A modular Java project can be fully modularized and packaged in a Debian package, ready to be deployed as follows:

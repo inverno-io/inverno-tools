@@ -57,7 +57,7 @@ public interface StopTask extends Task<Long, StopTask> {
 	 * 
 	 * <p>
 	 * Defaults to {@code 60000}.
-	 * <p>
+	 * </p>
 	 * 
 	 * @param timeout the timeout in milliseconds
 	 * 

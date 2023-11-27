@@ -85,7 +85,7 @@ public interface ExecTask<U, V extends ExecTask<U, V>> extends Task<U, V> {
 	 * 
 	 * @param addUnnamedModules true to add unnamed modules, false otherwise
 	 * 
-	 * @return 
+	 * @return the task
 	 */
 	V addUnnamedModules(boolean addUnnamedModules);
 	
@@ -115,7 +115,7 @@ public interface ExecTask<U, V extends ExecTask<U, V>> extends Task<U, V> {
 	 * 
 	 * @param redirectOutput the output destination
 	 * 
-	 * @return 
+	 * @return the task
 	 */
 	V redirectOutput(ProcessBuilder.Redirect redirectOutput);
 	
