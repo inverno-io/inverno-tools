@@ -60,8 +60,6 @@ public abstract class AbstractInvernoMojo extends AbstractMojo {
 	@Parameter(defaultValue = "${mojoExecution}", readonly = true, required = true )
 	protected MojoExecution mojoExecution;
 	
-	private Path logPath = Path.of(this.mavenProject.getBuild().getDirectory(), "maven-inverno.log").toAbsolutePath();
-	
 	/**
 	 * A directory containing module descriptors to use to modularize unnamed or automatic dependency modules and which replace the ones that are otherwise generated.
 	 */
@@ -80,8 +78,11 @@ public abstract class AbstractInvernoMojo extends AbstractMojo {
 	@Parameter(property = "inverno.progressBar", defaultValue = "true", required = false)
 	protected boolean progressBar;
 	
+	private Path logPath;
+	
 	@Override
 	public final void execute() throws MojoExecutionException, MojoFailureException {
+		this.logPath = Path.of(this.mavenProject.getBuild().getDirectory(), "maven-inverno.log").toAbsolutePath();
 		if(!this.isSkipped()) {
 			Logger logger = this.configureLogging();
 			
@@ -91,6 +92,7 @@ public abstract class AbstractInvernoMojo extends AbstractMojo {
 			
 			try {
 				this.doExecute(this.configureProject(new MavenInvernoProject.Builder(this.mavenProject)).build());
+				logger.info("{} successfully executed", this.mojoExecution.getMojoDescriptor().getFullGoalName());
 			}
 			catch(Exception e) {
 				logger.error("Failed to execute goal " + this.mojoExecution.getMojoDescriptor().getFullGoalName(), e);
@@ -113,7 +115,7 @@ public abstract class AbstractInvernoMojo extends AbstractMojo {
 		ConfigurationBuilder<BuiltConfiguration> builder = ConfigurationBuilderFactory.newConfigurationBuilder();
 		
 		LayoutComponentBuilder layout = builder.newLayout("PatternLayout");
-		layout.addAttribute("pattern", "[%level] %msg%n%throwable");
+		layout.addAttribute("pattern", "%d{DEFAULT} [%level] %msg%n%throwable");
 		
 		AppenderComponentBuilder outputAppender = builder.newAppender("inverno-maven-plugin-log", "File"); 
 		outputAppender.addAttribute("fileName", this.logPath.toFile().getAbsolutePath());

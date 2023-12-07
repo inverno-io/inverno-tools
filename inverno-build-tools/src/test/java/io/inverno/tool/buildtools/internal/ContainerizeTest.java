@@ -56,7 +56,7 @@ public class ContainerizeTest {
 	
 	@Test
 	public void testExecute() throws Exception {
-		ContainerizeTask.ContainerImageRef imageReference = this.project
+		ContainerizeTask.ContainerImage image = this.project
 			.modularizeDependencies()
 			.buildJmod()
 			.buildRuntime()
@@ -64,9 +64,9 @@ public class ContainerizeTest {
 			.containerize()
 			.execute();
 		
-		Assertions.assertEquals(this.project.getName() + ":" + this.project.getVersion(), imageReference.getCanonicalName());
-		Assertions.assertTrue(imageReference.getArchivePath().isPresent());
-		Assertions.assertEquals(this.project.getContainerImagePath(), imageReference.getArchivePath().get());
+		Assertions.assertEquals(this.project.getName() + ":" + this.project.getVersion(), image.getCanonicalName());
+		Assertions.assertTrue(image.getPath().isPresent());
+		Assertions.assertEquals(this.project.getContainerImagePath(), image.getPath().get());
 		Assertions.assertTrue(Files.exists(this.project.getContainerImagePath()));
 		
 		try(ArchiveInputStream tarInputStream = new TarArchiveInputStream(Files.newInputStream(this.project.getContainerImagePath()))) {
@@ -88,7 +88,7 @@ public class ContainerizeTest {
 	
 	@Test
 	public void testExecuteWithDockerFormat() throws Exception {
-		ContainerizeTask.ContainerImageRef imageReference = this.project
+		ContainerizeTask.ContainerImage image = this.project
 			.modularizeDependencies()
 			.buildJmod()
 			.buildRuntime()
@@ -97,9 +97,9 @@ public class ContainerizeTest {
 			.format(Format.Docker)
 			.execute();
 		
-		Assertions.assertEquals(this.project.getName() + ":" + this.project.getVersion(), imageReference.getCanonicalName());
-		Assertions.assertTrue(imageReference.getArchivePath().isPresent());
-		Assertions.assertEquals(this.project.getContainerImagePath(), imageReference.getArchivePath().get());
+		Assertions.assertEquals(this.project.getName() + ":" + this.project.getVersion(), image.getCanonicalName());
+		Assertions.assertTrue(image.getPath().isPresent());
+		Assertions.assertEquals(this.project.getContainerImagePath(), image.getPath().get());
 		Assertions.assertTrue(Files.exists(this.project.getContainerImagePath()));
 		
 		try(ArchiveInputStream tarInputStream = new TarArchiveInputStream(Files.newInputStream(this.project.getContainerImagePath()))) {

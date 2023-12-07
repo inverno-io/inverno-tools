@@ -49,7 +49,7 @@ public class PackageContainerImageMojo extends AbstractContainerizeMojo {
 
 	@Override
 	protected void doExecute(MavenInvernoProject project) throws Exception {
-		ContainerizeTask.ContainerImageRef imageRef = project
+		ContainerizeTask.ContainerImage image = project
 			.modularizeDependencies(this::configureTask)
 			.buildJmod(this::configureTask)
 			.buildRuntime(this::configureTask)
@@ -57,8 +57,7 @@ public class PackageContainerImageMojo extends AbstractContainerizeMojo {
 			.containerize(this::configureTask)
 			.execute();
 
-		imageRef.getArchivePath()
-			.ifPresent(archivePath -> this.attachArchives(Set.of(archivePath)));
+		this.attachImages(Set.of(image));
 	}
 	
 	@Override

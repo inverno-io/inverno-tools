@@ -15,21 +15,23 @@
  */
 package io.inverno.tool.maven;
 
-import io.inverno.tool.maven.internal.MavenInvernoProject;
 import java.io.File;
+import java.net.URI;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import org.apache.maven.plugins.annotations.Parameter;
-import io.inverno.tool.buildtools.PackageApplicationTask;
-import java.net.URI;
-import java.nio.file.Path;
-import java.util.HashSet;
 import java.util.stream.Collectors;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.maven.plugins.annotations.Execute;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.plugins.annotations.ResolutionScope;
+
+import io.inverno.tool.buildtools.Image;
+import io.inverno.tool.buildtools.PackageApplicationTask;
+import io.inverno.tool.maven.internal.MavenInvernoProject;
 
 /**
  * <p>
@@ -109,7 +111,7 @@ public class PackageApplicationMojo extends BuildRuntimeMojo {
 	/**
 	 * A list of package types to generate (eg. rpm, deb, exe, msi, dmg pkg...)
 	 */
-	@Parameter(property = "inverno.app.packageTypes", required = true)
+	@Parameter(property = "inverno.app.packageTypes", required = false)
 	protected Set<String> packageTypes;
 	
 	
@@ -142,7 +144,7 @@ public class PackageApplicationMojo extends BuildRuntimeMojo {
 	@Override
 	protected void doExecute(MavenInvernoProject project) throws Exception {
 		// We need to get intermediary results as well... like a callback
-		Set<Path> appArchives = new HashSet<>();
+		Set<Image> appArchives = new HashSet<>();
 		appArchives.addAll(project
 			.modularizeDependencies(this::configureTask)
 			.buildJmod(this::configureTask)
@@ -153,7 +155,7 @@ public class PackageApplicationMojo extends BuildRuntimeMojo {
 			.execute()
 		);
 		
-		this.attachArchives(appArchives);
+		this.attachImages(appArchives);
 	}
 	
 	/**

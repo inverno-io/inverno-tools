@@ -469,7 +469,7 @@ A runtime image is a custom Java runtime containing a set of modules and their d
                 </li>
                 <li>
                     <em>Default</em>
-                    : true
+                    : ${project.build.finalName}
                 </li>
             </ul>
         </td>
@@ -914,7 +914,7 @@ The path to the runtime image within the archive.
 - **Type**: java.lang.String
 - **Required**: no
 - **User property**: inverno.runtime.archivePrefix
-- **Default**: true
+- **Default**: ${project.build.finalName}
 
 
 ##### &lt;attach&gt;
@@ -1257,21 +1257,6 @@ Builds and deploys the project application container image to an image registry.
             </ul>
         </td>
     </tr>
-    <tr>
-        <td>
-            <a href="#packageTypes">packageTypes</a>
-        </td>
-        <td>String&gt;</td>
-        <td>
-            A list of package types to generate (eg. rpm, deb, exe, msi, dmg pkg...)
-            <ul>
-                <li>
-                    <em>User property</em>
-                    : inverno.app.packageTypes
-                </li>
-            </ul>
-        </td>
-    </tr>
 </table>
 
 #### Optional parameters
@@ -1364,7 +1349,7 @@ Builds and deploys the project application container image to an image registry.
                 </li>
                 <li>
                     <em>Default</em>
-                    : true
+                    : ${project.build.finalName}
                 </li>
             </ul>
         </td>
@@ -1782,6 +1767,21 @@ Builds and deploys the project application container image to an image registry.
     </tr>
     <tr>
         <td>
+            <a href="#packageTypes">packageTypes</a>
+        </td>
+        <td>String&gt;</td>
+        <td>
+            A list of package types to generate (eg. rpm, deb, exe, msi, dmg pkg...)
+            <ul>
+                <li>
+                    <em>User property</em>
+                    : inverno.app.packageTypes
+                </li>
+            </ul>
+        </td>
+    </tr>
+    <tr>
+        <td>
             <a href="#ports">ports</a>
         </td>
         <td>String&gt;</td>
@@ -2095,7 +2095,7 @@ The path to the runtime image within the archive.
 - **Type**: java.lang.String
 - **Required**: no
 - **User property**: inverno.runtime.archivePrefix
-- **Default**: true
+- **Default**: ${project.build.finalName}
 
 
 ##### &lt;attach&gt;
@@ -2384,7 +2384,7 @@ A directory containing module descriptors to use to modularize unnamed or automa
 A list of package types to generate (eg. rpm, deb, exe, msi, dmg pkg...)
 
 - **Type**: java.util.Set&lt;java.lang.String&gt;
-- **Required**: yes
+- **Required**: no
 - **User property**: inverno.app.packageTypes
 
 
@@ -2783,21 +2783,6 @@ Builds and installs the project application container image to the local Docker 
             </ul>
         </td>
     </tr>
-    <tr>
-        <td>
-            <a href="#packageTypes1">packageTypes</a>
-        </td>
-        <td>String&gt;</td>
-        <td>
-            A list of package types to generate (eg. rpm, deb, exe, msi, dmg pkg...)
-            <ul>
-                <li>
-                    <em>User property</em>
-                    : inverno.app.packageTypes
-                </li>
-            </ul>
-        </td>
-    </tr>
 </table>
 
 #### Optional parameters
@@ -2890,7 +2875,7 @@ Builds and installs the project application container image to the local Docker 
                 </li>
                 <li>
                     <em>Default</em>
-                    : true
+                    : ${project.build.finalName}
                 </li>
             </ul>
         </td>
@@ -3333,6 +3318,21 @@ Builds and installs the project application container image to the local Docker 
     </tr>
     <tr>
         <td>
+            <a href="#packageTypes1">packageTypes</a>
+        </td>
+        <td>String&gt;</td>
+        <td>
+            A list of package types to generate (eg. rpm, deb, exe, msi, dmg pkg...)
+            <ul>
+                <li>
+                    <em>User property</em>
+                    : inverno.app.packageTypes
+                </li>
+            </ul>
+        </td>
+    </tr>
+    <tr>
+        <td>
             <a href="#ports1">ports</a>
         </td>
         <td>String&gt;</td>
@@ -3616,7 +3616,7 @@ The path to the runtime image within the archive.
 - **Type**: java.lang.String
 - **Required**: no
 - **User property**: inverno.runtime.archivePrefix
-- **Default**: true
+- **Default**: ${project.build.finalName}
 
 
 ##### &lt;attach&gt;
@@ -3922,7 +3922,7 @@ A directory containing module descriptors to use to modularize unnamed or automa
 A list of package types to generate (eg. rpm, deb, exe, msi, dmg pkg...)
 
 - **Type**: java.util.Set&lt;java.lang.String&gt;
-- **Required**: yes
+- **Required**: no
 - **User property**: inverno.app.packageTypes
 
 
@@ -4127,21 +4127,6 @@ A project application package is a native self-contained Java application includ
             </ul>
         </td>
     </tr>
-    <tr>
-        <td>
-            <a href="#packageTypes2">packageTypes</a>
-        </td>
-        <td>String&gt;</td>
-        <td>
-            A list of package types to generate (eg. rpm, deb, exe, msi, dmg pkg...)
-            <ul>
-                <li>
-                    <em>User property</em>
-                    : inverno.app.packageTypes
-                </li>
-            </ul>
-        </td>
-    </tr>
 </table>
 
 #### Optional parameters
@@ -4234,7 +4219,7 @@ A project application package is a native self-contained Java application includ
                 </li>
                 <li>
                     <em>Default</em>
-                    : true
+                    : ${project.build.finalName}
                 </li>
             </ul>
         </td>
@@ -4613,6 +4598,21 @@ A project application package is a native self-contained Java application includ
     </tr>
     <tr>
         <td>
+            <a href="#packageTypes2">packageTypes</a>
+        </td>
+        <td>String&gt;</td>
+        <td>
+            A list of package types to generate (eg. rpm, deb, exe, msi, dmg pkg...)
+            <ul>
+                <li>
+                    <em>User property</em>
+                    : inverno.app.packageTypes
+                </li>
+            </ul>
+        </td>
+    </tr>
+    <tr>
+        <td>
             <a href="#progressBar3">progressBar</a>
         </td>
         <td>boolean</td>
@@ -4836,7 +4836,7 @@ The path to the runtime image within the archive.
 - **Type**: java.lang.String
 - **Required**: no
 - **User property**: inverno.runtime.archivePrefix
-- **Default**: true
+- **Default**: ${project.build.finalName}
 
 
 ##### &lt;attach&gt;
@@ -5079,7 +5079,7 @@ A directory containing module descriptors to use to modularize unnamed or automa
 A list of package types to generate (eg. rpm, deb, exe, msi, dmg pkg...)
 
 - **Type**: java.util.Set&lt;java.lang.String&gt;
-- **Required**: yes
+- **Required**: no
 - **User property**: inverno.app.packageTypes
 
 
@@ -5278,21 +5278,6 @@ Builds and packages the project application container image in a TAR archive.
             </ul>
         </td>
     </tr>
-    <tr>
-        <td>
-            <a href="#packageTypes3">packageTypes</a>
-        </td>
-        <td>String&gt;</td>
-        <td>
-            A list of package types to generate (eg. rpm, deb, exe, msi, dmg pkg...)
-            <ul>
-                <li>
-                    <em>User property</em>
-                    : inverno.app.packageTypes
-                </li>
-            </ul>
-        </td>
-    </tr>
 </table>
 
 #### Optional parameters
@@ -5385,7 +5370,7 @@ Builds and packages the project application container image in a TAR archive.
                 </li>
                 <li>
                     <em>Default</em>
-                    : true
+                    : ${project.build.finalName}
                 </li>
             </ul>
         </td>
@@ -5803,6 +5788,21 @@ Builds and packages the project application container image in a TAR archive.
     </tr>
     <tr>
         <td>
+            <a href="#packageTypes3">packageTypes</a>
+        </td>
+        <td>String&gt;</td>
+        <td>
+            A list of package types to generate (eg. rpm, deb, exe, msi, dmg pkg...)
+            <ul>
+                <li>
+                    <em>User property</em>
+                    : inverno.app.packageTypes
+                </li>
+            </ul>
+        </td>
+    </tr>
+    <tr>
+        <td>
             <a href="#ports2">ports</a>
         </td>
         <td>String&gt;</td>
@@ -6086,7 +6086,7 @@ The path to the runtime image within the archive.
 - **Type**: java.lang.String
 - **Required**: no
 - **User property**: inverno.runtime.archivePrefix
-- **Default**: true
+- **Default**: ${project.build.finalName}
 
 
 ##### &lt;attach&gt;
@@ -6375,7 +6375,7 @@ A directory containing module descriptors to use to modularize unnamed or automa
 A list of package types to generate (eg. rpm, deb, exe, msi, dmg pkg...)
 
 - **Type**: java.util.Set&lt;java.lang.String&gt;
-- **Required**: yes
+- **Required**: no
 - **User property**: inverno.app.packageTypes
 
 

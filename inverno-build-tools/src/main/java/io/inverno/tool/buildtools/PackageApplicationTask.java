@@ -40,7 +40,7 @@ import java.util.function.Consumer;
  * @author <a href="jeremy.kuhn@inverno.io">Jeremy Kuhn</a>
  * @since 1.4
  */
-public interface PackageApplicationTask extends Task<Set<Path>, PackageApplicationTask> {
+public interface PackageApplicationTask extends Task<Set<Image>, PackageApplicationTask> {
 	
 	/**
 	 * <p>

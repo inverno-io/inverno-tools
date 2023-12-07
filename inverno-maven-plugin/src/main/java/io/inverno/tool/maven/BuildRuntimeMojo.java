@@ -15,22 +15,24 @@
  */
 package io.inverno.tool.maven;
 
-import io.inverno.tool.buildtools.ArchiveTask;
-import io.inverno.tool.buildtools.BuildJmodTask;
-import io.inverno.tool.buildtools.BuildRuntimeTask;
-import io.inverno.tool.maven.internal.MavenInvernoProject;
 import java.io.File;
 import java.nio.file.Files;
-import java.nio.file.Path;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import org.apache.commons.compress.utils.FileNameUtils;
+
 import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.plugins.annotations.ResolutionScope;
 import org.apache.maven.project.MavenProjectHelper;
+
+import io.inverno.tool.buildtools.ArchiveTask;
+import io.inverno.tool.buildtools.BuildJmodTask;
+import io.inverno.tool.buildtools.BuildRuntimeTask;
+import io.inverno.tool.buildtools.Image;
+import io.inverno.tool.maven.internal.MavenInvernoProject;
 
 /**
  * <p>
@@ -237,7 +239,7 @@ public class BuildRuntimeMojo extends AbstractInvernoMojo {
 	/**
 	 * The path to the runtime image within the archive.
 	 */
-	@Parameter(property = "inverno.runtime.archivePrefix", defaultValue = "true", required = false)
+	@Parameter(property = "inverno.runtime.archivePrefix", defaultValue = "${project.build.finalName}", required = false)
 	protected String archivePrefix;
 	
 	/* Maven specific */
@@ -255,28 +257,34 @@ public class BuildRuntimeMojo extends AbstractInvernoMojo {
 
 	@Override
 	protected void doExecute(MavenInvernoProject project) throws Exception {
-		this.attachArchives(project
+		Set<Image> runtimeImages = new HashSet<>();
+		runtimeImages.addAll(project
 			.modularizeDependencies(this::configureTask)
 			.buildJmod(this::configureTask)
 			.buildRuntime(this::configureTask)
+			.doOnComplete(runtimeImages::add)
 			.archive(this::configureTask)
 			.execute()
 		);
+		
+		this.attachImages(runtimeImages);
 	}
 	
 	/**
 	 * <p>
-	 * Attaches the specified archives as project artifacts.
+	 * Attaches the specified images as project artifacts.
 	 * </p>
 	 * 
-	 * @param archivesPaths the archives to attach
+	 * @param images the images to attach
 	 */
-	protected void attachArchives(Set<Path> archivesPaths) {
+	protected void attachImages(Set<Image> images) {
 		if(this.attach) {
-			for(Path archivePath : archivesPaths) {
-				if(Files.exists(archivePath) && Files.isRegularFile(archivePath)) {
-					this.mavenProjectHelper.attachArtifact(this.mavenProject, FileNameUtils.getExtension(archivePath), archivePath.toFile());
-				}
+			for(Image image : images) {
+				image.getPath()
+					.filter(path -> Files.exists(path) && Files.isRegularFile(path))
+					.ifPresent(path -> {
+						this.mavenProjectHelper.attachArtifact(this.mavenProject, image.getFormat().get(), image.getClassifier(), path.toFile());
+					});
 			}
 		}
 	}

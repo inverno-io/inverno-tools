@@ -15,15 +15,12 @@
  */
 package io.inverno.tool.buildtools.internal;
 
-import io.inverno.tool.buildtools.ArchiveTask;
-import io.inverno.tool.buildtools.TaskExecutionException;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.LinkOption;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -32,6 +29,7 @@ import java.util.Set;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
 import org.apache.commons.compress.archivers.ArchiveEntry;
 import org.apache.commons.compress.archivers.ArchiveException;
 import org.apache.commons.compress.archivers.ArchiveOutputStream;
@@ -46,6 +44,10 @@ import org.apache.commons.compress.compressors.CompressorStreamFactory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import io.inverno.tool.buildtools.ArchiveTask;
+import io.inverno.tool.buildtools.Image;
+import io.inverno.tool.buildtools.TaskExecutionException;
+
 /**
  * <p>
  * Generic {@link ArchiveTask} implementation.
@@ -58,11 +60,11 @@ import org.apache.logging.log4j.Logger;
  * @author <a href="jeremy.kuhn@inverno.io">Jeremy Kuhn</a>
  * @since 1.4
  */
-public class GenericArchiveTask extends AbstractTask<Set<Path>, ArchiveTask> implements ArchiveTask {
+public class GenericArchiveTask extends AbstractTask<Set<Image>, ArchiveTask> implements ArchiveTask {
 
 	private static final Logger LOGGER = LogManager.getLogger(GenericArchiveTask.class);
 	
-	private static final int UNITARY_WEIGHT = 1;
+	private static final int UNITARY_WEIGHT = 250;
 	
 	private final ImageType imageType;
 	
@@ -110,7 +112,7 @@ public class GenericArchiveTask extends AbstractTask<Set<Path>, ArchiveTask> imp
 	}
 	
 	@Override
-	protected Set<Path> doExecute(BuildProject project, ProgressBar.Step step) throws TaskExecutionException {
+	protected Set<Image> doExecute(BuildProject project, ProgressBar.Step step) throws TaskExecutionException {
 		if(step != null) {
 			step.setDescription("Creating archives...");
 		}
@@ -152,7 +154,10 @@ public class GenericArchiveTask extends AbstractTask<Set<Path>, ArchiveTask> imp
 		else {
 			LOGGER.info("[ Archives are up to date ]");
 		}
-		return new HashSet<>(imageArchivesPaths.values());
+		
+		return imageArchivesPaths.entrySet().stream()
+			.map(e -> new GenericImage(this.imageType, e.getKey(), e.getValue()))
+			.collect(Collectors.toSet());
 	}
 	
 	/**

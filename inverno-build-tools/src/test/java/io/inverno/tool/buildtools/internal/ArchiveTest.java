@@ -15,6 +15,7 @@
  */
 package io.inverno.tool.buildtools.internal;
 
+import io.inverno.tool.buildtools.Image;
 import io.inverno.tool.buildtools.TestProject;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -58,7 +59,7 @@ public class ArchiveTest {
 	
 	@Test
 	public void testExecute() throws Exception {
-		Set<Path> archivePaths = this.project
+		Set<Image> archiveImages = this.project
 			.modularizeDependencies()
 			.buildJmod()
 			.buildRuntime()
@@ -68,10 +69,10 @@ public class ArchiveTest {
 		
 		Assertions.assertEquals(
 			FORMATS.stream().map(this.project::getArchivePath).collect(Collectors.toSet()), 
-			archivePaths
+			archiveImages.stream().map(image -> image.getPath().get()).collect(Collectors.toSet())
 		);
 		
-		Path zipArchivePath = archivePaths.stream().filter(p -> p.getFileName().toString().endsWith(".zip")).findFirst().get();
+		Path zipArchivePath = archiveImages.stream().map(image -> image.getPath().get()).filter(p -> p.getFileName().toString().endsWith(".zip")).findFirst().get();
 
 		Set<String> archiveFileNames = new HashSet<>();
 		try (ZipFile zipFile = new ZipFile(zipArchivePath.toFile())) {
@@ -104,7 +105,7 @@ public class ArchiveTest {
 	@Test
 	public void testExecuteWithPrefix() throws Exception {
 		String prefix = "somePrefix";
-		Set<Path> archivePaths = this.project
+		Set<Image> archiveImages = this.project
 			.modularizeDependencies()
 			.buildJmod()
 			.buildRuntime()
@@ -115,10 +116,10 @@ public class ArchiveTest {
 		
 		Assertions.assertEquals(
 			Set.of(this.project.getArchivePath("zip")),
-			archivePaths
+			archiveImages.stream().map(image -> image.getPath().get()).collect(Collectors.toSet())
 		);
 		
-		Path zipArchivePath = archivePaths.iterator().next();
+		Path zipArchivePath = archiveImages.stream().map(image -> image.getPath().get()).iterator().next();
 
 		Set<String> archiveFileNames = new HashSet<>();
 		try (ZipFile zipFile = new ZipFile(zipArchivePath.toFile())) {

@@ -245,8 +245,8 @@ public class BuildProject extends Project {
 	public final Path getImagePath(ImageType imageType) {
 		switch(imageType) {
 			case RUNTIME:
-			case APPLICATION: return this.getTargetPath().resolve(this.getFinalName() + "-" + imageType.getNativeQualifier());
-			case CONTAINER: return this.getTargetPath().resolve(this.getFinalName() + "-" + ImageType.CONTAINER.getNativeQualifier() + ".tar");
+			case APPLICATION: return this.getTargetPath().resolve(this.getFinalName() + "-" + imageType.getNativeClassifier());
+			case CONTAINER: return this.getTargetPath().resolve(this.getFinalName() + "-" + ImageType.CONTAINER.getNativeClassifier() + ".tar");
 			default: throw new IllegalStateException("Unsupported image type: " + imageType);
 		}
 	}
@@ -254,7 +254,7 @@ public class BuildProject extends Project {
 	public final Map<String, Path> getImageArchivesPaths(ImageType imageType, Set<String> formats) {
 		return formats != null ? formats.stream()
 			.collect(Collectors.toMap(Function.identity(), 
-				format -> this.getTargetPath().resolve(this.getFinalName() + "-" + imageType.getNativeQualifier() + "." + format)
+				format -> this.getTargetPath().resolve(this.getFinalName() + "-" + imageType.getNativeClassifier() + "." + format)
 			)) : Map.of();
 	}
 	

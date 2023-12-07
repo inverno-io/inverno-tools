@@ -38,7 +38,7 @@ import java.util.function.Consumer;
  * @author <a href="jeremy.kuhn@inverno.io">Jeremy Kuhn</a>
  * @since 1.4
  */
-public interface BuildRuntimeTask extends Task<Path, BuildRuntimeTask> {
+public interface BuildRuntimeTask extends Task<Image, BuildRuntimeTask> {
 
 	/**
 	 * <p>

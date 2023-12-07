@@ -62,7 +62,7 @@ import org.apache.logging.log4j.Logger;
  * @author <a href="jeremy.kuhn@inverno.io">Jeremy Kuhn</a>
  * @since 1.4
  */
-public class GenericContainerizeTask extends AbstractTask<ContainerizeTask.ContainerImageRef, ContainerizeTask> implements ContainerizeTask {
+public class GenericContainerizeTask extends AbstractTask<ContainerizeTask.ContainerImage, ContainerizeTask> implements ContainerizeTask {
 	
 	private static final Logger LOGGER = LogManager.getLogger(GenericContainerizeTask.class);
 
@@ -210,16 +210,17 @@ public class GenericContainerizeTask extends AbstractTask<ContainerizeTask.Conta
 	}
 	
 	@Override
-	protected ContainerizeTask.ContainerImageRef doExecute(BuildProject project, ProgressBar.Step step) throws TaskExecutionException {
+	protected ContainerizeTask.ContainerImage doExecute(BuildProject project, ProgressBar.Step step) throws TaskExecutionException {
 		if(step != null) {
 			step.setDescription("Creating project container image...");
 		}
+		Target resolvedTarget = this.target.orElse(DEFAULT_TARGET);
 		Path applicationImagePath = project.getImagePath(ImageType.APPLICATION);
 		Path containerImagePath = project.getImagePath(ImageType.CONTAINER);
 		if(project.isMarked() || 
 			project.getDependencies().stream().anyMatch(dependency -> dependency.isMarked()) || 
-			(this.target.orElse(DEFAULT_TARGET) == Target.TAR && !Files.exists(containerImagePath))) {
-			switch(this.target.orElse(DEFAULT_TARGET)) {
+			resolvedTarget == Target.DOCKER || resolvedTarget == Target.REGISTRY || !Files.exists(containerImagePath)) {
+			switch(resolvedTarget) {
 				case TAR: LOGGER.info("[ Creating project container image {}... ]", containerImagePath);
 					break;
 				case DOCKER: LOGGER.info("[ Creating project container image to Docker daemon... ]");
@@ -263,7 +264,7 @@ public class GenericContainerizeTask extends AbstractTask<ContainerizeTask.Conta
 				
 				JibContainer container = builder.containerize(containerizer);
 				
-				return new GenericContainerizeTask.ContainerImageRef(project, container.getTargetImage());
+				return new GenericContainerizeTask.ContainerImage(project, container.getTargetImage());
 			} 
 			catch (InterruptedException | RegistryException | IOException | CacheDirectoryCreationException	| ExecutionException | InvalidImageReferenceException e) {
 				throw new TaskExecutionException("Error creating project container image", e);
@@ -423,7 +424,7 @@ public class GenericContainerizeTask extends AbstractTask<ContainerizeTask.Conta
 	 * @author <a href="jeremy.kuhn@inverno.io">Jeremy Kuhn</a>
 	 * @since 1.4
 	 */
-	private static class ContainerImageRef implements ContainerizeTask.ContainerImageRef {
+	private static class ContainerImage implements ContainerizeTask.ContainerImage {
 
 		private final ImageReference imageReference;
 		
@@ -431,13 +432,13 @@ public class GenericContainerizeTask extends AbstractTask<ContainerizeTask.Conta
 
 		/**
 		 * <p>
-		 * Creates a generic container image reference.
+		 * Creates a generic container image.
 		 * </p>
 		 * 
 		 * @param project        the build project
 		 * @param imageReference the underlying image reference
 		 */
-		public ContainerImageRef(BuildProject project, ImageReference imageReference) {
+		public ContainerImage(BuildProject project, ImageReference imageReference) {
 			this.imageReference = imageReference;
 			this.imageArchivePath = Optional.of(project.getImagePath(ImageType.CONTAINER)).filter(Files::exists);
 		}
@@ -468,13 +469,23 @@ public class GenericContainerizeTask extends AbstractTask<ContainerizeTask.Conta
 		}
 
 		@Override
-		public Optional<Path> getArchivePath() {
+		public Optional<Path> getPath() {
 			return this.imageArchivePath;
 		}
 
 		@Override
 		public String toString() {
 			return this.imageReference.toString();
+		}
+
+		@Override
+		public String getClassifier() {
+			return ImageType.CONTAINER.getNativeClassifier();
+		}
+
+		@Override
+		public Optional<String> getFormat() {
+			return this.imageArchivePath.map(ign -> "tar");
 		}
 	}
 }

@@ -15,7 +15,6 @@
  */
 package io.inverno.tool.buildtools;
 
-import java.nio.file.Path;
 import java.util.Set;
 
 /**
@@ -33,7 +32,7 @@ import java.util.Set;
  * @see BuildRuntimeTask
  * @see PackageApplicationTask
  */
-public interface ArchiveTask extends Task<Set<Path>, ArchiveTask> {
+public interface ArchiveTask extends Task<Set<Image>, ArchiveTask> {
 
 	/**
 	 * {@code .zip} archive format.

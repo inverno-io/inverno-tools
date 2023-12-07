@@ -17,6 +17,7 @@ package io.inverno.tool.buildtools.internal;
 
 import io.inverno.tool.buildtools.ArchiveTask;
 import io.inverno.tool.buildtools.BuildRuntimeTask;
+import io.inverno.tool.buildtools.Image;
 import io.inverno.tool.buildtools.TaskExecutionException;
 import java.io.IOException;
 import java.io.PrintStream;
@@ -51,7 +52,7 @@ import io.inverno.tool.buildtools.PackageApplicationTask;
  * @author <a href="jeremy.kuhn@inverno.io">Jeremy Kuhn</a>
  * @since 1.4
  */
-public class GenericBuildRuntimeTask extends AbstractTask<Path, BuildRuntimeTask> implements BuildRuntimeTask {
+public class GenericBuildRuntimeTask extends AbstractTask<Image, BuildRuntimeTask> implements BuildRuntimeTask {
 
 	private static final Logger LOGGER = LogManager.getLogger(GenericBuildRuntimeTask.class);
 	
@@ -158,14 +159,14 @@ public class GenericBuildRuntimeTask extends AbstractTask<Path, BuildRuntimeTask
 	}
 	
 	@Override
-	protected Path doExecute(BuildProject project, ProgressBar.Step step) throws TaskExecutionException {
+	protected Image doExecute(BuildProject project, ProgressBar.Step step) throws TaskExecutionException {
 		if(step != null) {
 			step.setDescription("Creating project runtime...");
 		}
 
 		Path runtimeImagePath = project.getImagePath(ImageType.RUNTIME);
 		if(project.isMarked() || project.getDependencies().stream().anyMatch(dependency -> dependency.isMarked()) || !Files.exists(runtimeImagePath)) {
-			LOGGER.info("[ Creating project runtime: {}... ]", runtimeImagePath);
+			LOGGER.info("[ Creating project runtime {}... ]", runtimeImagePath);
 			if(Files.exists(runtimeImagePath)) {
 				try (Stream<Path> walk = Files.walk(runtimeImagePath)) {
 					for(Iterator<Path> pathIterator = walk.sorted(Comparator.reverseOrder()).iterator(); pathIterator.hasNext();) {
@@ -265,7 +266,7 @@ public class GenericBuildRuntimeTask extends AbstractTask<Path, BuildRuntimeTask
 		else {
 			LOGGER.info("[ Project runtime is up to date ]");
 		}
-		return runtimeImagePath;
+		return new GenericImage(ImageType.RUNTIME, null, runtimeImagePath);
 	}
 
 	@Override

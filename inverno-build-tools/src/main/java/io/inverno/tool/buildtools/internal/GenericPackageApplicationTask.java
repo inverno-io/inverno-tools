@@ -17,6 +17,7 @@ package io.inverno.tool.buildtools.internal;
 
 import io.inverno.tool.buildtools.ArchiveTask;
 import io.inverno.tool.buildtools.ContainerizeTask;
+import io.inverno.tool.buildtools.Image;
 import io.inverno.tool.buildtools.TaskExecutionException;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -56,7 +57,7 @@ import io.inverno.tool.buildtools.PackageApplicationTask;
  * @author <a href="jeremy.kuhn@inverno.io">Jeremy Kuhn</a>
  * @since 1.4
  */
-public class GenericPackageApplicationTask extends AbstractTask<Set<Path>, PackageApplicationTask> implements PackageApplicationTask {
+public class GenericPackageApplicationTask extends AbstractTask<Set<Image>, PackageApplicationTask> implements PackageApplicationTask {
 
 	private static final Logger LOGGER = LogManager.getLogger(GenericPackageApplicationTask.class);
 	
@@ -191,7 +192,7 @@ public class GenericPackageApplicationTask extends AbstractTask<Set<Path>, Packa
 	}
 	
 	@Override
-	protected Set<Path> doExecute(BuildProject project, ProgressBar.Step step) throws TaskExecutionException {
+	protected Set<Image> doExecute(BuildProject project, ProgressBar.Step step) throws TaskExecutionException {
 		if(step != null) {
 			step.setDescription("Packaging project application...");
 		}
@@ -522,7 +523,7 @@ public class GenericPackageApplicationTask extends AbstractTask<Set<Path>, Packa
 				}
 			}
 			
-			Set<Path> jpackageImagePaths = new HashSet<>();
+			Set<Image> jpackageImages = new HashSet<>();
 
 			// Build Application image
 			try {
@@ -545,7 +546,7 @@ public class GenericPackageApplicationTask extends AbstractTask<Set<Path>, Packa
 				if(JavaTools.JPACKAGE.run(OUT, ERR, image_jpackage_args.stream().toArray(String[]::new)) == 0) {
 					// jpackage creates the app in the main launcher name folder
 					Files.move(applicationImagePath.getParent().resolve(mainLauncherName), applicationImagePath);
-					jpackageImagePaths.add(applicationImagePath);
+					jpackageImages.add(new GenericImage(ImageType.APPLICATION, null, applicationImagePath));
 				}
 				else {
 					throw new TaskExecutionException("Error packaging project application");
@@ -674,13 +675,13 @@ public class GenericPackageApplicationTask extends AbstractTask<Set<Path>, Packa
 							throw new TaskExecutionException("Generated application of type " + e.getKey() + " could not be found in " + applicationImagePath.getParent());
 						}
 						Files.move(jpackagePath.get(), e.getValue());
-						jpackageImagePaths.add(e.getValue());
+						jpackageImages.add(new GenericImage(ImageType.APPLICATION, e.getKey(), e.getValue()));
 					}
 					else {
 						throw new TaskExecutionException("Error packaging project application");
 					}
 				}
-				return jpackageImagePaths;
+				return jpackageImages;
 			} 
 			catch (IOException e) {
 				throw new TaskExecutionException("Error packaging project application", e);
@@ -689,13 +690,13 @@ public class GenericPackageApplicationTask extends AbstractTask<Set<Path>, Packa
 		else {
 			LOGGER.info("[ Project application package is up to date ]");
 			
-			Set<Path> jpackageImagePaths = new HashSet<>();
-			jpackageImagePaths.add(applicationImagePath);
+			Set<Image> jpackageImages = new HashSet<>();
+			jpackageImages.add(new GenericImage(ImageType.APPLICATION, null, applicationImagePath));
 			
 			for(Map.Entry<String, Path> e : applicationImageArchivesPaths.entrySet()) {
-				jpackageImagePaths.add(e.getValue());
+				jpackageImages.add(new GenericImage(ImageType.APPLICATION, e.getKey(), e.getValue()));
 			}
-			return jpackageImagePaths;
+			return jpackageImages;
 		}
 	}
 

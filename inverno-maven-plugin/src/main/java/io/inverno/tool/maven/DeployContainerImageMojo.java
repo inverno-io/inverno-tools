@@ -60,7 +60,7 @@ public class DeployContainerImageMojo extends AbstractContainerizeMojo {
 
 	@Override
 	protected void doExecute(MavenInvernoProject project) throws Exception {
-		ContainerizeTask.ContainerImageRef imageRef = project
+		ContainerizeTask.ContainerImage image = project
 			.modularizeDependencies(this::configureTask)
 			.buildJmod(this::configureTask)
 			.buildRuntime(this::configureTask)
@@ -68,7 +68,7 @@ public class DeployContainerImageMojo extends AbstractContainerizeMojo {
 			.containerize(this::configureTask)
 			.execute();
 
-		this.getLog().info("Project image " + imageRef.getCanonicalName() + " deployed to " + this.registry + "/" + this.repository);
+		this.getLog().info("Project image " + image.getCanonicalName() + " deployed to " + this.registry + "/" + this.repository);
 	}
 	
 	@Override

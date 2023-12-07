@@ -15,6 +15,7 @@
  */
 package io.inverno.tool.buildtools.internal;
 
+import io.inverno.tool.buildtools.Image;
 import io.inverno.tool.buildtools.PackageApplicationTask;
 import io.inverno.tool.buildtools.TestProject;
 import java.nio.file.Files;
@@ -23,6 +24,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Properties;
 import java.util.Set;
+import java.util.stream.Collectors;
 import org.apache.commons.compress.archivers.ArchiveEntry;
 import org.apache.commons.compress.archivers.ArchiveInputStream;
 import org.apache.commons.compress.archivers.ar.ArArchiveInputStream;
@@ -64,7 +66,7 @@ public class PackageApplicationTest {
 	
 	@Test
 	public void testExecute() throws Exception {
-		Set<Path> applicationPaths = this.project
+		Set<Image> applicationImages = this.project
 			.modularizeDependencies()
 			.buildJmod()
 			.buildRuntime()
@@ -75,7 +77,7 @@ public class PackageApplicationTest {
 		
 		Assertions.assertEquals(
 			Set.of(applicationPath),
-			applicationPaths
+			applicationImages.stream().map(image -> image.getPath().get()).collect(Collectors.toSet())
 		);
 		
 		Assertions.assertTrue(Files.exists(applicationPath));
@@ -90,7 +92,7 @@ public class PackageApplicationTest {
 	
 	@Test
 	public void testExecuteWithGenericOptions() throws Exception {
-		Set<Path> applicationPaths = this.project
+		Set<Image> applicationImages = this.project
 			.modularizeDependencies()
 			.buildJmod()
 			.buildRuntime()
@@ -103,17 +105,17 @@ public class PackageApplicationTest {
 		
 		Assertions.assertEquals(
 			Set.of(this.project.getApplicationPath(null)),
-			applicationPaths
+			applicationImages.stream().map(image -> image.getPath().get()).collect(Collectors.toSet())
 		);
 		
-		applicationPaths.forEach(applicationPath -> Assertions.assertTrue(Files.exists(applicationPath)));
+		applicationImages.forEach(image -> Assertions.assertTrue(Files.exists(image.getPath().get())));
 		
 		// TODO it seems these options don't do anything at least when generating the app-image
 	}
 	
 	@Test
 	public void testExecuteWithZipArchiveFormat() throws Exception {
-		Set<Path> applicationPaths = this.project
+		Set<Image> applicationImages = this.project
 			.modularizeDependencies()
 			.buildJmod()
 			.buildRuntime()
@@ -124,15 +126,15 @@ public class PackageApplicationTest {
 		
 		Assertions.assertEquals(
 			Set.of(this.project.getApplicationPath("zip")),
-			applicationPaths
+			applicationImages.stream().map(image -> image.getPath().get()).collect(Collectors.toSet())
 		);
 		
-		applicationPaths.forEach(applicationPath -> Assertions.assertTrue(Files.exists(applicationPath)));
+		applicationImages.forEach(image -> Assertions.assertTrue(Files.exists(image.getPath().get())));
 	}
 	
 	@Test
 	public void testExecuteWithLauncher() throws Exception {
-		Set<Path> applicationPaths = this.project
+		Set<Image> applicationImages = this.project
 			.modularizeDependencies()
 			.buildJmod()
 			.buildRuntime()
@@ -224,7 +226,7 @@ public class PackageApplicationTest {
 			Set.of(
 				applicationPath
 			),
-			applicationPaths
+			applicationImages.stream().map(image -> image.getPath().get()).collect(Collectors.toSet())
 		);
 		
 		Assertions.assertTrue(Files.exists(applicationPath));
@@ -245,7 +247,7 @@ public class PackageApplicationTest {
 	@Test
 	@EnabledOnOs({OS.LINUX})
 	public void testExecuteWithDebArchiveFormat() throws Exception {
-		Set<Path> applicationPaths = this.project
+		Set<Image> applicationImages = this.project
 			.modularizeDependencies()
 			.buildJmod()
 			.buildRuntime()
@@ -304,10 +306,10 @@ public class PackageApplicationTest {
 				this.project.getApplicationPath(null),
 				this.project.getApplicationPath("deb")
 			),
-			applicationPaths
+			applicationImages.stream().map(image -> image.getPath().get()).collect(Collectors.toSet())
 		);
 		
-		applicationPaths.forEach(applicationPath -> Assertions.assertTrue(Files.exists(applicationPath)));
+		applicationImages.forEach(image -> Assertions.assertTrue(Files.exists(image.getPath().get())));
 		
 		try(ArchiveInputStream debInputStream = new ArArchiveInputStream(Files.newInputStream(this.project.getApplicationPath("deb")))) {
 			ArchiveEntry debEntry = null;
@@ -390,7 +392,7 @@ public class PackageApplicationTest {
 	@Test
 	@EnabledOnOs({OS.WINDOWS})
 	public void testExecuteWithExeArchiveFormat() throws Exception {
-		Set<Path> applicationPaths = this.project
+		Set<Image> applicationImages = this.project
 			.modularizeDependencies()
 			.buildJmod()
 			.buildRuntime()
@@ -406,16 +408,16 @@ public class PackageApplicationTest {
 			Set.of(
 				this.project.getApplicationPath("exe")
 			),
-			applicationPaths
+			applicationImages.stream().map(image -> image.getPath().get()).collect(Collectors.toSet())
 		);
 		
-		applicationPaths.forEach(applicationPath -> Assertions.assertTrue(Files.exists(applicationPath)));
+		applicationImages.forEach(image -> Assertions.assertTrue(Files.exists(image.getPath().get())));
 	}
 	
 	@Test
 	@EnabledOnOs({OS.WINDOWS})
 	public void testExecuteWithMsiArchiveFormat() throws Exception {
-		Set<Path> applicationPaths = this.project
+		Set<Image> applicationImages = this.project
 			.modularizeDependencies()
 			.buildJmod()
 			.buildRuntime()
@@ -431,16 +433,16 @@ public class PackageApplicationTest {
 			Set.of(
 				this.project.getApplicationPath("msi")
 			),
-			applicationPaths
+			applicationImages.stream().map(image -> image.getPath().get()).collect(Collectors.toSet())
 		);
 		
-		applicationPaths.forEach(applicationPath -> Assertions.assertTrue(Files.exists(applicationPath)));
+		applicationImages.forEach(image -> Assertions.assertTrue(Files.exists(image.getPath().get())));
 	}
 	
 	@Test
 	@EnabledOnOs({OS.MAC})
 	public void testExecuteWithDmgArchiveFormat() throws Exception {
-		Set<Path> applicationPaths = this.project
+		Set<Image> applicationImages = this.project
 			.modularizeDependencies()
 			.buildJmod()
 			.buildRuntime()
@@ -456,16 +458,16 @@ public class PackageApplicationTest {
 			Set.of(
 				this.project.getApplicationPath("msi")
 			),
-			applicationPaths
+			applicationImages.stream().map(image -> image.getPath().get()).collect(Collectors.toSet())
 		);
 		
-		applicationPaths.forEach(applicationPath -> Assertions.assertTrue(Files.exists(applicationPath)));
+		applicationImages.forEach(image -> Assertions.assertTrue(Files.exists(image.getPath().get())));
 	}
 	
 	@Test
 	@EnabledOnOs({OS.MAC})
 	public void testExecuteWithPkgArchiveFormat() throws Exception {
-		Set<Path> applicationPaths = this.project
+		Set<Image> applicationImages = this.project
 			.modularizeDependencies()
 			.buildJmod()
 			.buildRuntime()
@@ -481,9 +483,9 @@ public class PackageApplicationTest {
 			Set.of(
 				this.project.getApplicationPath("pkg")
 			),
-			applicationPaths
+			applicationImages.stream().map(image -> image.getPath().get()).collect(Collectors.toSet())
 		);
 		
-		applicationPaths.forEach(applicationPath -> Assertions.assertTrue(Files.exists(applicationPath)));
+		applicationImages.forEach(image -> Assertions.assertTrue(Files.exists(image.getPath().get())));
 	}
 }

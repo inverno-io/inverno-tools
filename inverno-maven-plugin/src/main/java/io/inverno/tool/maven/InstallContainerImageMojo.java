@@ -62,7 +62,7 @@ public class InstallContainerImageMojo extends AbstractContainerizeMojo {
 
 	@Override
 	protected void doExecute(MavenInvernoProject project) throws Exception {
-		ContainerizeTask.ContainerImageRef imageRef = project
+		ContainerizeTask.ContainerImage image = project
 			.modularizeDependencies(this::configureTask)
 			.buildJmod(this::configureTask)
 			.buildRuntime(this::configureTask)
@@ -70,14 +70,14 @@ public class InstallContainerImageMojo extends AbstractContainerizeMojo {
 			.containerize(this::configureTask)
 			.execute();
 
-		this.getLog().info("Project image " + imageRef.getCanonicalName() + " installed to Docker");
+		this.getLog().info("Project image " + image.getCanonicalName() + " installed to Docker");
 	}
 	
 	@Override
 	protected ContainerizeTask configureTask(ContainerizeTask packageApplicationTask) {
 		return super.configureTask(packageApplicationTask)
 			.target(ContainerizeTask.Target.DOCKER)
-			.format(imageFormat.Docker)
+			.format(ContainerizeTask.Format.Docker)
 			.dockerExecutable(this.dockerExecutableFile != null ? this.dockerExecutableFile.toPath().toAbsolutePath() : null)
 			.dockerEnvironment(this.dockerEnvironment);
 	}

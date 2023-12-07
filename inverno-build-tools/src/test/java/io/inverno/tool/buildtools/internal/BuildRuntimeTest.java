@@ -16,6 +16,7 @@
 package io.inverno.tool.buildtools.internal;
 
 import io.inverno.tool.buildtools.BuildRuntimeTask;
+import io.inverno.tool.buildtools.Image;
 import io.inverno.tool.buildtools.TestProject;
 import java.io.IOException;
 import java.io.InputStream;
@@ -56,11 +57,13 @@ public class BuildRuntimeTest {
 	
 	@Test
 	public void testExecute() throws Exception {
-		Path runtimePath = this.project
+		Image runtimeImage = this.project
 			.modularizeDependencies()
 			.buildJmod()
 			.buildRuntime()
 			.execute();
+		
+		Path runtimePath = runtimeImage.getPath().get();
 		
 		Properties releaseProperties = new Properties();
 		try(InputStream releaseInput = Files.newInputStream(runtimePath.resolve("release"))) {
@@ -72,12 +75,14 @@ public class BuildRuntimeTest {
 	
 	@Test
 	public void testExecuteWithNativeCommands() throws Exception {
-		Path runtimePath = this.project
+		Image runtimeImage = this.project
 			.modularizeDependencies()
 			.buildJmod()
 			.buildRuntime()
 			.stripNativeCommands(false)
 			.execute();
+		
+		Path runtimePath = runtimeImage.getPath().get();
 		
 		Properties releaseProperties = new Properties();
 		try(InputStream releaseInput = Files.newInputStream(runtimePath.resolve("release"))) {
@@ -89,7 +94,7 @@ public class BuildRuntimeTest {
 	
 	@Test
 	public void testExecuteWithConfLegalManInJmod() throws Exception {
-		Path runtimePath = this.project
+		Image runtimeImage = this.project
 			.modularizeDependencies()
 			.buildJmod()
 			.resolveMainClass(true)
@@ -98,6 +103,8 @@ public class BuildRuntimeTest {
 			.manPath(Path.of("src/test/resources/man").toAbsolutePath())
 			.buildRuntime()
 			.execute();
+		
+		Path runtimePath = runtimeImage.getPath().get();
 		
 		Properties releaseProperties = new Properties();
 		try(InputStream releaseInput = Files.newInputStream(runtimePath.resolve("release"))) {
@@ -112,7 +119,7 @@ public class BuildRuntimeTest {
 	
 	@Test
 	public void testExecuteWithLauncher() throws Exception {
-		Path runtimePath = this.project
+		Image runtimeImage = this.project
 			.modularizeDependencies()
 			.buildJmod()
 			.buildRuntime()
@@ -120,6 +127,8 @@ public class BuildRuntimeTest {
 				BuildRuntimeTask.Launcher.of("project", this.project.getModuleName(), "io.inverno.test.project.Main")
 			))
 			.execute();
+		
+		Path runtimePath = runtimeImage.getPath().get();
 		
 		Properties releaseProperties = new Properties();
 		try(InputStream releaseInput = Files.newInputStream(runtimePath.resolve("release"))) {

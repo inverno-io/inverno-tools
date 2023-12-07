@@ -37,7 +37,7 @@ public enum ImageType {
 	*/
    CONTAINER("container");
 
-   private final String nativeQualifier;
+   private final String nativeClassifier;
 
    /**
 	* <p>
@@ -47,18 +47,18 @@ public enum ImageType {
 	* @param classifier the image qualifier
 	*/
    private ImageType(String classifier) {
-	   this.nativeQualifier = classifier + "_" + Platform.getSystemPlatform();
+	   this.nativeClassifier = classifier + "_" + Platform.getSystemPlatform();
    }
 
    /**
 	* <p>
-	* Returns the qualifier of the image type including OS and architecture.
+	* Returns the classifier of the image type including OS and architecture.
 	* </p>
 	* 
 	* @return The image type
 	*/
-   public String getNativeQualifier() {
-	   return this.nativeQualifier;
+   public String getNativeClassifier() {
+	   return this.nativeClassifier;
    }
 
    /**

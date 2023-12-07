@@ -176,24 +176,24 @@ public class TestProject extends Project {
 	}
 	
 	public Path getRuntimePath() {
-		return TestProject.TARGET_PATH.resolve(this.getFinalName() + "-" + ImageType.RUNTIME.getNativeQualifier());
+		return TestProject.TARGET_PATH.resolve(this.getFinalName() + "-" + ImageType.RUNTIME.getNativeClassifier());
 	}
 	
 	public Path getArchivePath(String format) {
-		return TestProject.TARGET_PATH.resolve(this.getFinalName() + "-" + ImageType.RUNTIME.getNativeQualifier() + "." + format);
+		return TestProject.TARGET_PATH.resolve(this.getFinalName() + "-" + ImageType.RUNTIME.getNativeClassifier() + "." + format);
 	}
 	
 	public Path getApplicationPath(String format) {
 		if(format == null) {
-			return TestProject.TARGET_PATH.resolve(Path.of(this.getFinalName() + "-" + ImageType.APPLICATION.getNativeQualifier()));
+			return TestProject.TARGET_PATH.resolve(Path.of(this.getFinalName() + "-" + ImageType.APPLICATION.getNativeClassifier()));
 		}
 		else {
-			return TestProject.TARGET_PATH.resolve(Path.of(this.getFinalName() + "-" + ImageType.APPLICATION.getNativeQualifier() + "." + format));
+			return TestProject.TARGET_PATH.resolve(Path.of(this.getFinalName() + "-" + ImageType.APPLICATION.getNativeClassifier() + "." + format));
 		}
 	}
 	
 	public Path getContainerImagePath() {
-		return TestProject.TARGET_PATH.resolve(this.getFinalName() + "-" + ImageType.CONTAINER.getNativeQualifier() + ".tar");
+		return TestProject.TARGET_PATH.resolve(this.getFinalName() + "-" + ImageType.CONTAINER.getNativeClassifier() + ".tar");
 	}
 	
 	public Path getPidfile() {

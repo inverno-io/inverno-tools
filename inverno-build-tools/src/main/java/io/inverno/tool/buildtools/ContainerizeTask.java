@@ -36,7 +36,7 @@ import java.util.Set;
  * @author <a href="jeremy.kuhn@inverno.io">Jeremy Kuhn</a>
  * @since 1.4
  */
-public interface ContainerizeTask extends Task<ContainerizeTask.ContainerImageRef, ContainerizeTask> {
+public interface ContainerizeTask extends Task<ContainerizeTask.ContainerImage, ContainerizeTask> {
 
 	/**
 	 * <p>
@@ -100,7 +100,7 @@ public interface ContainerizeTask extends Task<ContainerizeTask.ContainerImageRe
 	 * @author <a href="jeremy.kuhn@inverno.io">Jeremy Kuhn</a>
 	 * @since 1.4
 	 */
-	interface ContainerImageRef {
+	interface ContainerImage extends Image {
 		
 		/**
 		 * <p>
@@ -146,15 +146,6 @@ public interface ContainerizeTask extends Task<ContainerizeTask.ContainerImageRe
 		 * @return the canonical name of the image
 		 */
 		String getCanonicalName();
-		
-		/**
-		 * <p>
-		 * Returns the path to the generated TAR archive.
-		 * </p>
-		 * 
-		 * @return an optional returning the path to the TAR archive or an empty optional
-		 */
-		Optional<Path> getArchivePath();
 	}
 	
 	/**
