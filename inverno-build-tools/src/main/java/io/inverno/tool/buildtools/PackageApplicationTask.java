@@ -340,7 +340,9 @@ public interface PackageApplicationTask extends Task<Set<Image>, PackageApplicat
 		 * 
 		 * @return an optional returning the package name or an empty optional
 		 */
-		Optional<String> getPackageName();
+		default Optional<String> getPackageName() {
+			return Optional.empty();
+		}
 
 		/**
 		 * <p>
@@ -349,7 +351,9 @@ public interface PackageApplicationTask extends Task<Set<Image>, PackageApplicat
 		 * 
 		 * @return an optional returning the Debian package maintainer or an empty optional
 		 */
-		Optional<String> getDebMaintainer();
+		default Optional<String> getDebMaintainer() {
+			return Optional.empty();
+		}
 
 		/**
 		 * <p>
@@ -358,7 +362,9 @@ public interface PackageApplicationTask extends Task<Set<Image>, PackageApplicat
 		 * 
 		 * @return an optional returning the Menu group or an empty optional
 		 */
-		Optional<String> getMenuGroup();
+		default Optional<String> getMenuGroup() {
+			return Optional.empty();
+		}
 
 		/**
 		 * <p>
@@ -367,7 +373,9 @@ public interface PackageApplicationTask extends Task<Set<Image>, PackageApplicat
 		 *
 		 * @return an optional returning the required packages or capabilities for the application or an empty optional
 		 */
-		Optional<String> getPackageDeps();
+		default Optional<String> getPackageDeps() {
+			return Optional.empty();
+		}
 
 		/**
 		 * <p>
@@ -376,7 +384,9 @@ public interface PackageApplicationTask extends Task<Set<Image>, PackageApplicat
 		 * 
 		 * @return an optional returning the type of the license or an empty optional
 		 */
-		Optional<String> getRpmLicenseType();
+		default Optional<String> getRpmLicenseType() {
+			return Optional.empty();
+		}
 
 		/**
 		 * <p>
@@ -385,7 +395,9 @@ public interface PackageApplicationTask extends Task<Set<Image>, PackageApplicat
 		 * 
 		 * @return an optional returning the release value or an empty optional
 		 */
-		Optional<String> getAppRelease();
+		default Optional<String> getAppRelease() {
+			return Optional.empty();
+		}
 
 		/**
 		 * <p>
@@ -394,7 +406,9 @@ public interface PackageApplicationTask extends Task<Set<Image>, PackageApplicat
 		 * 
 		 * @return an optional returning the group value or an empty optional
 		 */
-		Optional<String> getAppCategory();
+		default Optional<String> getAppCategory() {
+			return Optional.empty();
+		}
 
 		/**
 		 * <p>
@@ -403,7 +417,9 @@ public interface PackageApplicationTask extends Task<Set<Image>, PackageApplicat
 		 * 
 		 * @return true to create a shortcut, false otherwise
 		 */
-		boolean isShortcut();
+		default boolean isShortcut() {
+			return false;
+		}
 	}
 	
 	/**
@@ -423,7 +439,9 @@ public interface PackageApplicationTask extends Task<Set<Image>, PackageApplicat
 		 * 
 		 * @return an optional returning the package identifier or an empty optional 
 		 */
-		Optional<String> getPackageIdentifier();
+		default Optional<String> getPackageIdentifier() {
+			return Optional.empty();
+		}
 
 		/**
 		 * <p>
@@ -432,7 +450,9 @@ public interface PackageApplicationTask extends Task<Set<Image>, PackageApplicat
 		 * 
 		 * @return an optional returning the package name or an empty optional 
 		 */
-		Optional<String> getPackageName();
+		default Optional<String> getPackageName() {
+			return Optional.empty();
+		}
 
 		/**
 		 * <p>
@@ -441,7 +461,9 @@ public interface PackageApplicationTask extends Task<Set<Image>, PackageApplicat
 		 * 
 		 * @return an optional returning the signing prefix or an empty optional
 		 */
-		Optional<String> getPackageSigningPrefix();
+		default Optional<String> getPackageSigningPrefix() {
+			return Optional.empty();
+		}
 
 		/**
 		 * <p>
@@ -450,7 +472,9 @@ public interface PackageApplicationTask extends Task<Set<Image>, PackageApplicat
 		 * 
 		 * @return true to sign the package, false otherwise
 		 */
-		boolean isSign();
+		default boolean isSign() {
+			return false;
+		}
 
 		/**
 		 * <p>
@@ -459,7 +483,9 @@ public interface PackageApplicationTask extends Task<Set<Image>, PackageApplicat
 		 * 
 		 * @return an optional returning the signing keychain or an empty optional
 		 */
-		Optional<String> getSigningKeychain();
+		default Optional<String> getSigningKeychain() {
+			return Optional.empty();
+		}
 
 		/**
 		 * <p>
@@ -468,7 +494,9 @@ public interface PackageApplicationTask extends Task<Set<Image>, PackageApplicat
 		 * 
 		 * @return an optional returning the username or an empty optional
 		 */
-		Optional<String> getSigningKeyUserName();
+		default Optional<String> getSigningKeyUserName() {
+			return Optional.empty();
+		}
 	}
 	
 	/**
@@ -492,7 +520,9 @@ public interface PackageApplicationTask extends Task<Set<Image>, PackageApplicat
 		 * 
 		 * @return true to start the application with a console launcher, false otherwise
 		 */
-		boolean isConsole();
+		default boolean isConsole() {
+			return false;
+		}
 
 		/**
 		 * <p>
@@ -501,7 +531,9 @@ public interface PackageApplicationTask extends Task<Set<Image>, PackageApplicat
 		 * 
 		 * @return true to add a dialog to choose an install directory, false otherwise
 		 */
-		boolean isDirChooser();
+		default boolean isDirChooser() {
+			return false;
+		}
 
 		/**
 		 * <p>
@@ -510,7 +542,9 @@ public interface PackageApplicationTask extends Task<Set<Image>, PackageApplicat
 		 * 
 		 * @return true to add a Start Menu shortcut, false otherwise
 		 */
-		boolean isMenu();
+		default boolean isMenu() {
+			return false;
+		}
 
 		/**
 		 * <p>
@@ -519,7 +553,9 @@ public interface PackageApplicationTask extends Task<Set<Image>, PackageApplicat
 		 * 
 		 * @return an optional returning the Start Menu group of the application or an empty optional
 		 */
-		Optional<String> getMenuGroup();
+		default Optional<String> getMenuGroup() {
+			return Optional.empty();
+		}
 
 		/**
 		 * <p>
@@ -528,7 +564,9 @@ public interface PackageApplicationTask extends Task<Set<Image>, PackageApplicat
 		 * 
 		 * @return true to install on a per-user basis, false otherwise
 		 */
-		boolean isPerUserInstall();
+		default boolean isPerUserInstall() {
+			return false;
+		}
 
 		/**
 		 * <p>
@@ -537,7 +575,9 @@ public interface PackageApplicationTask extends Task<Set<Image>, PackageApplicat
 		 * 
 		 * @return true to create a shortcut, false otherwise
 		 */
-		boolean isShortcut();
+		default boolean isShortcut() {
+			return false;
+		}
 		
 		/**
 		 * <p>
@@ -546,7 +586,9 @@ public interface PackageApplicationTask extends Task<Set<Image>, PackageApplicat
 		 * 
 		 * @return true to add a dialog for choosing if shortcuts will be created, false otherwise
 		 */
-		boolean isShortcutPrompt();
+		default boolean isShortcutPrompt() {
+			return false;
+		}
 
 		/**
 		 * <p>
@@ -555,7 +597,9 @@ public interface PackageApplicationTask extends Task<Set<Image>, PackageApplicat
 		 * 
 		 * @return an optional returning the URL of available application update information or an empty optional
 		 */
-		Optional<URI> getUpdateURL();
+		default Optional<URI> getUpdateURL() {
+			return Optional.empty();
+		}
 		
 		/**
 		 * <p>
@@ -564,7 +608,9 @@ public interface PackageApplicationTask extends Task<Set<Image>, PackageApplicat
 		 * 
 		 * @return an optional returning the UUID associated with upgrades for this package or an empty optional
 		 */
-		Optional<String> getUpgradeUUID();
+		default Optional<String> getUpgradeUUID() {
+			return Optional.empty();
+		}
 	}
 	
 	/**
@@ -588,7 +634,9 @@ public interface PackageApplicationTask extends Task<Set<Image>, PackageApplicat
 		 * 
 		 * @return an optional returning the launcher name or an empty optional
 		 */
-		Optional<String> getName();
+		default Optional<String> getName() {
+			return Optional.empty();
+		}
 		
 		/**
 		 * <p>
@@ -597,7 +645,9 @@ public interface PackageApplicationTask extends Task<Set<Image>, PackageApplicat
 		 * 
 		 * @return an optional returning the launcher description or an empty optional
 		 */
-		Optional<String> getDescription();
+		default Optional<String> getDescription() {
+			return Optional.empty();
+		}
 
 		/**
 		 * <p>
@@ -610,7 +660,9 @@ public interface PackageApplicationTask extends Task<Set<Image>, PackageApplicat
 		 * 
 		 * @return an optional returning the name of the module defining the main class or an empty optional
 		 */
-		Optional<String> getModule();
+		default Optional<String> getModule() {
+			return Optional.empty();
+		}
 
 		/**
 		 * <p>
@@ -624,7 +676,9 @@ public interface PackageApplicationTask extends Task<Set<Image>, PackageApplicat
 		 * 
 		 * @return an optional returning the canonical name of the main class or an empty optional
 		 */
-		Optional<String> getMainClass();
+		default Optional<String> getMainClass() {
+			return Optional.empty();
+		}
 
 		/**
 		 * <p>
@@ -633,7 +687,9 @@ public interface PackageApplicationTask extends Task<Set<Image>, PackageApplicat
 		 * 
 		 * @return an optional returning the VM options or an empty optional
 		 */
-		Optional<String> getVmOptions();
+		default Optional<String> getVmOptions() {
+			return Optional.empty();
+		}
 
 		/**
 		 * <p>
@@ -642,7 +698,9 @@ public interface PackageApplicationTask extends Task<Set<Image>, PackageApplicat
 		 * 
 		 * @return an opional returning the arguments or an empty optional
 		 */
-		Optional<String> getArguments();
+		default Optional<String> getArguments() {
+			return Optional.empty();
+		}
 
 		/**
 		 * <p>
@@ -651,7 +709,9 @@ public interface PackageApplicationTask extends Task<Set<Image>, PackageApplicat
 		 * 
 		 * @return an optional returnin the path to the icon file or an empty optional
 		 */
-		Optional<Path> getIconPath();
+		default Optional<Path> getIconPath() {
+			return Optional.empty();
+		}
 
 		/**
 		 * <p>
@@ -660,7 +720,9 @@ public interface PackageApplicationTask extends Task<Set<Image>, PackageApplicat
 		 * 
 		 * @return an optional returning the application launcher version or an empty optional
 		 */
-		Optional<String> getAppVersion();
+		default Optional<String> getAppVersion() {
+			return Optional.empty();
+		}
 		
 		/**
 		 * <p>
@@ -669,7 +731,9 @@ public interface PackageApplicationTask extends Task<Set<Image>, PackageApplicat
 		 * 
 		 * @return true to add unnamed modules, false otherwise
 		 */
-		boolean isAddUnnamedModules();
+		default boolean isAddUnnamedModules() {
+			return false;
+		}
 		
 		/**
 		 * <p>
@@ -678,7 +742,9 @@ public interface PackageApplicationTask extends Task<Set<Image>, PackageApplicat
 		 * 
 		 * @return true to create a service-type application launcher, false otherwise
 		 */
-		boolean isLauncherAsService();
+		default boolean isLauncherAsService() {
+			return false;
+		}
 		
 		/**
 		 * <p>
@@ -687,7 +753,9 @@ public interface PackageApplicationTask extends Task<Set<Image>, PackageApplicat
 		 * 
 		 * @return true to create a console launcher, false otherwise
 		 */
-		boolean isWinConsole();
+		default boolean isWinConsole() {
+			return false;
+		}
 		
 		/**
 		 * <p>
@@ -696,7 +764,9 @@ public interface PackageApplicationTask extends Task<Set<Image>, PackageApplicat
 		 * 
 		 * @return true to create a shortcut, false otherwise
 		 */
-		boolean isWinShortcut();
+		default boolean isWinShortcut() {
+			return false;
+		}
 		
 		/**
 		 * <p>
@@ -705,7 +775,9 @@ public interface PackageApplicationTask extends Task<Set<Image>, PackageApplicat
 		 * 
 		 * @return true to add a Start Menu shortcut, false otherwise
 		 */
-		boolean isWinMenu();
+		default boolean isWinMenu() {
+			return false;
+		}
 		
 		/**
 		 * <p>
@@ -714,7 +786,9 @@ public interface PackageApplicationTask extends Task<Set<Image>, PackageApplicat
 		 * 
 		 * @return an optional returning the group value or an empty optional
 		 */
-		Optional<String> getLinuxAppCategory();
+		default Optional<String> getLinuxAppCategory() {
+			return Optional.empty();
+		}
 		
 		/**
 		 * <p>
@@ -723,6 +797,8 @@ public interface PackageApplicationTask extends Task<Set<Image>, PackageApplicat
 		 * 
 		 * @return true to create a shortcut, false otherwise
 		 */
-		boolean isLinuxShortcut();
+		default boolean isLinuxShortcut() {
+			return false;
+		}
 	}
 }

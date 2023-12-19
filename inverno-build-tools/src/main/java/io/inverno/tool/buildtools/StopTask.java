@@ -33,11 +33,11 @@ public interface StopTask extends Task<Long, StopTask> {
 
 	/**
 	 * <p>
-	 * Sets the path to the file containing the pid pf the running project.
+	 * Sets the path to the file containing the pid of the running project.
 	 * </p>
 	 * 
 	 * <p>
-	 * Defaults to {@code [WORKING_PATH]/[PROJECT_NAME].pid"}
+	 * Defaults to {@code [WORKING_PATH]/[PROJECT_NAME].pid}
 	 * </p>
 	 * 
 	 * @param pidfile The path tp the pidfile

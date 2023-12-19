@@ -38,11 +38,11 @@ public interface StartTask extends ExecTask<Long, StartTask> {
 
 	/**
 	 * <p>
-	 * Sets the path of the file where the project pid is stored.
+	 * Sets the path of the file where the project application pid is stored.
 	 * </p>
 	 * 
 	 * <p>
-	 * Defaults to {@code [WORKING_PATH]/[PROJECT_NAME].pid"}
+	 * Defaults to {@code [WORKING_PATH]/[PROJECT_NAME].pid}
 	 * </p>
 	 * 
 	 * @param pidfile the path to the pidfile

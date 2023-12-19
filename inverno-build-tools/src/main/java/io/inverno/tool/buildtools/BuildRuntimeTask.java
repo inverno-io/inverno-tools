@@ -242,7 +242,9 @@ public interface BuildRuntimeTask extends Task<Image, BuildRuntimeTask> {
 		 * 
 		 * @return an optional returning the the module to execute or an empty optional
 		 */
-		Optional<String> getModule();
+		default Optional<String> getModule() {
+			return Optional.empty();
+		}
 
 		/**
 		 * <p>
@@ -255,7 +257,9 @@ public interface BuildRuntimeTask extends Task<Image, BuildRuntimeTask> {
 		 * 
 		 * @return an optional returning the main class to execute or an empty optional
 		 */
-		Optional<String> getMainClass();
+		default Optional<String> getMainClass() {
+			return Optional.empty();
+		}
 		
 		/**
 		 * <p>

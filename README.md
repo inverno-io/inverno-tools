@@ -1,3 +1,4 @@
+[inverno-tool-build-tools]: https://github.com/inverno-io/inverno-tools/tree/master/inverno-build-tools
 [inverno-tool-maven-plugin]: https://github.com/inverno-io/inverno-tools/tree/master/inverno-maven-plugin
 
 [jdk]: https://jdk.java.net/
@@ -9,17 +10,21 @@
 
 [![CI/CD](https://github.com/inverno-io/inverno-tools/actions/workflows/maven.yml/badge.svg)](https://github.com/inverno-io/inverno-tools/actions/workflows/maven.yml)
 
-The Inverno framework provides tools for running and building modular Java applications and Inverno applications in particular. It allows for instance to create native runtime and application images providing all the dependencies required to run a modular application. It is also possible to build Docker and [OCI][open-container-image] images.
+The Inverno framework provides tools for running and building modular Java applications and Inverno applications in particular. It allows for instance to create native runtime and application images providing all the dependencies required to run a modular application. It is also possible to build Docker and [OCI][open-container-image] images, install them on a local Docker daemon or deploy them on remote registry.
+
+## Inverno Build Tools
+
+The [Inverno Build Tools][inverno-tool-build-tools] is a Java module exposing an API for running, packaging and distributing fully modular applications.
 
 ## Inverno Maven Plugin
 
-The [Inverno Maven Plugin][inverno-tool-maven-plugin] provides specific goals to:
+The [Inverno Maven Plugin][inverno-tool-maven-plugin] is a Maven plugin based on the Inverno Build tools module which provides multiple goals to:
 
-- run a modular Java application.
+- run a modular Java application project.
 - start/stop a modular Java application during the build process to execute integration tests.
-- build native a runtime image containing a set of modules and their dependencies creating a light Java runtime.
-- build native an application image containing an application and all its dependencies into an easy to install platform dependent package (eg. `.deb`, `.rpm`, `.dmg`, `.exe`, `.msi`...).
-- build docker or OCI images of an application into a tarball, a Docker daemon or a container image registry.
+- build native runtime image containing a set of modules and their dependencies creating a light Java runtime.
+- build native application image containing an application and all its dependencies into an easy to install platform dependent package (eg. `.deb`, `.rpm`, `.dmg`, `.exe`, `.msi`...).
+- build docker or OCI images of an application into a tarball, a Docker daemon or a remote container image registry.
 
 The plugin requires [JDK][jdk] 15+ and [Apache Maven][maven] 3.6.0 or later.
 
