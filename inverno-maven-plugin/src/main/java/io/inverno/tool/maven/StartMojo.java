@@ -49,6 +49,12 @@ public class StartMojo extends AbstractExecMojo {
 	@Parameter(property = "inverno.start.skip", required = false)
 	private boolean skip;
 	
+	/**
+	 * The amount of time in milliseconds to wait for the application to start.
+	 */
+	@Parameter(property = "inverno.start.timeout", required = false)
+	private long timeout;
+	
 	@Override
 	protected boolean isSkipped() {
 		return this.skip;
@@ -77,6 +83,7 @@ public class StartMojo extends AbstractExecMojo {
 		String pidfileVmOption = "-D" + PROPERTY_PID_FILE + "=" + project.getPidfile();
 		return startTask
 			.pidfile(project.getPidfile())
+			.timeout(this.timeout)
 			.vmOptions(StringUtils.isNotBlank(this.vmOptions) ? pidfileVmOption + " " + this.vmOptions : pidfileVmOption);
 	}
 }

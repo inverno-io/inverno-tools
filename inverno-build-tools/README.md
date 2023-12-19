@@ -582,7 +582,8 @@ project
 	.buildRuntime()
 	.packageApplication()
 	.containerize()
-		.registry("docker.io/my-docker-id")
+		.registry("docker.io")
+		.repository("my-docker-id")
 		.registryUsername("username")
 		.registryPassword("password")
 	.execute();

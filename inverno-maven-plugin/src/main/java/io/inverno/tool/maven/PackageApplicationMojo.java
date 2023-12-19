@@ -114,7 +114,6 @@ public class PackageApplicationMojo extends BuildRuntimeMojo {
 	@Parameter(property = "inverno.app.packageTypes", required = false)
 	protected Set<String> packageTypes;
 	
-	
 	/**
 	 * Linux specific configuration.
 	 */

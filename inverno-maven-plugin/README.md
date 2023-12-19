@@ -5,11 +5,13 @@ The Inverno Maven Plugin is used to run, package and distribute modular applicat
 ## Usage
 
 
-The Inverno Maven plugin can be used to run a modular application project or build an image for a modular project. There are three types of images that can be build using the plugin:
+Considering a modular application project, the Inverno Maven plugin is used to run, start, stop a the application or build project images. There are three types of images that can be built using the plugin:
 
 - **runtime image** is a custom Java runtime containing a set of modules and their dependencies.
-- **application image** is a native self-contained Java application including all the necessary dependencies to run the application without the need of a Java runtime. 
-- **container image** is a Docker or CLI container image that can be packaged as a TAR archive or directly deployed on a Docker daemon or container registry.
+- **application image** is a native self-contained Java application including all the necessary dependencies to run the project application without the need of a Java runtime. 
+- **container image** is a Docker or OCI container image that can be packaged as a `.tar` archive or directly loaded on a Docker daemon or pushed to a container registry.
+
+The plugin is a Maven implementation of the [Inverno Build Tools](../inverno-build-tools/README.md), it can be used to build any Java modular application project and Inverno application in particular.
 
 ### Run a module application project
 
@@ -19,9 +21,9 @@ The `inverno:run` goal is used to execute the modular application defined in the
 $ mvn inverno:run
 ```
 
-The application is first *modularized* which means that any non-modular dependency is modularized by generating an appropriate module descriptor using the `jdeps` tool in order for the application to be run with a module path and not a class path (and certainly not both).
+The application is first *modularized* which means that any non-modular dependency is modularized by generating an appropriate module descriptor in order for the application to run with a module path and not a class path (and certainly not both).
 
-The application is executed in a forked process, application arguments can be passed on the command line:
+The application is executed in a forked process, application arguments can be passed on the command line as follows:
 
 ```plaintext
 $ mvn inverno:run -Dinverno.run.arguments='--some.configuration=\"hello\"'
@@ -45,7 +47,7 @@ By default the plugin will detect the main class of the application, but it is a
 $ mvn inverno:run -Dinverno.exec.mainClass=io.inverno.example.Main
 ```
 
-A pidfile is created when the application is started under `${project.build.directory}/maven-inverno` directory, it indicates the pid of the process running the application. If the build exits while the application is still running or if the pidfile was not properly removed after the application has exited, it might be necessary to manually kill the process and/or remove the pidfile. 
+&gt; When building an Inverno application, a pidfile is normally created when the application is started under `${project.build.directory}/maven-inverno` directory, it indicates the pid of the process running the application. If the build exits while the application is still running or if the pidfile was not properly removed after the application has exited, it might be necessary to manually kill the process and/or remove the pidfile. 
 
 ### Start and stop the application for integration testing
 
@@ -82,11 +84,13 @@ They are bound to the `pre-integration-test` and `pre-integration-test` phases r
 </project>
 ```
 
+In order to detect when the application has started, the start goal waits for a pidfile containing the application pid to be created by the application. If the application doesn't create that pidfile, the goal eventually times out and the build fails.
+
 ### Build a runtime image
 
-A runtime image is a custom Java runtime distribution containing specific modules and their dependencies. Such image is used as a base for generating application image but it can also be distributed as a lightweight Java runtime.
+A runtime image is a custom Java runtime distribution containing specific modules and their dependencies. Such image is used as a base for generating application image but it can also be distributed as a lightweight Java runtime specific to the project module.
 
-The `inverno:build-runtime` goal uses `jlink` tool to assemble the project module and its dependencies.
+The `inverno:build-runtime` goal assemble the project module and its dependencies.
 
 ```xml
 <project>
@@ -97,7 +101,7 @@ The `inverno:build-runtime` goal uses `jlink` tool to assemble the project modul
                 <artifactId>inverno-maven-plugin</artifactId>
                 <executions>
                     <execution>
-                        <id>build-project-runtime</id>
+                        <id>build-runtime</id>
                         <phase>package</phase>
                         <goals>
                             <goal>build-runtime</goal>
@@ -106,11 +110,11 @@ The `inverno:build-runtime` goal uses `jlink` tool to assemble the project modul
                             <vm>server</vm>
                             <addModules>jdk.jdwp.agent,jdk.crypto.ec</addModules>
                             <vmOptions>-Xms2G -Xmx2G -XX:+UseNUMA -XX:+UseParallelGC</vmOptions>
-                            <formats>
-                                <format>zip</format>
-                                <format>tar.gz</format>
-                                <format>tar.bz2</format>
-                            </formats>
+                            <archiveFormats>
+                                <archiveFormat>zip</archiveFormat>
+                                <archiveFormat>tar.gz</archiveFormat>
+                                <archiveFormat>tar.bz2</archiveFormat>
+                            </archiveFormats>
                         </configuration>
                     </execution>
                 </executions>
@@ -122,11 +126,11 @@ The `inverno:build-runtime` goal uses `jlink` tool to assemble the project modul
 
 By default, the project module and its dependencies are included in the resulting image, this include JDK's modules such as `java.base`, in the previous example we've also explicitly added the `jdk.jdwp.agent` to support remote debugging and `jdk.crypto.ec` to support TLS communications.
 
-The resulting image is packaged to the formats defined in the configuration and attached, by default, to the Maven project. 
+The resulting image is packaged to the formats defined in the configuration and attached, by default, to the Maven project as a result they are installed and published along with the project `.jar`.
 
-### Build an application image
+### Package the application
 
-An application image is built using the `inverno:build-app` goal which basically generates a runtime image and uses `jpackage` tool to generate a native platform-specific application package.
+An application image is built using the `inverno:package-app` goal which generates a native platform-specific application package.
 
 ```xml
 <project>
@@ -137,10 +141,10 @@ An application image is built using the `inverno:build-app` goal which basically
                 <artifactId>inverno-maven-plugin</artifactId>
                 <executions>
                     <execution>
-                        <id>build-application</id>
+                        <id>package-application</id>
                         <phase>package</phase>
                         <goals>
-                            <goal>build-app</goal>
+                            <goal>package-app</goal>
                         </goals>
                         <configuration>
                             <vm>server</vm>
@@ -151,10 +155,12 @@ An application image is built using the `inverno:build-app` goal which basically
                                     <vmOptions>-Xms2G -Xmx2G -XX:+UseNUMA -XX:+UseParallelGC</vmOptions>
                                 </launcher>
                             </launchers>
-                            <formats>
-                                <format>zip</format>
-                                <format>deb</format>
-                            </formats>
+                            <packageTypes>
+                            	<packageType>deb</packageType>
+                            </packageTypes>
+                            <archiveFormat>
+                                <archiveFormat>zip</archiveFormat>
+                            </archiveFormat>
                         </configuration>
                     </execution>
                 </executions>
@@ -164,16 +170,16 @@ An application image is built using the `inverno:build-app` goal which basically
 </project>
 ```
 
-The `inverno:build-app` goal is very similar to the `inverno:build-runtime` goal except that the resulting image provides an application launcher and it can be packaged in a platform-specific format. For instance, we can generate a `.deb` on a Linux platform or a `.exe` or `.msi` on a Windows platform or a `.dmg` on a MacOS platform. The resulting package can be installed on these platforms in a standard way.
+The `inverno:build-app` goal is very similar to the `inverno:build-runtime` goal except that the resulting image provides a native application launcher and it can be packaged in a platform-specific format. For instance, we can generate a `.deb` on a Linux platform or a `.exe` or `.msi` installer on a Windows platform or a `.dmg` on a MacOS platform. The resulting package can be installed on these platforms in a standard way.
 
 > This goal uses `jpackage` tool which is an incubating feature in JDK&lt;16, if you intend to build an application image with an old JDK, you'll need to explicitly add the `jdk.incubator.jpackage` module in `MAVEN_OPTS`:
 > ```plaintext
 > $ export MAVEN_OPTS="--add-modules jdk.incubator.jpackage"
 > ```
 
-### Build a container image tarball
+### Build the container image
 
-A container image can be built in a TAR archive using the `inverno:build-image-tar` goal which basically build an application package and package it in a container image.
+A container image can be built in a TAR archive using the `inverno:package-image` goal which basically build an application image and package it in a container image.
 
 ```xml
 <project>
@@ -184,10 +190,10 @@ A container image can be built in a TAR archive using the `inverno:build-image-t
                 <artifactId>inverno-maven-plugin</artifactId>
                 <executions>
                     <execution>
-                        <id>build-image-tar</id>
+                        <id>package-image</id>
                         <phase>package</phase>
                         <goals>
-                            <goal>build-image-tar</goal>
+                            <goal>package-image</goal>
                         </goals>
                         <configuration>
                             <vm>server</vm>
@@ -222,9 +228,9 @@ $ docker load --input target/example-1.0.0-SNAPSHOT-container_linux_amd64.tar
 > $ export MAVEN_OPTS="--add-modules jdk.incubator.jpackage"
 > ```
 
-### Build and deploy a container image to a Docker daemon
+### Install the container image to a Docker daemon
 
-The `inverno:build-image-docker` goal is used to build a container image and deploy it to a Docker daemon using the Docker CLI.
+The `inverno:install-image` goal is used to build a container image and load it to a Docker daemon using the Docker CLI.
 
 ```xml
 <project>
@@ -235,10 +241,10 @@ The `inverno:build-image-docker` goal is used to build a container image and dep
                 <artifactId>inverno-maven-plugin</artifactId>
                 <executions>
                     <execution>
-                        <id>build-image-docker</id>
-                        <phase>package</phase>
+                        <id>install-image</id>
+                        <phase>install</phase>
                         <goals>
-                            <goal>build-image-docker</goal>
+                            <goal>install-image</goal>
                         </goals>
                         <configuration>
                             <vm>server</vm>
@@ -267,9 +273,9 @@ By default the `docker` command is used but it is possible to specify the path t
 > $ export MAVEN_OPTS="--add-modules jdk.incubator.jpackage"
 > ```
 
-### Build and deploy a container image to a remote repository
+### Deploy the container image to a registry
 
-The `inverno:build-image` goal builds a container image and deploy it to a remote repository.
+The `inverno:deploy-image` goal builds a container image and deploy it to an image registry.
 
 ```xml
 <project>
@@ -280,10 +286,10 @@ The `inverno:build-image` goal builds a container image and deploy it to a remot
                 <artifactId>inverno-maven-plugin</artifactId>
                 <executions>
                     <execution>
-                        <id>build-image-docker</id>
-                        <phase>package</phase>
+                        <id>deploy-image</id>
+                        <phase>deploy</phase>
                         <goals>
-                            <goal>build-image-docker</goal>
+                            <goal>deploy-image</goal>
                         </goals>
                         <configuration>
                             <vm>server</vm>
@@ -308,7 +314,7 @@ The `inverno:build-image` goal builds a container image and deploy it to a remot
 </project>
 ```
 
-By default the registry points to the Docker hub `registry-1.docker.io` but another registry can be specified, `gcr.io` in our example.
+By default the registry points to the Docker hub `docker.io` but another registry can be specified, `gcr.io` in our example.
 
 > As for `build-app` goal, this goal uses `jpackage` tool so if you intend to use a JDK&lt;16 you'll need to explicitly add the `jdk.incubator.jpackage` module in `MAVEN_OPTS`:
 > ```plaintext
@@ -6943,6 +6949,21 @@ This goal is used together with the stop goal in the pre-integration-test and po
     </tr>
     <tr>
         <td>
+            <a href="#timeout">timeout</a>
+        </td>
+        <td>long</td>
+        <td>
+            The amount of time in milliseconds to wait for the application to start.
+            <ul>
+                <li>
+                    <em>User property</em>
+                    : inverno.start.timeout
+                </li>
+            </ul>
+        </td>
+    </tr>
+    <tr>
+        <td>
             <a href="#vmOptions1">vmOptions</a>
         </td>
         <td>String</td>
@@ -7047,6 +7068,15 @@ Skips the execution.
 - **Type**: boolean
 - **Required**: no
 - **User property**: inverno.start.skip
+
+
+##### &lt;timeout&gt;
+
+The amount of time in milliseconds to wait for the application to start.
+
+- **Type**: long
+- **Required**: no
+- **User property**: inverno.start.timeout
 
 
 ##### &lt;vmOptions&gt;
@@ -7163,7 +7193,7 @@ This goal is used together with the start goal in the pre-integration-test and p
     </tr>
     <tr>
         <td>
-            <a href="#timeout">timeout</a>
+            <a href="#timeout1">timeout</a>
         </td>
         <td>long</td>
         <td>
