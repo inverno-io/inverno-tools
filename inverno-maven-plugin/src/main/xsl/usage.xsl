@@ -48,7 +48,7 @@ By default the plugin will detect the main class of the application, but it is a
 $ mvn inverno:run -Dinverno.exec.mainClass=io.inverno.example.Main
 ```
 
-> When building an Inverno application, a pidfile is normally created when the application is started under `${project.build.directory}/maven-inverno` directory, it indicates the pid of the process running the application. If the build exits while the application is still running or if the pidfile was not properly removed after the application has exited, it might be necessary to manually kill the process and/or remove the pidfile. 
+<xsl:text disable-output-escaping="yes"><![CDATA[>]]></xsl:text> When building an Inverno application, a pidfile is normally created when the application is started under `${project.build.directory}/maven-inverno` directory, it indicates the pid of the process running the application. If the build exits while the application is still running or if the pidfile was not properly removed after the application has exited, it might be necessary to manually kill the process and/or remove the pidfile. 
 
 ### Start and stop the application for integration testing
 
