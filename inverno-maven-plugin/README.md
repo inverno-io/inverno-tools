@@ -6686,7 +6686,7 @@ Runs the project application.
                 </li>
                 <li>
                     <em>Default</em>
-                    : -Dorg.apache.logging.log4j.simplelog.level=INFO -Dorg.apache.logging.log4j.level=INFO
+                    : -Dlog4j2.simplelogLevel=INFO -Dlog4j2.level=INFO
                 </li>
             </ul>
         </td>
@@ -6796,7 +6796,7 @@ The VM options to use when executing the application.
 - **Type**: java.lang.String
 - **Required**: no
 - **User property**: inverno.exec.vmOptions
-- **Default**: -Dorg.apache.logging.log4j.simplelog.level=INFO -Dorg.apache.logging.log4j.level=INFO
+- **Default**: -Dlog4j2.simplelogLevel=INFO -Dlog4j2.level=INFO
 
 
 ##### &lt;workingDirectory&gt;
@@ -6976,7 +6976,7 @@ This goal is used together with the stop goal in the pre-integration-test and po
                 </li>
                 <li>
                     <em>Default</em>
-                    : -Dorg.apache.logging.log4j.simplelog.level=INFO -Dorg.apache.logging.log4j.level=INFO
+                    : -Dlog4j2.simplelogLevel=INFO -Dlog4j2.level=INFO
                 </li>
             </ul>
         </td>
@@ -7086,7 +7086,7 @@ The VM options to use when executing the application.
 - **Type**: java.lang.String
 - **Required**: no
 - **User property**: inverno.exec.vmOptions
-- **Default**: -Dorg.apache.logging.log4j.simplelog.level=INFO -Dorg.apache.logging.log4j.level=INFO
+- **Default**: -Dlog4j2.simplelogLevel=INFO -Dlog4j2.level=INFO
 
 
 ##### &lt;workingDirectory&gt;
