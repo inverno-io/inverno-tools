@@ -6,7 +6,7 @@
 [docker]: https://www.docker.com/
 [oci]: https://github.com/opencontainers/image-spec/blob/master/manifest.md
 
-# Inverno Build Tools
+# Inverno Build Tools
 
 The Inverno Build Tools module provides an API for running, packaging and distributing Java modular applications.
 
