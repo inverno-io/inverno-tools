@@ -341,7 +341,7 @@ By default the registry points to the Docker hub `docker.io` but another registr
 
 **Full name:**
 
-io.inverno.tool:inverno-maven-plugin:1.4.0-SNAPSHOT:build-runtime
+io.inverno.tool:inverno-maven-plugin:1.4.0:build-runtime
 
 **Description:**
 
@@ -1166,7 +1166,7 @@ Selects the HotSpot VM in the output image defined as: "client" / "server" / "mi
 
 **Full name:**
 
-io.inverno.tool:inverno-maven-plugin:1.4.0-SNAPSHOT:deploy-image
+io.inverno.tool:inverno-maven-plugin:1.4.0:deploy-image
 
 **Description:**
 
@@ -2552,7 +2552,7 @@ Windows specific configuration.
 
 **Full name:**
 
-io.inverno.tool:inverno-maven-plugin:1.4.0-SNAPSHOT:help
+io.inverno.tool:inverno-maven-plugin:1.4.0:help
 
 **Description:**
 
@@ -2692,7 +2692,7 @@ The maximum length of a display line, should be positive.
 
 **Full name:**
 
-io.inverno.tool:inverno-maven-plugin:1.4.0-SNAPSHOT:install-image
+io.inverno.tool:inverno-maven-plugin:1.4.0:install-image
 
 **Description:**
 
@@ -4072,7 +4072,7 @@ Windows specific configuration.
 
 **Full name:**
 
-io.inverno.tool:inverno-maven-plugin:1.4.0-SNAPSHOT:package-app
+io.inverno.tool:inverno-maven-plugin:1.4.0:package-app
 
 **Description:**
 
@@ -5187,7 +5187,7 @@ Windows specific configuration.
 
 **Full name:**
 
-io.inverno.tool:inverno-maven-plugin:1.4.0-SNAPSHOT:package-image
+io.inverno.tool:inverno-maven-plugin:1.4.0:package-image
 
 **Description:**
 
@@ -6525,7 +6525,7 @@ Windows specific configuration.
 
 **Full name:**
 
-io.inverno.tool:inverno-maven-plugin:1.4.0-SNAPSHOT:run
+io.inverno.tool:inverno-maven-plugin:1.4.0:run
 
 **Description:**
 
@@ -6813,7 +6813,7 @@ The working directory of the application.
 
 **Full name:**
 
-io.inverno.tool:inverno-maven-plugin:1.4.0-SNAPSHOT:start
+io.inverno.tool:inverno-maven-plugin:1.4.0:start
 
 **Description:**
 
@@ -7103,7 +7103,7 @@ The working directory of the application.
 
 **Full name:**
 
-io.inverno.tool:inverno-maven-plugin:1.4.0-SNAPSHOT:stop
+io.inverno.tool:inverno-maven-plugin:1.4.0:stop
 
 **Description:**
 
