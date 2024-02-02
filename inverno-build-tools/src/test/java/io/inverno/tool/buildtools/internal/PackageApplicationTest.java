@@ -28,6 +28,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Properties;
 import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 import org.apache.commons.compress.archivers.ArchiveEntry;
 import org.apache.commons.compress.archivers.ArchiveInputStream;
@@ -454,7 +455,7 @@ public class PackageApplicationTest {
 
 				@Override
 				public Optional<String> getUpgradeUUID() {
-					return Optional.of("123");
+					return Optional.of(UUID.randomUUID().toString());
 				}
 			})
 			.execute();
@@ -527,7 +528,7 @@ public class PackageApplicationTest {
 
 				@Override
 				public Optional<String> getUpgradeUUID() {
-					return Optional.of("123");
+					return Optional.of(UUID.randomUUID().toString());
 				}
 			})
 			.execute();
