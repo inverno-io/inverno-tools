@@ -59,11 +59,11 @@ public class PackageApplicationTest {
 	
 	@AfterEach
 	public void cleanup() throws Exception {
-//		this.project.clean();
-//		Files.deleteIfExists(PROCESS_OUTPUT_PATH);
+		this.project.clean();
+		Files.deleteIfExists(PROCESS_OUTPUT_PATH);
 	}
 	
-//	@Test
+	@Test
 	public void testExecute() throws Exception {
 		Set<Image> applicationImages = this.project
 			.modularizeDependencies()
@@ -89,7 +89,7 @@ public class PackageApplicationTest {
 		Assertions.assertEquals("execute module dep, execute automatic module dep, webjar module dep, execute unnamed module dep" + System.lineSeparator(), Files.readString(PROCESS_OUTPUT_PATH));
 	}
 	
-//	@Test
+	@Test
 	public void testExecuteWithGenericOptions() throws Exception {
 		Set<Image> applicationImages = this.project
 			.modularizeDependencies()
@@ -112,7 +112,7 @@ public class PackageApplicationTest {
 		// TODO it seems these options don't do anything at least when generating the app-image
 	}
 	
-//	@Test
+	@Test
 	public void testExecuteWithZipArchiveFormat() throws Exception {
 		Set<Image> applicationImages = this.project
 			.modularizeDependencies()
@@ -248,7 +248,7 @@ public class PackageApplicationTest {
 		Assertions.assertEquals("io.inverno.test.project/io.inverno.test.project.Main", projectProperties.get("app.mainmodule"));
 	}
 	
-//	@Test
+	@Test
 	@EnabledOnOs({OS.LINUX})
 	public void testExecuteWithDebArchiveFormat() throws Exception {
 		Set<Image> applicationImages = this.project
