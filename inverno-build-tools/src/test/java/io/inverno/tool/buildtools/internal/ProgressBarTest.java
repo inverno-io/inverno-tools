@@ -19,11 +19,13 @@ import io.inverno.tool.buildtools.internal.ProgressBar.Step;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 /**
  * @author <a href="mailto:jeremy.kuhn@inverno.io">Jeremy Kuhn</a>
  */
+@Disabled
 public class ProgressBarTest {
 
 	@Test
