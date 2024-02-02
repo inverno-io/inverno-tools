@@ -68,7 +68,7 @@ public class BuildJmodTest {
 		);
 		
 		Assertions.assertEquals(
-			"classes/module-info.class\n" +
+			"classes/module-info.class" + System.lineSeparator() +
 			"classes/io/inverno/test/project/Main.class",
 			listJmod(jmodPath)
 		);
@@ -96,7 +96,7 @@ public class BuildJmodTest {
 		);
 		
 		Assertions.assertEquals(
-			"classes/module-info.class\n" +
+			"classes/module-info.class" + System.lineSeparator() +
 			"classes/io/inverno/test/project/Main.class",
 			listJmod(jmodPath)
 		);
@@ -124,7 +124,7 @@ public class BuildJmodTest {
 		);
 		
 		Assertions.assertEquals(
-			"classes/module-info.class\n" +
+			"classes/module-info.class" + System.lineSeparator() +
 			"classes/io/inverno/test/project/Main.class",
 			listJmod(jmodPath)
 		);
@@ -151,8 +151,8 @@ public class BuildJmodTest {
 		);
 		
 		Assertions.assertEquals(
-			"classes/module-info.class\n" +
-			"classes/io/inverno/test/project/Main.class\n" +
+			"classes/module-info.class" + System.lineSeparator() +
+			"classes/io/inverno/test/project/Main.class" + System.lineSeparator() +
 			"legal/LICENSE",
 			listJmod(jmodPath)
 		);
@@ -179,8 +179,8 @@ public class BuildJmodTest {
 		);
 		
 		Assertions.assertEquals(
-			"classes/module-info.class\n" +
-			"classes/io/inverno/test/project/Main.class\n" +
+			"classes/module-info.class" + System.lineSeparator() +
+			"classes/io/inverno/test/project/Main.class" + System.lineSeparator() +
 			"man/project.1",
 			listJmod(jmodPath)
 		);
@@ -207,8 +207,8 @@ public class BuildJmodTest {
 		);
 		
 		Assertions.assertEquals(
-			"classes/module-info.class\n" +
-			"classes/io/inverno/test/project/Main.class\n" +
+			"classes/module-info.class" + System.lineSeparator() +
+			"classes/io/inverno/test/project/Main.class" + System.lineSeparator() +
 			"conf/configuration.properties",
 			listJmod(jmodPath)
 		);

@@ -94,9 +94,9 @@ public class GenericStartTask extends AbstractExecTask<Long, StartTask> implemen
 		Process proc = this.startProject(project);
 		if(proc.isAlive()) {
 			// We must wait for the pidfile to appear
-			Path pidfile = this.pidfile.orElse(project.getPidfile());
+			Path projectPidfile = this.pidfile.orElse(project.getPidfile());
 			try(WatchService watchService = FileSystems.getDefault().newWatchService()) {
-				pidfile.getParent().register(watchService, StandardWatchEventKinds.ENTRY_CREATE);
+				projectPidfile.getParent().register(watchService, StandardWatchEventKinds.ENTRY_CREATE);
 				int tries = (int) (this.timeout/POLL_TIMEOUT);
 				WatchKey watchKey = null;
 				for(int i = 0;i<tries;i++) {
@@ -106,18 +106,23 @@ public class GenericStartTask extends AbstractExecTask<Long, StartTask> implemen
 							throw new TaskExecutionException("Application exited: exit(" + proc.exitValue() + ")");
 						}
 					}
-					else if(watchKey.pollEvents().stream().map(WatchEvent::context).anyMatch(path -> path.equals(pidfile.getFileName()))) {
+					else if(watchKey.pollEvents().stream().map(WatchEvent::context).anyMatch(path -> path.equals(projectPidfile.getFileName()))) {
 						watchKey.cancel();
-						try {
-							return Long.valueOf(Files.readString(pidfile));
-						}
-						catch(IOException | NumberFormatException e) {
+						for(int j=i;j<tries;j++) {
 							try {
-								LOGGER.error("Unable to get pid, trying to stop the process gracefully...", e);
-								this.destroyProcess(proc);
+								return Long.valueOf(Files.readString(projectPidfile));
 							}
-							finally {
-								throw new TaskExecutionException("Error reading pidfile: " + pidfile, e);
+							catch(IOException | NumberFormatException e) {
+								if(j < tries-1) {
+									continue;
+								}
+								try {
+									LOGGER.error("Unable to get pid, trying to stop the process gracefully...", e);
+									this.destroyProcess(proc);
+								}
+								finally {
+									throw new TaskExecutionException("Error reading pidfile: " + projectPidfile, e);
+								}
 							}
 						}
 					}

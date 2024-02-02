@@ -70,7 +70,7 @@ public class BuildRuntimeTest {
 			releaseProperties.load(releaseInput);
 			Assertions.assertEquals("\"java.base io.inverno.test.automaticModuleDep io.inverno.test.moduleDep io.inverno.test.project io.inverno.test.unnamed.dep org.webjars.webjar.dep\"", releaseProperties.getProperty("MODULES"));
 		}
-		Assertions.assertFalse(Files.exists(runtimePath.resolve("bin")));
+		Assertions.assertFalse(Files.exists(runtimePath.resolve(Platform.getSystemPlatform() == Platform.WINDOWS ? "bin/project.bat" : "bin/project")));
 	}
 	
 	@Test
@@ -111,7 +111,7 @@ public class BuildRuntimeTest {
 			releaseProperties.load(releaseInput);
 			Assertions.assertEquals("\"java.base io.inverno.test.automaticModuleDep io.inverno.test.moduleDep io.inverno.test.project io.inverno.test.unnamed.dep org.webjars.webjar.dep\"", releaseProperties.getProperty("MODULES"));
 		}
-		Assertions.assertFalse(Files.exists(runtimePath.resolve("bin")));
+		Assertions.assertFalse(Files.exists(runtimePath.resolve(Platform.getSystemPlatform() == Platform.WINDOWS ? "bin/project.bat" : "bin/project")));
 		Assertions.assertTrue(Files.exists(runtimePath.resolve("conf/configuration.properties")));
 		Assertions.assertTrue(Files.exists(runtimePath.resolve("man/project.1")));
 		Assertions.assertTrue(Files.exists(runtimePath.resolve("legal/" + this.project.getModuleName()+ "/LICENSE")));
@@ -136,12 +136,14 @@ public class BuildRuntimeTest {
 			Assertions.assertEquals("\"java.base io.inverno.test.automaticModuleDep io.inverno.test.moduleDep io.inverno.test.project io.inverno.test.unnamed.dep org.webjars.webjar.dep\"", releaseProperties.getProperty("MODULES"));
 		}
 		Assertions.assertTrue(Files.exists(runtimePath.resolve("bin/project")));
+
+		String command = runtimePath.resolve(Platform.getSystemPlatform() == Platform.WINDOWS ? "bin/project.bat" : "bin/project").toAbsolutePath().toString();
 		
-		ProcessBuilder pb = new ProcessBuilder(runtimePath.resolve("bin/project").toAbsolutePath().toString())
+		ProcessBuilder pb = new ProcessBuilder(command)
 			.redirectOutput(PROCESS_OUTPUT_PATH.toFile());
 		
 		Process process = pb.start();
 		process.waitFor();
-		Assertions.assertEquals("execute module dep, execute automatic module dep, webjar module dep, execute unnamed module dep\n", Files.readString(PROCESS_OUTPUT_PATH));
+		Assertions.assertEquals("execute module dep, execute automatic module dep, webjar module dep, execute unnamed module dep" + System.lineSeparator(), Files.readString(PROCESS_OUTPUT_PATH));
 	}
 }

@@ -73,7 +73,7 @@ public class StopTest {
 		// Do some useful tests...
 		Assertions.assertTrue(Files.exists(outputPath));
 		
-		Assertions.assertEquals("execute module dep, execute automatic module dep, webjar module dep, execute unnamed module dep\n", Files.readString(outputPath));
+		Assertions.assertEquals("execute module dep, execute automatic module dep, webjar module dep, execute unnamed module dep" + System.lineSeparator(), Files.readString(outputPath));
 		
 		// Stop...
 		Long stopPid = this.project

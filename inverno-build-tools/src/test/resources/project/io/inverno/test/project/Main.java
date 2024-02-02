@@ -32,7 +32,7 @@ public class Main {
 			while((b = webjarInput.read()) != -1) {
 				bout.write(b);
 			}
-			webjarDepResult = new String(bout.toByteArray()).replaceAll("\n","");
+			webjarDepResult = new String(bout.toByteArray());
 		}
 		
 		// Resolve class from unnamed module

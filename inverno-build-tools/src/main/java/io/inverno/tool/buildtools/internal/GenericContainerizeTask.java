@@ -245,7 +245,7 @@ public class GenericContainerizeTask extends AbstractTask<ContainerizeTask.Conta
 					.setFormat(this.imageFormat.orElse(DEFAULT_IMAGE_FORMAT))
 					.addFileEntriesLayer(layer)
 					.setWorkingDirectory(AbsoluteUnixPath.get("/opt/" + project.getName()))
-					.setEntrypoint("/opt/" + project.getName() + "/bin/" + this.executable.orElse(project.getName()))
+					.setEntrypoint("/opt/" + project.getName() + "/" + (Platform.getSystemPlatform() == Platform.WINDOWS ? this.executable.orElse(project.getName() + ".exe") : "bin/" + this.executable.orElse(project.getName())))
 					.addExposedPort(DEFAULT_PORT);
 
 				this.labels.ifPresent(builder::setLabels);
@@ -382,7 +382,8 @@ public class GenericContainerizeTask extends AbstractTask<ContainerizeTask.Conta
 			try {
 				return FilePermissions.fromPosixFilePermissions(Files.getPosixFilePermissions(sourcePath));
 			} 
-			catch (IOException e) {
+			catch (IOException | UnsupportedOperationException e) {
+				LOGGER.warn("Unable to determine File permissions, falling back to default", e);
 				return Files.isDirectory(sourcePath) ? FilePermissions.DEFAULT_FOLDER_PERMISSIONS : FilePermissions.DEFAULT_FILE_PERMISSIONS;
 			}
 		};

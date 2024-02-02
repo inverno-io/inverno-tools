@@ -78,7 +78,7 @@ public class ArchiveTest {
 		try (ZipFile zipFile = new ZipFile(zipArchivePath.toFile())) {
 		    Enumeration<? extends ZipEntry> zipEntries = zipFile.entries();
 		    while (zipEntries.hasMoreElements()) {
-		    	archiveFileNames.add(zipEntries.nextElement().getName());
+		    	archiveFileNames.add(zipEntries.nextElement().getName().replace('\\', '/'));
 		    }
 		}
 		
@@ -93,9 +93,9 @@ public class ArchiveTest {
 						return prefix + "/";
 					}
 					else if(Files.isDirectory(path)) {
-						return prefix + "/" + path.toString().substring(runtimePathIndex) + "/";
+						return prefix + "/" + path.toString().substring(runtimePathIndex).replace('\\', '/') + "/";
 					}
-					return prefix + "/" + path.toString().substring(runtimePathIndex);
+					return prefix + "/" + path.toString().substring(runtimePathIndex).replace('\\', '/');
 				})
 				.collect(Collectors.toSet());
 	    }
@@ -125,7 +125,7 @@ public class ArchiveTest {
 		try (ZipFile zipFile = new ZipFile(zipArchivePath.toFile())) {
 		    Enumeration<? extends ZipEntry> zipEntries = zipFile.entries();
 		    while (zipEntries.hasMoreElements()) {
-		    	archiveFileNames.add(zipEntries.nextElement().getName());
+		    	archiveFileNames.add(zipEntries.nextElement().getName().replace('\\', '/'));
 		    }
 		}
 		
@@ -139,9 +139,9 @@ public class ArchiveTest {
 						return prefix + "/";
 					}
 					else if(Files.isDirectory(path)) {
-						return prefix + "/" + path.toString().substring(runtimePathIndex) + "/";
+						return prefix + "/" + path.toString().substring(runtimePathIndex).replace('\\', '/') + "/";
 					}
-					return prefix + "/" + path.toString().substring(runtimePathIndex);
+					return prefix + "/" + path.toString().substring(runtimePathIndex).replace('\\', '/');
 				})
 				.collect(Collectors.toSet());
 	    }

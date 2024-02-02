@@ -62,6 +62,7 @@ public class ContainerizeTest {
 			.buildRuntime()
 			.packageApplication()
 			.containerize()
+			.from(Platform.getSystemPlatform() == Platform.WINDOWS ? "mcr.microsoft.com/windows/nanoserver:ltsc2022" : "debian:stable-slim")
 			.execute();
 		
 		Assertions.assertEquals(this.project.getName() + ":" + this.project.getVersion(), image.getCanonicalName());
@@ -94,6 +95,7 @@ public class ContainerizeTest {
 			.buildRuntime()
 			.packageApplication()
 			.containerize()
+			.from(Platform.getSystemPlatform() == Platform.WINDOWS ? "mcr.microsoft.com/windows/nanoserver:ltsc2022" : "debian:stable-slim")
 			.format(Format.Docker)
 			.execute();
 		
@@ -111,7 +113,7 @@ public class ContainerizeTest {
 						ByteArrayOutputStream bout = new ByteArrayOutputStream();
 						IOUtils.copy(tarInputStream, bout);
 						JsonNode config = mapper.readTree(bout.toByteArray()).get("config");
-						Assertions.assertEquals("/opt/" + this.project.getName() + "/bin/" + this.project.getName(), config.get("Entrypoint").get(0).textValue());
+						Assertions.assertEquals("/opt/" + this.project.getName() + "/" + (Platform.getSystemPlatform() == Platform.WINDOWS ? this.project.getName() + ".exe" : "bin/" + this.project.getName()), config.get("Entrypoint").get(0).textValue());
 						Assertions.assertEquals("{\"8080/tcp\":{}}", config.get("ExposedPorts").toString());
 						Assertions.assertEquals("/opt/" + this.project.getName(), config.get("WorkingDir").textValue());
 						break;

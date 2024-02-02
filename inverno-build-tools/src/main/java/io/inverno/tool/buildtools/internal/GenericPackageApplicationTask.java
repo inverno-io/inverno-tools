@@ -525,71 +525,47 @@ public class GenericPackageApplicationTask extends AbstractTask<Set<Image>, Pack
 			
 			Set<Image> jpackageImages = new HashSet<>();
 
-			// Build Application image
-			try {
-				List<String> image_jpackage_args = new ArrayList<>(jpackage_args);
-				// TODO why?
-				for(Iterator<String> image_jpackage_argsIterator = image_jpackage_args.iterator();image_jpackage_argsIterator.hasNext();) {
-					String currentArg = image_jpackage_argsIterator.next();
-					if(currentArg.equals("--license-file") || currentArg.equals("--about-url")) {
-						image_jpackage_argsIterator.remove();
-						image_jpackage_argsIterator.next();
-						image_jpackage_argsIterator.remove();
-					}
-				}
-
-				image_jpackage_args.add("--type");
-				image_jpackage_args.add("app-image");
-
-				// We must generate app-image and invoke CreateImageArchivesTask later in the process
-				LOGGER.info(" - jpackage {}", image_jpackage_args.stream().collect(Collectors.joining(" ")));
-				if(JavaTools.JPACKAGE.run(OUT, ERR, image_jpackage_args.stream().toArray(String[]::new)) == 0) {
-					// jpackage creates the app in the main launcher name folder
-					Files.move(applicationImagePath.getParent().resolve(mainLauncherName), applicationImagePath);
-					jpackageImages.add(new GenericImage(ImageType.APPLICATION, null, applicationImagePath));
-				}
-				else {
-					throw new TaskExecutionException("Error packaging project application");
-				}
-			} 
-			catch (IOException e) {
-				throw new TaskExecutionException("Error packaging project application", e);
-			}
-			
 			switch(Platform.getSystemPlatform()) {
-				case LINUX: this.linuxConfiguration.ifPresent(configuration -> {
-						configuration.getPackageName().ifPresent(value -> {
-							jpackage_args.add("--linux-package-name");
-							jpackage_args.add(value);
-						});
-						configuration.getDebMaintainer().ifPresent(value -> {
-							jpackage_args.add("--linux-deb-maintainer");
-							jpackage_args.add(value);
-						});
-						configuration.getMenuGroup().ifPresent(value -> {
-							jpackage_args.add("--linux-menu-group");
-							jpackage_args.add(value);
-						});
-						configuration.getPackageDeps().ifPresent(value -> {
-							jpackage_args.add("--linux-package-deps");
-							jpackage_args.add(value);
-						});
-						configuration.getRpmLicenseType().ifPresent(value -> {
-							jpackage_args.add("--linux-rpm-license-type");
-							jpackage_args.add(value);
-						});
-						configuration.getAppRelease().ifPresent(value -> {
-							jpackage_args.add("--linux-app-release");
-							jpackage_args.add(value);
-						});
-						configuration.getAppCategory().ifPresent(value -> {
-							jpackage_args.add("--linux-app-category");
-							jpackage_args.add(value);
-						});
-						if(configuration.isShortcut()) {
-							jpackage_args.add("--linux-shortcut");
+				case LINUX: this.linuxConfiguration.ifPresentOrElse(
+						configuration -> {
+							configuration.getPackageName().ifPresent(value -> {
+								jpackage_args.add("--linux-package-name");
+								jpackage_args.add(value);
+							});
+							configuration.getDebMaintainer().ifPresent(value -> {
+								jpackage_args.add("--linux-deb-maintainer");
+								jpackage_args.add(value);
+							});
+							configuration.getMenuGroup().ifPresent(value -> {
+								jpackage_args.add("--linux-menu-group");
+								jpackage_args.add(value);
+							});
+							configuration.getPackageDeps().ifPresent(value -> {
+								jpackage_args.add("--linux-package-deps");
+								jpackage_args.add(value);
+							});
+							configuration.getRpmLicenseType().ifPresent(value -> {
+								jpackage_args.add("--linux-rpm-license-type");
+								jpackage_args.add(value);
+							});
+							configuration.getAppRelease().ifPresent(value -> {
+								jpackage_args.add("--linux-app-release");
+								jpackage_args.add(value);
+							});
+							configuration.getAppCategory().ifPresent(value -> {
+								jpackage_args.add("--linux-app-category");
+								jpackage_args.add(value);
+							});
+							if(configuration.isShortcut() || mainLauncher.isLinuxShortcut()) {
+								jpackage_args.add("--linux-shortcut");
+							}
+						},
+						() -> {
+							if(mainLauncher.isLinuxShortcut()) {
+								jpackage_args.add("--linux-shortcut");
+							}
 						}
-					});
+					);
 					break;
 				case MACOS: this.macOSConfiguration.ifPresent(configuration -> {
 						configuration.getPackageIdentifier().ifPresent(value -> {
@@ -622,40 +598,84 @@ public class GenericPackageApplicationTask extends AbstractTask<Set<Image>, Pack
 						});
 					});
 					break;
-				case WINDOWS: this.windowsConfiguration.ifPresent(configuration -> {
-						if(configuration.isConsole()) {
-							jpackage_args.add("--win-console");
+				case WINDOWS: this.windowsConfiguration.ifPresentOrElse(
+						configuration -> {
+							if(configuration.isConsole() || mainLauncher.isWinConsole()) {
+								jpackage_args.add("--win-console");
+							}
+							if(configuration.isDirChooser()) {
+								jpackage_args.add("--win-dir-chooser");
+							}
+							if(configuration.isMenu() || mainLauncher.isWinMenu()) {
+								jpackage_args.add("--win-menu");
+							}
+							configuration.getMenuGroup().ifPresent(value -> {
+								jpackage_args.add("--win-menu-group");
+								jpackage_args.add(value);
+							});
+							if(configuration.isPerUserInstall()) {
+								jpackage_args.add("--win-per-user-install");
+							}
+							if(configuration.isShortcut() || mainLauncher.isWinShortcut()) {
+								jpackage_args.add("--win-shortcut");
+							}
+							if(configuration.isShortcutPrompt()) {
+								jpackage_args.add("--win-shortcut-prompt");
+							}
+							configuration.getUpdateURL().ifPresent(value -> {
+								jpackage_args.add("--win-update-url");
+								jpackage_args.add(value.normalize().toString());
+							});
+							configuration.getUpgradeUUID().ifPresent(value -> {
+								jpackage_args.add("--win-upgrade-uuid");
+								jpackage_args.add(value);
+							});
+						},
+						() -> {
+							if(mainLauncher.isWinConsole()) {
+								jpackage_args.add("--win-console");
+							}
+							if(mainLauncher.isWinMenu()) {
+								jpackage_args.add("--win-menu");
+							}
+							if(mainLauncher.isWinShortcut()) {
+								jpackage_args.add("--win-shortcut");
+							}
 						}
-						if(configuration.isDirChooser()) {
-							jpackage_args.add("--win-dir-chooser");
-						}
-						if(configuration.isMenu()) {
-							jpackage_args.add("--win-menu");
-						}
-						configuration.getMenuGroup().ifPresent(value -> {
-							jpackage_args.add("--win-menu-group");
-							jpackage_args.add(value);
-						});
-						if(configuration.isPerUserInstall()) {
-							jpackage_args.add("--win-per-user-install");
-						}
-						if(configuration.isShortcut()) {
-							jpackage_args.add("--win-shortcut");
-						}
-						if(configuration.isShortcutPrompt()) {
-							jpackage_args.add("--win-shortcut-prompt");
-						}
-						configuration.getUpdateURL().ifPresent(value -> {
-							jpackage_args.add("--win-update-url");
-							jpackage_args.add(value.normalize().toString());
-						});
-						configuration.getUpgradeUUID().ifPresent(value -> {
-							jpackage_args.add("--win-upgrade-uuid");
-							jpackage_args.add(value);
-						});
-					});
+					);
 					break;
 				default: LOGGER.warn("Could not apply platform specific configuration because the platform could not be determined");
+			}
+			
+			// Build Application image
+			try {
+				List<String> image_jpackage_args = new ArrayList<>(jpackage_args);
+				// TODO why?
+				for(Iterator<String> image_jpackage_argsIterator = image_jpackage_args.iterator();image_jpackage_argsIterator.hasNext();) {
+					String currentArg = image_jpackage_argsIterator.next();
+					if(currentArg.equals("--license-file") || currentArg.equals("--about-url")) {
+						image_jpackage_argsIterator.remove();
+						image_jpackage_argsIterator.next();
+						image_jpackage_argsIterator.remove();
+					}
+				}
+
+				image_jpackage_args.add("--type");
+				image_jpackage_args.add("app-image");
+
+				// We must generate app-image and invoke CreateImageArchivesTask later in the process
+				LOGGER.info(" - jpackage {}", image_jpackage_args.stream().collect(Collectors.joining(" ")));
+				if(JavaTools.JPACKAGE.run(OUT, ERR, image_jpackage_args.stream().toArray(String[]::new)) == 0) {
+					// jpackage creates the app in the main launcher name folder
+					Files.move(applicationImagePath.getParent().resolve(mainLauncherName), applicationImagePath);
+					jpackageImages.add(new GenericImage(ImageType.APPLICATION, null, applicationImagePath));
+				}
+				else {
+					throw new TaskExecutionException("Error packaging project application");
+				}
+			} 
+			catch (IOException e) {
+				throw new TaskExecutionException("Error packaging project application", e);
 			}
 			
 			try {	

@@ -86,10 +86,10 @@ public class GenericStopTask extends AbstractTask<Long, StopTask> implements Sto
 		
 		LOGGER.info("[ Stopping project {}... ]", project);
 		
-		Path pidfile = this.pidfile.orElse(project.getPidfile());
-		if(Files.exists(pidfile)) {
+		Path projectPidfile = this.pidfile.orElse(project.getPidfile());
+		if(Files.exists(projectPidfile)) {
 			try {
-				Long pid = Long.valueOf(Files.readString(pidfile));
+				Long pid = Long.valueOf(Files.readString(projectPidfile));
 				ProcessHandle.of(pid).ifPresentOrElse(
 					ph -> {
 						ph.destroy();
@@ -97,7 +97,7 @@ public class GenericStopTask extends AbstractTask<Long, StopTask> implements Sto
 							ph.onExit().get(this.timeout, TimeUnit.MILLISECONDS);
 						} 
 						catch (InterruptedException | ExecutionException e) {
-							throw new TaskExecutionException("Error stopping project gracefully: " + project + "(" + pidfile + ")", e);
+							throw new TaskExecutionException("Error stopping project gracefully: " + project + "(" + projectPidfile + ")", e);
 						}
 						catch (TimeoutException e) {
 							LOGGER.error("Application exit timeout exceeded, trying to stop the process forcibly...");
@@ -106,24 +106,24 @@ public class GenericStopTask extends AbstractTask<Long, StopTask> implements Sto
 								ph.onExit().get(this.timeout, TimeUnit.MILLISECONDS);
 							} 
 							catch (InterruptedException | ExecutionException e1) {
-								throw new TaskExecutionException("Error stopping project forcibly: " + project + "(" + pidfile + ")", e1);
+								throw new TaskExecutionException("Error stopping project forcibly: " + project + "(" + projectPidfile + ")", e1);
 							}
 							catch (TimeoutException e1) {
 								throw new TaskExecutionException("Application exit timeout exceeded on both graceful and forced shutdown attempts");
 							}
 						}
 					},
-					() -> LOGGER.warn("[ Project doesn't appear to be running, removing existing pidfile {} ]", pidfile)
+					() -> LOGGER.warn("[ Project doesn't appear to be running, removing existing pidfile {} ]", projectPidfile)
 				);
-				Files.deleteIfExists(pidfile);
+				Files.deleteIfExists(projectPidfile);
 				return pid;
 			}
 			catch (IOException | NumberFormatException e) {
-				throw new TaskExecutionException("Error reading pidfile: " + pidfile, e);
+				throw new TaskExecutionException("Error reading pidfile: " + projectPidfile, e);
 			}
 		}
 		else {
-			LOGGER.warn("[ Project doesn't appear to be running, pidfile is not present: {} ]", pidfile);
+			LOGGER.warn("[ Project doesn't appear to be running, pidfile is not present: {} ]", projectPidfile);
 			return null;
 		}
 	}

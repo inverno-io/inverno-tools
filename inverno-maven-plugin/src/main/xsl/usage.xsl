@@ -36,6 +36,8 @@ $ mvn inverno:run -Dinverno.run.arguments='--some.configuration=\"hello\"'
 ]]></xsl:text> 
 <xsl:text disable-output-escaping="yes"><![CDATA[>]]></xsl:text> Since quotes or double quotes are used as delimiters, they might need to be escaped as well to declare an argument that contains some: `I\'m\ happy`, `"I'm happy"`, `'I\'m happy'`.
 
+<xsl:text disable-output-escaping="yes"><![CDATA[>]]></xsl:text> The way quotes are escaped greatly depends on the operating system. Above examples refers to Unix systems with proper shells, please look for the right documentation if you are using a different one.
+
 In order to debug the application, we need to specify the appropriate options to the JVM:
 
 ```plaintext

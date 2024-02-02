@@ -84,7 +84,7 @@ public class StartTest {
 			});
 		
 		Assertions.assertTrue(Files.exists(outputPath));
-		Assertions.assertEquals("execute module dep, execute automatic module dep, webjar module dep, execute unnamed module dep\n", Files.readString(outputPath));
+		Assertions.assertEquals("execute module dep, execute automatic module dep, webjar module dep, execute unnamed module dep" + System.lineSeparator(), Files.readString(outputPath));
 	}
 	
 	@Test
@@ -120,7 +120,7 @@ public class StartTest {
 			});
 		
 		Assertions.assertTrue(Files.exists(outputPath));
-		Assertions.assertEquals("execute module dep, execute automatic module dep, webjar module dep, execute unnamed module dep, arg1, arg2\n", Files.readString(outputPath));
+		Assertions.assertEquals("execute module dep, execute automatic module dep, webjar module dep, execute unnamed module dep, arg1, arg2" + System.lineSeparator(), Files.readString(outputPath));
 	}
 	
 	@Test

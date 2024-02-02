@@ -37,7 +37,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledOnOs;
 import org.junit.jupiter.api.condition.OS;
 
-
 /**
  * @author <a href="mailto:jeremy.kuhn@inverno.io">Jeremy Kuhn</a>
  */
@@ -82,12 +81,12 @@ public class PackageApplicationTest {
 		
 		Assertions.assertTrue(Files.exists(applicationPath));
 		
-		ProcessBuilder pb = new ProcessBuilder(applicationPath.resolve("bin/project").toAbsolutePath().toString())
+		ProcessBuilder pb = new ProcessBuilder(applicationPath.resolve(Platform.getSystemPlatform() == Platform.WINDOWS ? "project.exe" : "bin/project").toAbsolutePath().toString())
 			.redirectOutput(PROCESS_OUTPUT_PATH.toFile());
 		
 		Process process = pb.start();
 		process.waitFor();
-		Assertions.assertEquals("execute module dep, execute automatic module dep, webjar module dep, execute unnamed module dep\n", Files.readString(PROCESS_OUTPUT_PATH));
+		Assertions.assertEquals("execute module dep, execute automatic module dep, webjar module dep, execute unnamed module dep" + System.lineSeparator(), Files.readString(PROCESS_OUTPUT_PATH));
 	}
 	
 	@Test
@@ -134,6 +133,8 @@ public class PackageApplicationTest {
 	
 	@Test
 	public void testExecuteWithLauncher() throws Exception {
+		String iconExt = Platform.getSystemPlatform() == Platform.WINDOWS ? "ico" : "exe";
+		Path iconPath = Path.of("src/test/resources/inverno_favicon." + iconExt);
 		Set<Image> applicationImages = this.project
 			.modularizeDependencies()
 			.buildJmod()
@@ -174,7 +175,7 @@ public class PackageApplicationTest {
 					
 					@Override
 					public Optional<Path> getIconPath() {
-						return Optional.of(Path.of("src/test/resources/inverno_favicon.png"));
+						return Optional.of(iconPath);
 					}
 					
 					@Override
@@ -230,16 +231,19 @@ public class PackageApplicationTest {
 		);
 		
 		Assertions.assertTrue(Files.exists(applicationPath));
-		Assertions.assertTrue(Files.exists(applicationPath.resolve("bin/test-project")));
-		Assertions.assertTrue(Files.exists(applicationPath.resolve("lib/test-project.png")));
-
-		Assertions.assertArrayEquals(
-			Files.readAllBytes(Path.of("src/test/resources/inverno_favicon.png")),
-			Files.readAllBytes(applicationPath.resolve("lib/test-project.png"))
-		);
+		Assertions.assertTrue(Files.exists(applicationPath.resolve(Platform.getSystemPlatform() == Platform.WINDOWS ? "test-project.exe" : "bin/test-project")));
+		
+		if(Platform.getSystemPlatform() != Platform.WINDOWS) {
+			// only .ico files are accepted on Windows but it doesn't exist it in the app-image
+			Assertions.assertTrue(Files.exists(applicationPath.resolve("lib/test-project." + iconExt)));
+			Assertions.assertArrayEquals(
+				Files.readAllBytes(iconPath),
+				Files.readAllBytes(applicationPath.resolve("lib/test-project." + iconExt))
+			);
+		}
 		
 		Properties projectProperties = new Properties();
-		projectProperties.load(Files.newInputStream(applicationPath.resolve("lib/app/test-project.cfg")));
+		projectProperties.load(Files.newInputStream(applicationPath.resolve(Platform.getSystemPlatform() == Platform.WINDOWS ? "app/test-project.cfg" : "lib/app/test-project.cfg")));
 		
 		Assertions.assertEquals("io.inverno.test.project/io.inverno.test.project.Main", projectProperties.get("app.mainmodule"));
 	}
@@ -406,6 +410,7 @@ public class PackageApplicationTest {
 		
 		Assertions.assertEquals(
 			Set.of(
+				this.project.getApplicationPath(null),
 				this.project.getApplicationPath("exe")
 			),
 			applicationImages.stream().map(image -> image.getPath().get()).collect(Collectors.toSet())
@@ -431,6 +436,7 @@ public class PackageApplicationTest {
 		
 		Assertions.assertEquals(
 			Set.of(
+				this.project.getApplicationPath(null),
 				this.project.getApplicationPath("msi")
 			),
 			applicationImages.stream().map(image -> image.getPath().get()).collect(Collectors.toSet())
@@ -456,7 +462,8 @@ public class PackageApplicationTest {
 		
 		Assertions.assertEquals(
 			Set.of(
-				this.project.getApplicationPath("msi")
+				this.project.getApplicationPath(null),
+				this.project.getApplicationPath("dmg")
 			),
 			applicationImages.stream().map(image -> image.getPath().get()).collect(Collectors.toSet())
 		);
