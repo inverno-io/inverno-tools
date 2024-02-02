@@ -225,7 +225,7 @@ public class GenericPackageApplicationTask extends AbstractTask<Set<Image>, Pack
 			}
 			
 			List<String> jpackage_args = new LinkedList<>();
-			List<String> nonAppImage_jpackage_args = new LinkedList<>();
+			List<String> package_jpackage_args = new LinkedList<>();
 			
 			jpackage_args.add("--runtime-image");
 			jpackage_args.add(runtimeImagePath.toString());
@@ -388,8 +388,8 @@ public class GenericPackageApplicationTask extends AbstractTask<Set<Image>, Pack
 				jpackage_args.add(value);
 			});
 			this.aboutURL.ifPresent(value -> {
-				nonAppImage_jpackage_args.add("--about-url");
-				nonAppImage_jpackage_args.add(value.normalize().toString());
+				package_jpackage_args.add("--about-url");
+				package_jpackage_args.add(value.normalize().toString());
 			});
 			this.installDirectory.ifPresent(value -> {
 				jpackage_args.add("--install-dir");
@@ -397,8 +397,8 @@ public class GenericPackageApplicationTask extends AbstractTask<Set<Image>, Pack
 			});
 			this.licensePath.ifPresent(value -> {
 				if(Files.exists(value)) {
-					nonAppImage_jpackage_args.add("--license-file");
-					nonAppImage_jpackage_args.add(value.toString());
+					package_jpackage_args.add("--license-file");
+					package_jpackage_args.add(value.toString());
 				}
 				else {
 					LOGGER.warn(" - ignoring license file {} which does not exist", value.toString());
@@ -530,72 +530,72 @@ public class GenericPackageApplicationTask extends AbstractTask<Set<Image>, Pack
 				case LINUX: this.linuxConfiguration.ifPresentOrElse(
 						configuration -> {
 							configuration.getPackageName().ifPresent(value -> {
-								nonAppImage_jpackage_args.add("--linux-package-name");
-								nonAppImage_jpackage_args.add(value);
+								package_jpackage_args.add("--linux-package-name");
+								package_jpackage_args.add(value);
 							});
 							configuration.getDebMaintainer().ifPresent(value -> {
-								nonAppImage_jpackage_args.add("--linux-deb-maintainer");
-								nonAppImage_jpackage_args.add(value);
+								package_jpackage_args.add("--linux-deb-maintainer");
+								package_jpackage_args.add(value);
 							});
 							configuration.getMenuGroup().ifPresent(value -> {
-								nonAppImage_jpackage_args.add("--linux-menu-group");
-								nonAppImage_jpackage_args.add(value);
+								package_jpackage_args.add("--linux-menu-group");
+								package_jpackage_args.add(value);
 							});
 							configuration.getPackageDeps().ifPresent(value -> {
-								nonAppImage_jpackage_args.add("--linux-package-deps");
-								nonAppImage_jpackage_args.add(value);
+								package_jpackage_args.add("--linux-package-deps");
+								package_jpackage_args.add(value);
 							});
 							configuration.getRpmLicenseType().ifPresent(value -> {
-								nonAppImage_jpackage_args.add("--linux-rpm-license-type");
-								nonAppImage_jpackage_args.add(value);
+								package_jpackage_args.add("--linux-rpm-license-type");
+								package_jpackage_args.add(value);
 							});
 							configuration.getAppRelease().ifPresent(value -> {
-								nonAppImage_jpackage_args.add("--linux-app-release");
-								nonAppImage_jpackage_args.add(value);
+								package_jpackage_args.add("--linux-app-release");
+								package_jpackage_args.add(value);
 							});
 							configuration.getAppCategory().ifPresent(value -> {
-								nonAppImage_jpackage_args.add("--linux-app-category");
-								nonAppImage_jpackage_args.add(value);
+								package_jpackage_args.add("--linux-app-category");
+								package_jpackage_args.add(value);
 							});
 							if(configuration.isShortcut() || mainLauncher.isLinuxShortcut()) {
-								nonAppImage_jpackage_args.add("--linux-shortcut");
+								package_jpackage_args.add("--linux-shortcut");
 							}
 						},
 						() -> {
 							if(mainLauncher.isLinuxShortcut()) {
-								nonAppImage_jpackage_args.add("--linux-shortcut");
+								package_jpackage_args.add("--linux-shortcut");
 							}
 						}
 					);
 					break;
 				case MACOS: this.macOSConfiguration.ifPresent(configuration -> {
 						configuration.getPackageIdentifier().ifPresent(value -> {
-							nonAppImage_jpackage_args.add("--mac-package-identifier");
-							nonAppImage_jpackage_args.add(value);
+							package_jpackage_args.add("--mac-package-identifier");
+							package_jpackage_args.add(value);
 						});
 						configuration.getPackageName().ifPresent(value -> {
-							nonAppImage_jpackage_args.add("--mac-package-name");
-							nonAppImage_jpackage_args.add(value);
+							package_jpackage_args.add("--mac-package-name");
+							package_jpackage_args.add(value);
 						});
 						configuration.getPackageSigningPrefix().ifPresent(value -> {
 							if(Runtime.version().feature() >= 17) {
-								nonAppImage_jpackage_args.add("--mac-package-signing-prefix");
+								package_jpackage_args.add("--mac-package-signing-prefix");
 							}
 							else {
-								nonAppImage_jpackage_args.add("--mac-bundle-signing-prefix");
+								package_jpackage_args.add("--mac-bundle-signing-prefix");
 							}
-							nonAppImage_jpackage_args.add(value);
+							package_jpackage_args.add(value);
 						});
 						if(configuration.isSign()) {
-							nonAppImage_jpackage_args.add("--mac-sign");
+							package_jpackage_args.add("--mac-sign");
 						}
 						configuration.getSigningKeychain().ifPresent(value -> {
-							nonAppImage_jpackage_args.add("--mac-signing-keychain");
-							nonAppImage_jpackage_args.add(value);
+							package_jpackage_args.add("--mac-signing-keychain");
+							package_jpackage_args.add(value);
 						});
 						configuration.getSigningKeyUserName().ifPresent(value -> {
-							nonAppImage_jpackage_args.add("--mac-signing-key-user-name");
-							nonAppImage_jpackage_args.add(value);
+							package_jpackage_args.add("--mac-signing-key-user-name");
+							package_jpackage_args.add(value);
 						});
 					});
 					break;
@@ -605,31 +605,31 @@ public class GenericPackageApplicationTask extends AbstractTask<Set<Image>, Pack
 								jpackage_args.add("--win-console");
 							}
 							if(configuration.isDirChooser()) {
-								nonAppImage_jpackage_args.add("--win-dir-chooser");
+								package_jpackage_args.add("--win-dir-chooser");
 							}
 							if(configuration.isMenu() || mainLauncher.isWinMenu()) {
-								nonAppImage_jpackage_args.add("--win-menu");
+								package_jpackage_args.add("--win-menu");
 							}
 							configuration.getMenuGroup().ifPresent(value -> {
-								nonAppImage_jpackage_args.add("--win-menu-group");
-								nonAppImage_jpackage_args.add(value);
+								package_jpackage_args.add("--win-menu-group");
+								package_jpackage_args.add(value);
 							});
 							if(configuration.isPerUserInstall()) {
-								nonAppImage_jpackage_args.add("--win-per-user-install");
+								package_jpackage_args.add("--win-per-user-install");
 							}
 							if(configuration.isShortcut() || mainLauncher.isWinShortcut()) {
-								nonAppImage_jpackage_args.add("--win-shortcut");
+								package_jpackage_args.add("--win-shortcut");
 							}
 							if(configuration.isShortcutPrompt()) {
-								nonAppImage_jpackage_args.add("--win-shortcut-prompt");
+								package_jpackage_args.add("--win-shortcut-prompt");
 							}
 							configuration.getUpdateURL().ifPresent(value -> {
-								nonAppImage_jpackage_args.add("--win-update-url");
-								nonAppImage_jpackage_args.add(value.normalize().toString());
+								package_jpackage_args.add("--win-update-url");
+								package_jpackage_args.add(value.normalize().toString());
 							});
 							configuration.getUpgradeUUID().ifPresent(value -> {
-								nonAppImage_jpackage_args.add("--win-upgrade-uuid");
-								nonAppImage_jpackage_args.add(value);
+								package_jpackage_args.add("--win-upgrade-uuid");
+								package_jpackage_args.add(value);
 							});
 						},
 						() -> {
@@ -637,10 +637,10 @@ public class GenericPackageApplicationTask extends AbstractTask<Set<Image>, Pack
 								jpackage_args.add("--win-console");
 							}
 							if(mainLauncher.isWinMenu()) {
-								nonAppImage_jpackage_args.add("--win-menu");
+								package_jpackage_args.add("--win-menu");
 							}
 							if(mainLauncher.isWinShortcut()) {
-								nonAppImage_jpackage_args.add("--win-shortcut");
+								package_jpackage_args.add("--win-shortcut");
 							}
 						}
 					);
@@ -669,7 +669,7 @@ public class GenericPackageApplicationTask extends AbstractTask<Set<Image>, Pack
 				throw new TaskExecutionException("Error packaging project application", e);
 			}
 			
-			jpackage_args.addAll(nonAppImage_jpackage_args);
+			jpackage_args.addAll(package_jpackage_args);
 			
 			try {	
 				// Package Application
