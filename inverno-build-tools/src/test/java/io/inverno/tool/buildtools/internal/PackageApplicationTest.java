@@ -17,7 +17,11 @@ package io.inverno.tool.buildtools.internal;
 
 import io.inverno.tool.buildtools.Image;
 import io.inverno.tool.buildtools.PackageApplicationTask;
+import io.inverno.tool.buildtools.PackageApplicationTask.MacOSConfiguration;
+import io.inverno.tool.buildtools.PackageApplicationTask.WindowsConfiguration;
 import io.inverno.tool.buildtools.TestProject;
+
+import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
@@ -406,6 +410,53 @@ public class PackageApplicationTest {
 			//.aboutURL(URI.create("https://inverno.io")) // requires JDK>15
 			.licensePath(Path.of("src/test/resources/legal/LICENSE"))
 			.types(Set.of(PackageApplicationTask.PackageType.EXE))
+			.windowsConfiguration(new PackageApplicationTask.WindowsConfiguration() {
+
+				@Override
+				public boolean isConsole() {
+					return true;
+				}
+
+				@Override
+				public boolean isDirChooser() {
+					return true;
+				}
+
+				@Override
+				public boolean isMenu() {
+					return true;
+				}
+
+				@Override
+				public Optional<String> getMenuGroup() {
+					return Optional.of("test");
+				}
+
+				@Override
+				public boolean isPerUserInstall() {
+					return true;
+				}
+
+				@Override
+				public boolean isShortcut() {
+					return true;
+				}
+
+				@Override
+				public boolean isShortcutPrompt() {
+					return true;
+				}
+
+				@Override
+				public Optional<URI> getUpdateURL() {
+					return Optional.of(URI.create("http://example.org"));
+				}
+
+				@Override
+				public Optional<String> getUpgradeUUID() {
+					return Optional.of("123");
+				}
+			})
 			.execute();
 		
 		Assertions.assertEquals(
@@ -432,6 +483,53 @@ public class PackageApplicationTest {
 			//.aboutURL(URI.create("https://inverno.io")) // requires JDK>15
 			.licensePath(Path.of("src/test/resources/legal/LICENSE"))
 			.types(Set.of(PackageApplicationTask.PackageType.MSI))
+			.windowsConfiguration(new PackageApplicationTask.WindowsConfiguration() {
+
+				@Override
+				public boolean isConsole() {
+					return true;
+				}
+
+				@Override
+				public boolean isDirChooser() {
+					return true;
+				}
+
+				@Override
+				public boolean isMenu() {
+					return true;
+				}
+
+				@Override
+				public Optional<String> getMenuGroup() {
+					return Optional.of("test");
+				}
+
+				@Override
+				public boolean isPerUserInstall() {
+					return true;
+				}
+
+				@Override
+				public boolean isShortcut() {
+					return true;
+				}
+
+				@Override
+				public boolean isShortcutPrompt() {
+					return true;
+				}
+
+				@Override
+				public Optional<URI> getUpdateURL() {
+					return Optional.of(URI.create("http://example.org"));
+				}
+
+				@Override
+				public Optional<String> getUpgradeUUID() {
+					return Optional.of("123");
+				}
+			})
 			.execute();
 		
 		Assertions.assertEquals(
@@ -458,6 +556,38 @@ public class PackageApplicationTest {
 			//.aboutURL(URI.create("https://inverno.io")) // requires JDK>15
 			.licensePath(Path.of("src/test/resources/legal/LICENSE"))
 			.types(Set.of(PackageApplicationTask.PackageType.DMG))
+			.macOSConfiguration(new PackageApplicationTask.MacOSConfiguration() {
+
+				@Override
+				public Optional<String> getPackageIdentifier() {
+					return Optional.of("project identifier");
+				}
+
+				@Override
+				public Optional<String> getPackageName() {
+					return Optional.of("project package");
+				}
+
+				@Override
+				public Optional<String> getPackageSigningPrefix() {
+					return Optional.of("signing prefix");
+				}
+
+				@Override
+				public boolean isSign() {
+					return true;
+				}
+
+				@Override
+				public Optional<String> getSigningKeychain() {
+					return Optional.empty();
+				}
+
+				@Override
+				public Optional<String> getSigningKeyUserName() {
+					return Optional.empty();
+				}
+			})
 			.execute();
 		
 		Assertions.assertEquals(
@@ -484,6 +614,38 @@ public class PackageApplicationTest {
 			//.aboutURL(URI.create("https://inverno.io")) // requires JDK>15
 			.licensePath(Path.of("src/test/resources/legal/LICENSE"))
 			.types(Set.of(PackageApplicationTask.PackageType.PKG))
+			.macOSConfiguration(new PackageApplicationTask.MacOSConfiguration() {
+
+				@Override
+				public Optional<String> getPackageIdentifier() {
+					return Optional.of("project identifier");
+				}
+
+				@Override
+				public Optional<String> getPackageName() {
+					return Optional.of("project package");
+				}
+
+				@Override
+				public Optional<String> getPackageSigningPrefix() {
+					return Optional.of("signing prefix");
+				}
+
+				@Override
+				public boolean isSign() {
+					return true;
+				}
+
+				@Override
+				public Optional<String> getSigningKeychain() {
+					return Optional.empty();
+				}
+
+				@Override
+				public Optional<String> getSigningKeyUserName() {
+					return Optional.empty();
+				}
+			})
 			.execute();
 		
 		Assertions.assertEquals(
