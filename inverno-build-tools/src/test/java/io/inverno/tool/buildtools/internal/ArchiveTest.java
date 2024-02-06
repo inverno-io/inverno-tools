@@ -42,7 +42,7 @@ public class ArchiveTest {
 		System.setProperty("org.apache.logging.log4j.simplelog.logFile", "system.out");
 	}
 	
-	private static final Set<String> FORMATS = Set.of("zip", "tar", "txz", "tar.gz");
+	private static final Set<String> FORMATS = Set.of("zip", "tar", "txz", "tar.gz", "tar.bz2");
 	
 	private TestProject project;
 	
@@ -85,7 +85,7 @@ public class ArchiveTest {
 		String prefix = this.project.getFinalName();
 		int runtimePathIndex = this.project.getRuntimePath().toString().length() + 1;
 		
-		Set<String> expectedArchiveFileNames = new HashSet<>();
+		Set<String> expectedArchiveFileNames;
 		try (Stream<Path> stream = Files.walk(this.project.getRuntimePath())) {
 			expectedArchiveFileNames = stream
 				.map(path -> {
@@ -131,7 +131,7 @@ public class ArchiveTest {
 		
 		int runtimePathIndex = this.project.getRuntimePath().toString().length() + 1;
 		
-		Set<String> expectedArchiveFileNames = new HashSet<>();
+		Set<String> expectedArchiveFileNames;
 		try (Stream<Path> stream = Files.walk(this.project.getRuntimePath())) {
 			expectedArchiveFileNames = stream
 				.map(path -> {

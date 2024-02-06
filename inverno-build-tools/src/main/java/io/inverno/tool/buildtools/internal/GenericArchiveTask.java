@@ -239,7 +239,7 @@ public class GenericArchiveTask extends AbstractTask<Set<Image>, ArchiveTask> im
 					if(!csf.getOutputStreamCompressorNames().contains(compressorName)) {
 						throw new TaskExecutionException("Unsupported compression format: " + compressorName);
 					}
-					return new TarArchiveOutputStream(imageArchiveOutput);
+					return new TarArchiveOutputStream(csf.createCompressorOutputStream(compressorName, imageArchiveOutput));
 				}
 				case 1: {
 					return new TarArchiveOutputStream(imageArchiveOutput);
