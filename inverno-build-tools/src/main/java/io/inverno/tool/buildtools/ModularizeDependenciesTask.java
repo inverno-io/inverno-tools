@@ -135,6 +135,30 @@ public interface ModularizeDependenciesTask extends Task<Set<Dependency>, Modula
 	
 	/**
 	 * <p>
+	 * Creates a debug task.
+	 * </p>
+	 * 
+	 * @return a debug task
+	 */
+	DebugTask debug();
+	
+	/**
+	 * <p>
+	 * Creates and configures a debug task.
+	 * </p>
+	 * 
+	 * @param configurer a configurer
+	 * 
+	 * @return a configured debug task
+	 */
+	default DebugTask debug(Consumer<DebugTask> configurer) {
+		DebugTask debug = this.debug();
+		configurer.accept(debug);
+		return debug;
+	}
+	
+	/**
+	 * <p>
 	 * Creates a jmod build task.
 	 * </p>
 	 * 

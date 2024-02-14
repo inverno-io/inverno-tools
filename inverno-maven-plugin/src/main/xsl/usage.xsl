@@ -38,10 +38,10 @@ $ mvn inverno:run -Dinverno.run.arguments='--some.configuration=\"hello\"'
 
 <xsl:text disable-output-escaping="yes"><![CDATA[>]]></xsl:text> The way quotes are escaped greatly depends on the operating system. Above examples refers to Unix systems with proper shells, please look for the right documentation if you are using a different one.
 
-In order to debug the application, we need to specify the appropriate options to the JVM:
+VM options can be specified as follows:
 
 ```plaintext
-$ mvn inverno:run -Dinverno.exec.vmOptions="-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=8000"
+$ mvn inverno:run -Dinverno.exec.vmOptions="-Xms2G -Xmx2G"
 ```
 
 By default the plugin will detect the main class of the application, but it is also possible to specify it explicitly in case multiple main classes exist in the project module.
@@ -51,6 +51,29 @@ $ mvn inverno:run -Dinverno.exec.mainClass=io.inverno.example.Main
 ```
 
 <xsl:text disable-output-escaping="yes"><![CDATA[>]]></xsl:text> When building an Inverno application, a pidfile is normally created when the application is started under `${project.build.directory}/maven-inverno` directory, it indicates the pid of the process running the application. If the build exits while the application is still running or if the pidfile was not properly removed after the application has exited, it might be necessary to manually kill the process and/or remove the pidfile. 
+
+### Debug a module application project
+
+The `inverno:debug` goal is used to execute the modular application defined in the project from the command line with JVM debug options (e.g. `-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=localhost:8000`).
+
+```plaintext
+$ mvn inverno:debug
+...
+Listening for transport dt_socket at address: 8000
+...
+```
+
+This goal is similar to the `inverno:run` goal and accepts the same arguments:
+
+```plaintext
+$ mvn inverno:debug -Dinverno.exec.vmOptions="-Xms2G -Xmx2G" -Dinverno.exec.mainClass="io.inverno.example.Main" -Dinverno.debug.arguments='--some.configuration=\"hello\"'
+```
+
+The debug port and whether to suspend or not the execution until a debugger is attached can also be specified:
+
+```plaintext
+$ mvn inverno:debug -Dinverno.debug.port=9000 -Dinverno.debug.suspend=false
+```
 
 ### Start and stop the application for integration testing
 

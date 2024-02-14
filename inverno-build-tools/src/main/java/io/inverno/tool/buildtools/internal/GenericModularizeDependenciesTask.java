@@ -16,6 +16,7 @@
 package io.inverno.tool.buildtools.internal;
 
 import io.inverno.tool.buildtools.BuildJmodTask;
+import io.inverno.tool.buildtools.DebugTask;
 import io.inverno.tool.buildtools.Dependency;
 import io.inverno.tool.buildtools.ModularizeDependenciesTask;
 import io.inverno.tool.buildtools.ModuleInfo;
@@ -650,6 +651,11 @@ public class GenericModularizeDependenciesTask extends AbstractTask<Set<Dependen
 	@Override
 	public RunTask run() {
 		return new GenericRunTask(this);
+	}
+	
+	@Override
+	public DebugTask debug() {
+		return new GenericDebugTask(this);
 	}
 
 	@Override

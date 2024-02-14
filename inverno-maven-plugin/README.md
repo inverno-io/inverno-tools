@@ -37,10 +37,10 @@ $ mvn inverno:run -Dinverno.run.arguments='--some.configuration=\"hello\"'
 
 > The way quotes are escaped greatly depends on the operating system. Above examples refers to Unix systems with proper shells, please look for the right documentation if you are using a different one.
 
-In order to debug the application, we need to specify the appropriate options to the JVM:
+VM options can be specified as follows:
 
 ```plaintext
-$ mvn inverno:run -Dinverno.exec.vmOptions="-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=8000"
+$ mvn inverno:run -Dinverno.exec.vmOptions="-Xms2G -Xmx2G"
 ```
 
 By default the plugin will detect the main class of the application, but it is also possible to specify it explicitly in case multiple main classes exist in the project module.
@@ -50,6 +50,29 @@ $ mvn inverno:run -Dinverno.exec.mainClass=io.inverno.example.Main
 ```
 
 > When building an Inverno application, a pidfile is normally created when the application is started under `${project.build.directory}/maven-inverno` directory, it indicates the pid of the process running the application. If the build exits while the application is still running or if the pidfile was not properly removed after the application has exited, it might be necessary to manually kill the process and/or remove the pidfile. 
+
+### Debug a module application project
+
+The `inverno:debug` goal is used to execute the modular application defined in the project from the command line with JVM debug options (e.g. `-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=localhost:8000`).
+
+```plaintext
+$ mvn inverno:debug
+...
+Listening for transport dt_socket at address: 8000
+...
+```
+
+This goal is similar to the `inverno:run` goal and accepts the same arguments:
+
+```plaintext
+$ mvn inverno:debug -Dinverno.exec.vmOptions="-Xms2G -Xmx2G" -Dinverno.exec.mainClass="io.inverno.example.Main" -Dinverno.debug.arguments='--some.configuration=\"hello\"'
+```
+
+The debug port and whether to suspend or not the execution until a debugger is attached can also be specified:
+
+```plaintext
+$ mvn inverno:debug -Dinverno.debug.port=9000 -Dinverno.debug.suspend=false
+```
 
 ### Start and stop the application for integration testing
 
@@ -330,6 +353,7 @@ By default the registry points to the Docker hub `docker.io` but another registr
 ### Overview
 
 - [inverno:build-runtime](#invernobuild-runtime) Builds the project runtime image.
+- [inverno:debug](#invernodebug) Debugs the project application.
 - [inverno:deploy-image](#invernodeploy-image) Builds and deploys the project application container image to an image registry.
 - [inverno:help](#invernohelp) Display help information on inverno-maven-plugin. 
 - [inverno:install-image](#invernoinstall-image) Builds and installs the project application container image to the local Docker daemon.
@@ -1164,6 +1188,352 @@ Selects the HotSpot VM in the output image defined as: "client" / "server" / "mi
 - **User property**: inverno.runtime.vm
 
 
+### inverno:debug
+
+**Full name:**
+
+io.inverno.tool:inverno-maven-plugin:1.5.0-SNAPSHOT:debug
+
+**Description:**
+
+
+Debugs the project application.
+
+
+**Attributes:**
+
+- Requires a Maven project to be executed.
+- Requires dependency resolution of artifacts in scope: compile+runtime.
+- Requires dependency collection of artifacts in scope: compile+runtime.
+- Since version: 1.4.
+- Binds by default to the lifecycle phase: validate.
+
+
+#### Optional parameters
+
+<table>
+    <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+    </tr>
+    <tr>
+        <td>
+            <a href="#addUnnamedModules1">addUnnamedModules</a>
+        </td>
+        <td>boolean</td>
+        <td>
+            Adds the unnamed modules when executing the application.
+            <ul>
+                <li>
+                    <em>User property</em>
+                    : inverno.exec.addUnnamedModules
+                </li>
+                <li>
+                    <em>Default</em>
+                    : true
+                </li>
+            </ul>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <a href="#arguments">arguments</a>
+        </td>
+        <td>String</td>
+        <td>
+            The arguments to pass to the application.
+            <ul/>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <a href="#commandLineArguments">commandLineArguments</a>
+        </td>
+        <td>String</td>
+        <td>
+            The command line arguments to pass to the application. This parameter overrides arguments when specified.
+            <ul>
+                <li>
+                    <em>User property</em>
+                    : inverno.debug.arguments
+                </li>
+            </ul>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <a href="#mainClass">mainClass</a>
+        </td>
+        <td>String</td>
+        <td>
+            The main class to use to run the application. If not specified, one of the main class in the project module is automatically selected.
+            <ul>
+                <li>
+                    <em>User property</em>
+                    : inverno.exec.mainClass
+                </li>
+            </ul>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <a href="#moduleOverrides1">moduleOverrides</a>
+        </td>
+        <td>ModuleInfoParameters&gt;</td>
+        <td>
+            A list of module-info.java overrides that will be merged into the generated module descriptors for unnamed or automatic modules.
+            <ul/>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <a href="#moduleOverridesDirectory1">moduleOverridesDirectory</a>
+        </td>
+        <td>File</td>
+        <td>
+            A directory containing module descriptors to use to modularize unnamed or automatic dependency modules and which replace the ones that are otherwise generated.
+            <ul>
+                <li>
+                    <em>User property</em>
+                    : inverno.moduleOverridesDirectory
+                </li>
+                <li>
+                    <em>Default</em>
+                    : ${project.basedir}/src/modules/
+                </li>
+            </ul>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <a href="#port">port</a>
+        </td>
+        <td>int</td>
+        <td>
+            The debug port.
+            <ul>
+                <li>
+                    <em>User property</em>
+                    : inverno.debug.port
+                </li>
+                <li>
+                    <em>Default</em>
+                    : 8000
+                </li>
+            </ul>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <a href="#progressBar1">progressBar</a>
+        </td>
+        <td>boolean</td>
+        <td>
+            Displays a progress bar.
+            <ul>
+                <li>
+                    <em>User property</em>
+                    : inverno.progressBar
+                </li>
+                <li>
+                    <em>Default</em>
+                    : true
+                </li>
+            </ul>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <a href="#skip1">skip</a>
+        </td>
+        <td>boolean</td>
+        <td>
+            Skips the execution.
+            <ul>
+                <li>
+                    <em>User property</em>
+                    : inverno.debug.skip
+                </li>
+            </ul>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <a href="#suspend">suspend</a>
+        </td>
+        <td>boolean</td>
+        <td>
+            Indicates whether to suspend execution until a debugger is attached.
+            <ul>
+                <li>
+                    <em>User property</em>
+                    : inverno.debug.suspend
+                </li>
+                <li>
+                    <em>Default</em>
+                    : true
+                </li>
+            </ul>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <a href="#vmOptions">vmOptions</a>
+        </td>
+        <td>String</td>
+        <td>
+            The VM options to use when executing the application.
+            <ul>
+                <li>
+                    <em>User property</em>
+                    : inverno.exec.vmOptions
+                </li>
+                <li>
+                    <em>Default</em>
+                    : -Dlog4j2.simplelogLevel=INFO -Dlog4j2.level=INFO
+                </li>
+            </ul>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <a href="#workingDirectory">workingDirectory</a>
+        </td>
+        <td>File</td>
+        <td>
+            The working directory of the application.
+            <ul>
+                <li>
+                    <em>User property</em>
+                    : inverno.exec.workingDirectory
+                </li>
+                <li>
+                    <em>Default</em>
+                    : ${project.build.directory}/maven-inverno/working
+                </li>
+            </ul>
+        </td>
+    </tr>
+</table>
+
+#### Parameter details
+
+
+
+##### &lt;addUnnamedModules&gt;
+
+Adds the unnamed modules when executing the application.
+
+- **Type**: boolean
+- **Required**: no
+- **User property**: inverno.exec.addUnnamedModules
+- **Default**: true
+
+
+##### &lt;arguments&gt;
+
+The arguments to pass to the application.
+
+- **Type**: java.lang.String
+- **Required**: no
+
+
+##### &lt;commandLineArguments&gt;
+
+The command line arguments to pass to the application. This parameter overrides arguments when specified.
+
+- **Type**: java.lang.String
+- **Required**: no
+- **User property**: inverno.debug.arguments
+
+
+##### &lt;mainClass&gt;
+
+The main class to use to run the application. If not specified, one of the main class in the project module is automatically selected.
+
+- **Type**: java.lang.String
+- **Required**: no
+- **User property**: inverno.exec.mainClass
+
+
+##### &lt;moduleOverrides&gt;
+
+A list of module-info.java overrides that will be merged into the generated module descriptors for unnamed or automatic modules.
+
+- **Type**: java.util.List&lt;io.inverno.tool.maven.ModuleInfoParameters&gt;
+- **Required**: no
+
+
+##### &lt;moduleOverridesDirectory&gt;
+
+A directory containing module descriptors to use to modularize unnamed or automatic dependency modules and which replace the ones that are otherwise generated.
+
+- **Type**: java.io.File
+- **Required**: no
+- **User property**: inverno.moduleOverridesDirectory
+- **Default**: ${project.basedir}/src/modules/
+
+
+##### &lt;port&gt;
+
+The debug port.
+
+- **Type**: int
+- **Required**: no
+- **User property**: inverno.debug.port
+- **Default**: 8000
+
+
+##### &lt;progressBar&gt;
+
+Displays a progress bar.
+
+- **Type**: boolean
+- **Required**: no
+- **User property**: inverno.progressBar
+- **Default**: true
+
+
+##### &lt;skip&gt;
+
+Skips the execution.
+
+- **Type**: boolean
+- **Required**: no
+- **User property**: inverno.debug.skip
+
+
+##### &lt;suspend&gt;
+
+Indicates whether to suspend execution until a debugger is attached.
+
+- **Type**: boolean
+- **Required**: no
+- **User property**: inverno.debug.suspend
+- **Default**: true
+
+
+##### &lt;vmOptions&gt;
+
+The VM options to use when executing the application.
+
+- **Type**: java.lang.String
+- **Required**: no
+- **User property**: inverno.exec.vmOptions
+- **Default**: -Dlog4j2.simplelogLevel=INFO -Dlog4j2.level=INFO
+
+
+##### &lt;workingDirectory&gt;
+
+The working directory of the application.
+
+- **Type**: java.io.File
+- **Required**: no
+- **User property**: inverno.exec.workingDirectory
+- **Default**: ${project.build.directory}/maven-inverno/working
+
+
 ### inverno:deploy-image
 
 **Full name:**
@@ -1326,7 +1696,7 @@ Builds and deploys the project application container image to an image registry.
     </tr>
     <tr>
         <td>
-            <a href="#addUnnamedModules1">addUnnamedModules</a>
+            <a href="#addUnnamedModules2">addUnnamedModules</a>
         </td>
         <td>boolean</td>
         <td>
@@ -1746,7 +2116,7 @@ Builds and deploys the project application container image to an image registry.
     </tr>
     <tr>
         <td>
-            <a href="#moduleOverrides1">moduleOverrides</a>
+            <a href="#moduleOverrides2">moduleOverrides</a>
         </td>
         <td>ModuleInfoParameters&gt;</td>
         <td>
@@ -1756,7 +2126,7 @@ Builds and deploys the project application container image to an image registry.
     </tr>
     <tr>
         <td>
-            <a href="#moduleOverridesDirectory1">moduleOverridesDirectory</a>
+            <a href="#moduleOverridesDirectory2">moduleOverridesDirectory</a>
         </td>
         <td>File</td>
         <td>
@@ -1800,7 +2170,7 @@ Builds and deploys the project application container image to an image registry.
     </tr>
     <tr>
         <td>
-            <a href="#progressBar1">progressBar</a>
+            <a href="#progressBar2">progressBar</a>
         </td>
         <td>boolean</td>
         <td>
@@ -1928,7 +2298,7 @@ Builds and deploys the project application container image to an image registry.
     </tr>
     <tr>
         <td>
-            <a href="#skip1">skip</a>
+            <a href="#skip2">skip</a>
         </td>
         <td>boolean</td>
         <td>
@@ -2852,7 +3222,7 @@ Builds and installs the project application container image to the local Docker 
     </tr>
     <tr>
         <td>
-            <a href="#addUnnamedModules2">addUnnamedModules</a>
+            <a href="#addUnnamedModules3">addUnnamedModules</a>
         </td>
         <td>boolean</td>
         <td>
@@ -3297,7 +3667,7 @@ Builds and installs the project application container image to the local Docker 
     </tr>
     <tr>
         <td>
-            <a href="#moduleOverrides2">moduleOverrides</a>
+            <a href="#moduleOverrides3">moduleOverrides</a>
         </td>
         <td>ModuleInfoParameters&gt;</td>
         <td>
@@ -3307,7 +3677,7 @@ Builds and installs the project application container image to the local Docker 
     </tr>
     <tr>
         <td>
-            <a href="#moduleOverridesDirectory2">moduleOverridesDirectory</a>
+            <a href="#moduleOverridesDirectory3">moduleOverridesDirectory</a>
         </td>
         <td>File</td>
         <td>
@@ -3351,7 +3721,7 @@ Builds and installs the project application container image to the local Docker 
     </tr>
     <tr>
         <td>
-            <a href="#progressBar2">progressBar</a>
+            <a href="#progressBar3">progressBar</a>
         </td>
         <td>boolean</td>
         <td>
@@ -3449,7 +3819,7 @@ Builds and installs the project application container image to the local Docker 
     </tr>
     <tr>
         <td>
-            <a href="#skip2">skip</a>
+            <a href="#skip3">skip</a>
         </td>
         <td>boolean</td>
         <td>
@@ -4196,7 +4566,7 @@ A project application package is a native self-contained Java application includ
     </tr>
     <tr>
         <td>
-            <a href="#addUnnamedModules3">addUnnamedModules</a>
+            <a href="#addUnnamedModules4">addUnnamedModules</a>
         </td>
         <td>boolean</td>
         <td>
@@ -4577,7 +4947,7 @@ A project application package is a native self-contained Java application includ
     </tr>
     <tr>
         <td>
-            <a href="#moduleOverrides3">moduleOverrides</a>
+            <a href="#moduleOverrides4">moduleOverrides</a>
         </td>
         <td>ModuleInfoParameters&gt;</td>
         <td>
@@ -4587,7 +4957,7 @@ A project application package is a native self-contained Java application includ
     </tr>
     <tr>
         <td>
-            <a href="#moduleOverridesDirectory3">moduleOverridesDirectory</a>
+            <a href="#moduleOverridesDirectory4">moduleOverridesDirectory</a>
         </td>
         <td>File</td>
         <td>
@@ -4621,7 +4991,7 @@ A project application package is a native self-contained Java application includ
     </tr>
     <tr>
         <td>
-            <a href="#progressBar3">progressBar</a>
+            <a href="#progressBar4">progressBar</a>
         </td>
         <td>boolean</td>
         <td>
@@ -4689,7 +5059,7 @@ A project application package is a native self-contained Java application includ
     </tr>
     <tr>
         <td>
-            <a href="#skip3">skip</a>
+            <a href="#skip4">skip</a>
         </td>
         <td>boolean</td>
         <td>
@@ -5347,7 +5717,7 @@ Builds and packages the project application container image in a TAR archive.
     </tr>
     <tr>
         <td>
-            <a href="#addUnnamedModules4">addUnnamedModules</a>
+            <a href="#addUnnamedModules5">addUnnamedModules</a>
         </td>
         <td>boolean</td>
         <td>
@@ -5767,7 +6137,7 @@ Builds and packages the project application container image in a TAR archive.
     </tr>
     <tr>
         <td>
-            <a href="#moduleOverrides4">moduleOverrides</a>
+            <a href="#moduleOverrides5">moduleOverrides</a>
         </td>
         <td>ModuleInfoParameters&gt;</td>
         <td>
@@ -5777,7 +6147,7 @@ Builds and packages the project application container image in a TAR archive.
     </tr>
     <tr>
         <td>
-            <a href="#moduleOverridesDirectory4">moduleOverridesDirectory</a>
+            <a href="#moduleOverridesDirectory5">moduleOverridesDirectory</a>
         </td>
         <td>File</td>
         <td>
@@ -5821,7 +6191,7 @@ Builds and packages the project application container image in a TAR archive.
     </tr>
     <tr>
         <td>
-            <a href="#progressBar4">progressBar</a>
+            <a href="#progressBar5">progressBar</a>
         </td>
         <td>boolean</td>
         <td>
@@ -5919,7 +6289,7 @@ Builds and packages the project application container image in a TAR archive.
     </tr>
     <tr>
         <td>
-            <a href="#skip4">skip</a>
+            <a href="#skip5">skip</a>
         </td>
         <td>boolean</td>
         <td>
@@ -6554,7 +6924,7 @@ Runs the project application.
     </tr>
     <tr>
         <td>
-            <a href="#addUnnamedModules5">addUnnamedModules</a>
+            <a href="#addUnnamedModules6">addUnnamedModules</a>
         </td>
         <td>boolean</td>
         <td>
@@ -6573,7 +6943,7 @@ Runs the project application.
     </tr>
     <tr>
         <td>
-            <a href="#arguments">arguments</a>
+            <a href="#arguments1">arguments</a>
         </td>
         <td>String</td>
         <td>
@@ -6583,7 +6953,7 @@ Runs the project application.
     </tr>
     <tr>
         <td>
-            <a href="#commandLineArguments">commandLineArguments</a>
+            <a href="#commandLineArguments1">commandLineArguments</a>
         </td>
         <td>String</td>
         <td>
@@ -6598,7 +6968,7 @@ Runs the project application.
     </tr>
     <tr>
         <td>
-            <a href="#mainClass">mainClass</a>
+            <a href="#mainClass1">mainClass</a>
         </td>
         <td>String</td>
         <td>
@@ -6613,7 +6983,7 @@ Runs the project application.
     </tr>
     <tr>
         <td>
-            <a href="#moduleOverrides5">moduleOverrides</a>
+            <a href="#moduleOverrides6">moduleOverrides</a>
         </td>
         <td>ModuleInfoParameters&gt;</td>
         <td>
@@ -6623,7 +6993,7 @@ Runs the project application.
     </tr>
     <tr>
         <td>
-            <a href="#moduleOverridesDirectory5">moduleOverridesDirectory</a>
+            <a href="#moduleOverridesDirectory6">moduleOverridesDirectory</a>
         </td>
         <td>File</td>
         <td>
@@ -6642,7 +7012,7 @@ Runs the project application.
     </tr>
     <tr>
         <td>
-            <a href="#progressBar5">progressBar</a>
+            <a href="#progressBar6">progressBar</a>
         </td>
         <td>boolean</td>
         <td>
@@ -6661,7 +7031,7 @@ Runs the project application.
     </tr>
     <tr>
         <td>
-            <a href="#skip5">skip</a>
+            <a href="#skip6">skip</a>
         </td>
         <td>boolean</td>
         <td>
@@ -6676,7 +7046,7 @@ Runs the project application.
     </tr>
     <tr>
         <td>
-            <a href="#vmOptions">vmOptions</a>
+            <a href="#vmOptions1">vmOptions</a>
         </td>
         <td>String</td>
         <td>
@@ -6695,7 +7065,7 @@ Runs the project application.
     </tr>
     <tr>
         <td>
-            <a href="#workingDirectory">workingDirectory</a>
+            <a href="#workingDirectory1">workingDirectory</a>
         </td>
         <td>File</td>
         <td>
@@ -6844,7 +7214,7 @@ This goal is used together with the stop goal in the pre-integration-test and po
     </tr>
     <tr>
         <td>
-            <a href="#addUnnamedModules6">addUnnamedModules</a>
+            <a href="#addUnnamedModules7">addUnnamedModules</a>
         </td>
         <td>boolean</td>
         <td>
@@ -6863,7 +7233,7 @@ This goal is used together with the stop goal in the pre-integration-test and po
     </tr>
     <tr>
         <td>
-            <a href="#arguments1">arguments</a>
+            <a href="#arguments2">arguments</a>
         </td>
         <td>String</td>
         <td>
@@ -6873,7 +7243,7 @@ This goal is used together with the stop goal in the pre-integration-test and po
     </tr>
     <tr>
         <td>
-            <a href="#mainClass1">mainClass</a>
+            <a href="#mainClass2">mainClass</a>
         </td>
         <td>String</td>
         <td>
@@ -6888,7 +7258,7 @@ This goal is used together with the stop goal in the pre-integration-test and po
     </tr>
     <tr>
         <td>
-            <a href="#moduleOverrides6">moduleOverrides</a>
+            <a href="#moduleOverrides7">moduleOverrides</a>
         </td>
         <td>ModuleInfoParameters&gt;</td>
         <td>
@@ -6898,7 +7268,7 @@ This goal is used together with the stop goal in the pre-integration-test and po
     </tr>
     <tr>
         <td>
-            <a href="#moduleOverridesDirectory6">moduleOverridesDirectory</a>
+            <a href="#moduleOverridesDirectory7">moduleOverridesDirectory</a>
         </td>
         <td>File</td>
         <td>
@@ -6917,7 +7287,7 @@ This goal is used together with the stop goal in the pre-integration-test and po
     </tr>
     <tr>
         <td>
-            <a href="#progressBar6">progressBar</a>
+            <a href="#progressBar7">progressBar</a>
         </td>
         <td>boolean</td>
         <td>
@@ -6936,7 +7306,7 @@ This goal is used together with the stop goal in the pre-integration-test and po
     </tr>
     <tr>
         <td>
-            <a href="#skip6">skip</a>
+            <a href="#skip7">skip</a>
         </td>
         <td>boolean</td>
         <td>
@@ -6966,7 +7336,7 @@ This goal is used together with the stop goal in the pre-integration-test and po
     </tr>
     <tr>
         <td>
-            <a href="#vmOptions1">vmOptions</a>
+            <a href="#vmOptions2">vmOptions</a>
         </td>
         <td>String</td>
         <td>
@@ -6985,7 +7355,7 @@ This goal is used together with the stop goal in the pre-integration-test and po
     </tr>
     <tr>
         <td>
-            <a href="#workingDirectory1">workingDirectory</a>
+            <a href="#workingDirectory2">workingDirectory</a>
         </td>
         <td>File</td>
         <td>
@@ -7132,7 +7502,7 @@ This goal is used together with the start goal in the pre-integration-test and p
     </tr>
     <tr>
         <td>
-            <a href="#moduleOverrides7">moduleOverrides</a>
+            <a href="#moduleOverrides8">moduleOverrides</a>
         </td>
         <td>ModuleInfoParameters&gt;</td>
         <td>
@@ -7142,7 +7512,7 @@ This goal is used together with the start goal in the pre-integration-test and p
     </tr>
     <tr>
         <td>
-            <a href="#moduleOverridesDirectory7">moduleOverridesDirectory</a>
+            <a href="#moduleOverridesDirectory8">moduleOverridesDirectory</a>
         </td>
         <td>File</td>
         <td>
@@ -7161,7 +7531,7 @@ This goal is used together with the start goal in the pre-integration-test and p
     </tr>
     <tr>
         <td>
-            <a href="#progressBar7">progressBar</a>
+            <a href="#progressBar8">progressBar</a>
         </td>
         <td>boolean</td>
         <td>
@@ -7180,7 +7550,7 @@ This goal is used together with the start goal in the pre-integration-test and p
     </tr>
     <tr>
         <td>
-            <a href="#skip7">skip</a>
+            <a href="#skip8">skip</a>
         </td>
         <td>boolean</td>
         <td>

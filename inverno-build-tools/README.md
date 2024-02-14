@@ -190,6 +190,34 @@ project
 
 > Althouh it is always possible to run an application with a mix of modular and non-modular dependencies, the advantage of running the application with modularized dependencie is that it only uses the module path and non-modular dependencies are no longer grouped into the `ALL-UNNAMED` module, this fully embraces the Java module system.
 
+### DebugTask
+
+The `DebugTask` is chained after the `ModularizeDependenciesTask`, it is identical to the `RunTask`, the onyl difference being that it adds debugging VM options to be able to attach a debugger to the process.
+
+The following example runs the project in debug mode and waiting for a debugger to be attached on port 8000:
+
+```java
+Project project = ... 
+project
+	.modularizeDependencies()
+	.debug()
+	.execute();
+```
+
+The debug port, whether to suspend the execution until a debugger is attached, as well as any `RunTask` options can be specified as follows:
+
+```java
+Project project = ... 
+project
+	.modularizeDependencies()
+	.debug()
+		.port(9000)
+		.suspend(false)
+		.mainClass("io.inverno.example.MainClassToLaunch")
+		.vmOptions("-DsomeProperty=1234")
+	.execute();
+```
+
 ### StartTask
 
 Just like the `RunTask` the `StartTask` is chained to the `ModularizeDependenciesTask` and runs the project application in a forked VM. But unlike the `RunTask` the invoking thread doesn't wait for the application to terminate, the `execute()` returns the pid once it has determined that the application has started.
