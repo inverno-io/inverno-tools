@@ -198,8 +198,6 @@ public abstract class AbstractExecTask<U, V extends ExecTask<U, V>> extends Abst
 		pb.redirectOutput(this.redirectOutput.orElse(ProcessBuilder.Redirect.INHERIT));
 		pb.redirectError(this.redirectError.orElse(ProcessBuilder.Redirect.INHERIT));
 		
-		System.out.println("");
-		
 		try {
 			return pb.start();
 		} 
