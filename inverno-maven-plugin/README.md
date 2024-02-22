@@ -367,7 +367,7 @@ By default the registry points to the Docker hub `docker.io` but another registr
 
 **Full name:**
 
-io.inverno.tool:inverno-maven-plugin:1.4.3:build-runtime
+io.inverno.tool:inverno-maven-plugin:1.5.0-SNAPSHOT:build-runtime
 
 **Description:**
 
@@ -1192,7 +1192,7 @@ Selects the HotSpot VM in the output image defined as: "client" / "server" / "mi
 
 **Full name:**
 
-io.inverno.tool:inverno-maven-plugin:1.4.3:debug
+io.inverno.tool:inverno-maven-plugin:1.5.0-SNAPSHOT:debug
 
 **Description:**
 
@@ -1538,7 +1538,7 @@ The working directory of the application.
 
 **Full name:**
 
-io.inverno.tool:inverno-maven-plugin:1.4.3:deploy-image
+io.inverno.tool:inverno-maven-plugin:1.5.0-SNAPSHOT:deploy-image
 
 **Description:**
 
@@ -2924,7 +2924,7 @@ Windows specific configuration.
 
 **Full name:**
 
-io.inverno.tool:inverno-maven-plugin:1.4.3:help
+io.inverno.tool:inverno-maven-plugin:1.5.0-SNAPSHOT:help
 
 **Description:**
 
@@ -3064,7 +3064,7 @@ The maximum length of a display line, should be positive.
 
 **Full name:**
 
-io.inverno.tool:inverno-maven-plugin:1.4.3:install-image
+io.inverno.tool:inverno-maven-plugin:1.5.0-SNAPSHOT:install-image
 
 **Description:**
 
@@ -4444,7 +4444,7 @@ Windows specific configuration.
 
 **Full name:**
 
-io.inverno.tool:inverno-maven-plugin:1.4.3:package-app
+io.inverno.tool:inverno-maven-plugin:1.5.0-SNAPSHOT:package-app
 
 **Description:**
 
@@ -5559,7 +5559,7 @@ Windows specific configuration.
 
 **Full name:**
 
-io.inverno.tool:inverno-maven-plugin:1.4.3:package-image
+io.inverno.tool:inverno-maven-plugin:1.5.0-SNAPSHOT:package-image
 
 **Description:**
 
@@ -6897,7 +6897,7 @@ Windows specific configuration.
 
 **Full name:**
 
-io.inverno.tool:inverno-maven-plugin:1.4.3:run
+io.inverno.tool:inverno-maven-plugin:1.5.0-SNAPSHOT:run
 
 **Description:**
 
@@ -7185,7 +7185,7 @@ The working directory of the application.
 
 **Full name:**
 
-io.inverno.tool:inverno-maven-plugin:1.4.3:start
+io.inverno.tool:inverno-maven-plugin:1.5.0-SNAPSHOT:start
 
 **Description:**
 
@@ -7475,7 +7475,7 @@ The working directory of the application.
 
 **Full name:**
 
-io.inverno.tool:inverno-maven-plugin:1.4.3:stop
+io.inverno.tool:inverno-maven-plugin:1.5.0-SNAPSHOT:stop
 
 **Description:**
 
