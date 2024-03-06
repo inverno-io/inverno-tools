@@ -10,6 +10,7 @@
 <xsl:output indent="yes" omit-xml-declaration="yes"/>
 
 <xsl:template match="/">
+<xsl:call-template name="getUsage_links"/>
 	<xsl:apply-templates/>
 </xsl:template>
 

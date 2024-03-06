@@ -3,7 +3,11 @@
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.w3.org/1999/XSL/Transform https://www.w3.org/2007/schema-for-xslt20.xsd">
-    
+
+<xsl:template name="getUsage_links">
+[inverno-tool-build-tools]: https://github.com/inverno-io/inverno-tools/tree/master/inverno-build-tools
+</xsl:template>
+	
 <xsl:template name="getUsage">
 Considering a modular application project, the Inverno Maven plugin is used to run, start, stop a the application or build project images. There are three types of images that can be built using the plugin:
 
@@ -11,7 +15,7 @@ Considering a modular application project, the Inverno Maven plugin is used to r
 - **application image** is a native self-contained Java application including all the necessary dependencies to run the project application without the need of a Java runtime. 
 - **container image** is a Docker or OCI container image that can be packaged as a `.tar` archive or directly loaded on a Docker daemon or pushed to a container registry.
 
-The plugin is a Maven implementation of the [Inverno Build Tools](../inverno-build-tools/README.md), it can be used to build any Java modular application project and Inverno application in particular.
+The plugin is a Maven implementation of the [Inverno Build Tools][inverno-tool-build-tools], it can be used to build any Java modular application project and Inverno application in particular.
 
 ### Run a module application project
 
