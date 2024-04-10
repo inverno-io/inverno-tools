@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "test.reserved";
+
+package test;
+
+service ReservedKeywordsService {
+	
+	rpc new (ReservedKeywordsRequest) returns (ReservedKeywordsResponse) {}
+}
+
+message ReservedKeywordsRequest {
+  string message = 1;
+}
+
+message ReservedKeywordsResponse {
+  string message = 1;
+}

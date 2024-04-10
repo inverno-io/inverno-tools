@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+option java_multiple_files = false;
+option java_package = "test.outer";
+
+package test;
+
+service OuterService {
+	
+	rpc call (OuterRequest) returns (OuterResponse) {}
+}
+
+message OuterRequest {
+  string message = 1;
+}
+
+message OuterResponse {
+  string message = 1;
+}

@@ -1,0 +1,35 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "test.serverstreaming";
+
+package test;
+
+/* 
+ * <p>
+ * This is a test service with a server streaming method.
+ * </p>
+ */
+service ServerStreaming {
+	
+	/*
+	 * <p>
+	 * Calls server streaming method.
+	 * </p>
+	 */
+	rpc callServerStreaming (ServerStreamingRequest) returns (stream ServerStreamingResponse) {}
+}
+
+/*
+ * Server streaming request.
+ */
+message ServerStreamingRequest {
+  string message = 1;
+}
+
+/*
+ * Server streaming response.
+ */
+message ServerStreamingResponse {
+  string message = 1;
+}

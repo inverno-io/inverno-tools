@@ -28,7 +28,7 @@
 	<artifactId>inverno-maven-plugin</artifactId>
 	<packaging>maven-plugin</packaging>
 
-	<name>Inverno Maven Plugin</name>
+	<name>io.inverno.tool.maven</name>
 	<description>The Inverno Maven Plugin is used to run, package and distribute modular applications and Inverno applications in particular. It relies on a set of Java tools to build native runtime or application images as well as Docker or OCI images for modular Java projects.</description>
 
 	<prerequisites>

@@ -1,0 +1,35 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "test.bidirectionalstreaming";
+
+package test;
+
+/* 
+ * <p>
+ * This is a test service with a bidirectional streaming method.
+ * </p>
+ */
+service BidirectionalStreaming {
+	
+	/*
+	 * <p>
+	 * Calls bidirectional streaming method.
+	 * </p>
+	 */
+	rpc callBidirectionalStreaming (stream BidirectionalStreamingRequest) returns (stream BidirectionalStreamingResponse) {}
+}
+
+/*
+ * Bidirectional streaming request.
+ */
+message BidirectionalStreamingRequest {
+  string message = 1;
+}
+
+/*
+ * Bidirectional streaming response.
+ */
+message BidirectionalStreamingResponse {
+  string message = 1;
+}

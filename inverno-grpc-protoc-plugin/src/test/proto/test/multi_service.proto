@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "test.multi";
+
+package test;
+
+service Service1 {
+	
+	rpc call (Svc1Request) returns (Svc1Response) {}
+}
+
+service Service2 {
+	
+	rpc call (stream Svc2Request) returns (Svc2Response) {}
+}
+
+message Svc1Request {
+  string message = 1;
+}
+
+message Svc1Response {
+  string message = 1;
+}
+
+message Svc2Request {
+  string message = 1;
+}
+
+message Svc2Response {
+  string message = 1;
+}

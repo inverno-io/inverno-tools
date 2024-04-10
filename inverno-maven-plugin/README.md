@@ -1,7 +1,7 @@
 
 [inverno-tool-build-tools]: https://github.com/inverno-io/inverno-tools/tree/master/inverno-build-tools
 
-# Inverno Maven Plugin
+# io.inverno.tool.maven
 The Inverno Maven Plugin is used to run, package and distribute modular applications and Inverno applications in particular. It relies on a set of Java tools to build native runtime or application images as well as Docker or OCI images for modular Java projects.
 
 ## Usage

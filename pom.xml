@@ -21,7 +21,7 @@
 	<parent>
 		<groupId>io.inverno</groupId>
 		<artifactId>inverno-oss-parent</artifactId>
-		<version>10</version>
+		<version>11-SNAPSHOT</version>
 	</parent>
 	<artifactId>inverno-tools-root</artifactId>
 	<version>1.5.0-SNAPSHOT</version>
@@ -78,12 +78,31 @@
 		<maven.compiler.source>15</maven.compiler.source>
 		<maven.compiler.target>15</maven.compiler.target>
 		<maven.compiler.release>15</maven.compiler.release>
+		
+		<version.inverno>1.6.0-SNAPSHOT</version.inverno>
+		<version.inverno.mods>1.9.0-SNAPSHOT</version.inverno.mods>
 	</properties>
 
 	<modules>
 		<module>inverno-maven-plugin</module>
 		<module>inverno-build-tools</module>
+		<module>inverno-grpc-protoc-plugin</module>
 	</modules>
+	
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>io.inverno</groupId>
+				<artifactId>inverno-core</artifactId>
+				<version>${version.inverno}</version>
+			</dependency>
+			<dependency>
+				<groupId>io.inverno.mod</groupId>
+				<artifactId>inverno-irt</artifactId>
+				<version>${version.inverno.mods}</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 	
 	<profiles>
 		<profile>

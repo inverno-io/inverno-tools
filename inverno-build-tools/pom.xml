@@ -28,8 +28,8 @@
 	<artifactId>inverno-build-tools</artifactId>
 	<packaging>jar</packaging>
 
-	<name>Inverno Build Tools</name>
-	<description>The Inverno Build tools provide a set of tasks to run, package and distribute modular applications and Inverno applications in particular as Docker or OCI images.</description>
+	<name>io.inverno.tool.buildtools</name>
+	<description>The Inverno Build tools provides a set of tasks to run, package and distribute modular applications and Inverno applications in particular as Docker or OCI images.</description>
 
 	<dependencies>
 		<dependency>

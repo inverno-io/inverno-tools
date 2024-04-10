@@ -1,0 +1,35 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "test.clientstreaming";
+
+package test;
+
+/* 
+ * <p>
+ * This is a test service with a client streaming method.
+ * </p>
+ */
+service ClientStreaming {
+	
+	/*
+	 * <p>
+	 * Calls client streaming method.
+	 * </p>
+	 */
+	rpc callClientStreaming (stream ClientStreamingRequest) returns (ClientStreamingResponse) {}
+}
+
+/*
+ * Client streaming request.
+ */
+message ClientStreamingRequest {
+  string message = 1;
+}
+
+/*
+ * Client streaming response.
+ */
+message ClientStreamingResponse {
+  string message = 1;
+}

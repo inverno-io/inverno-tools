@@ -78,7 +78,7 @@ public class GenericDebugTask extends AbstractExecTask<Integer, DebugTask> imple
 		
 		LOGGER.info("[ Debugging project {}... ]", project);
 		
-		String debugOptions = "-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=" + (this.suspend ? "y" : "n") +",address=localhost:" + this.port;
+		String debugOptions = "-Xrunjdwp:transport=dt_socket,server=y,suspend=" + (this.suspend ? "y" : "n") +",address=localhost:" + this.port;
 		this.vmOptions(this.vmOptions.map(options -> options + " " + debugOptions).orElse(debugOptions));
 		
 		Process proc = this.startProject(project);

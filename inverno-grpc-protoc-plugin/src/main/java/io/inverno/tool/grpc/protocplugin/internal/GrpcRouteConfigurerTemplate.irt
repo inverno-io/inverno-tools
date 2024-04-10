@@ -1,0 +1,197 @@
+package io.inverno.tool.grpc.protocplugin.internal;
+
+import static io.inverno.tool.grpc.protocplugin.internal.GenericInvernoGrpcGenerator.javadoc;
+
+option modes = {"STRING"};
+option charset = "utf-8";
+
+(InvernoGrpcMetadata.ServiceMetadata service) -> {{@if (service.getJavaPackageName().isPresent()) -> {package {@(service.getJavaPackageName().get())};
+}}
+import io.inverno.mod.base.resource.MediaTypes;
+import io.inverno.mod.grpc.base.GrpcServiceName;
+import io.inverno.mod.grpc.server.GrpcExchange;
+import io.inverno.mod.grpc.server.GrpcServer;
+import io.inverno.mod.http.base.ExchangeContext;
+import io.inverno.mod.http.base.Method;
+import io.inverno.mod.web.server.WebRoutable;
+import io.inverno.mod.web.server.WebRoutesConfigurer;
+{@if (service.isImportPublisher()) -> {import org.reactivestreams.Publisher;
+}}{@if (service.isImportMono()) -> {import reactor.core.publisher.Mono;
+}}
+/**
+ * {@(service.getServiceComment().orElse(""))|javadoc(0)}
+ *
+ * @param <A> the exchange context type
+ */
+{@if (service.isDeprecated()) -> {@Deprecated
+}}public abstract class {@service.javaServiceName}GrpcRoutesConfigurer<A extends ExchangeContext> implements WebRoutesConfigurer<A> \{
+
+	public static final GrpcServiceName SERVICE_NAME = GrpcServiceName.of({@(service.getPackageName().map(s -> "\"" + s + "\"").orElse(null))}, "{@service.serviceName}");
+	
+	private final GrpcServer grpcServer;
+	
+	public {@service.javaServiceName}GrpcRoutesConfigurer(GrpcServer grpcServer) \{
+		this.grpcServer = grpcServer;
+	\}
+	
+	@Override
+	public final void configure(WebRoutable<A, ?> routes) \{
+		routes{service.methods;
+			(method) -> unary_route when (method.isUnary());
+			client_streaming_route when (method.isClientStreaming());
+			server_streaming_route when (method.isServerStreaming());
+			bidirectional_streaming_route
+		};
+	\}
+	{service.methods;
+		(method) -> unary when (method.isUnary());
+		client_streaming when (method.isClientStreaming());
+		server_streaming when (method.isServerStreaming());
+		bidirectional_streaming
+	}
+\}
+}
+
+unary(InvernoGrpcMetadata.ServiceMetadata.MethodMetadata method) -> {
+	/**
+	 * {@(method.getMethodComment().orElse(""))|javadoc(1)}
+	 * 
+	 * @param exchange the unary exchange
+	 */
+	{@if (method.isDeprecated()) -> {@Deprecated
+	}}public void {@method.javaMethodName}(GrpcExchange.Unary<A, {@method.javaRequestType}, {@method.javaResponseType}> grpcExchange) \{
+		grpcExchange.response().value(grpcExchange.request().value().flatMap(this::{@method.javaMethodName}));
+	\}
+
+	/**
+	 * {@(method.getMethodComment().orElse(""))|javadoc(1)}
+	 * 
+	 * @param request the client request
+	 * 
+	 * @return the server response
+	 */
+	{@if (method.isDeprecated()) -> {@Deprecated
+	}}public Mono<{@method.javaResponseType}> {@method.javaMethodName}({@method.javaRequestType} request) \{
+		throw new UnsupportedOperationException();
+	\}
+}
+
+unary_route(InvernoGrpcMetadata.ServiceMetadata.MethodMetadata method) -> {
+			.route()
+				.path(SERVICE_NAME.methodPath("{@method.methodName}"))
+				.method(Method.POST)
+				.consumes(MediaTypes.APPLICATION_GRPC)
+				.consumes(MediaTypes.APPLICATION_GRPC_PROTO)
+				.handler(this.grpcServer.unary(
+					{@method.javaRequestType}.getDefaultInstance(), 
+					{@method.javaResponseType}.getDefaultInstance(), 
+					(GrpcExchange.Unary<A, {@method.javaRequestType}, {@method.javaResponseType}> grpcExchange) -> this.{@method.javaMethodName}(grpcExchange)
+				))}
+
+client_streaming(InvernoGrpcMetadata.ServiceMetadata.MethodMetadata method) -> {
+	/**
+	 * {@(method.getMethodComment().orElse(""))|javadoc(1)}
+	 * 
+	 * @param exchange the client streaming exchange
+	 */
+	{@if (method.isDeprecated()) -> {@Deprecated
+	}}public void {@method.javaMethodName}(GrpcExchange.ClientStreaming<A, {@method.javaRequestType}, {@method.javaResponseType}> grpcExchange) \{
+		grpcExchange.response().value(this.{@method.javaMethodName}(grpcExchange.request().stream()));
+	\}
+
+	/**
+	 * {@(method.getMethodComment().orElse(""))|javadoc(1)}
+	 * 
+	 * @param request the client request publisher
+	 * 
+	 * @return the server response
+	 */
+	{@if (method.isDeprecated()) -> {@Deprecated
+	}}public Mono<{@method.javaResponseType}> {@method.javaMethodName}(Publisher<{@method.javaRequestType}> request) \{
+		throw new UnsupportedOperationException();
+	\}
+}
+
+client_streaming_route(InvernoGrpcMetadata.ServiceMetadata.MethodMetadata method) -> {
+			.route()
+				.path(SERVICE_NAME.methodPath("{@method.methodName}"))
+				.method(Method.POST)
+				.consumes(MediaTypes.APPLICATION_GRPC)
+				.consumes(MediaTypes.APPLICATION_GRPC_PROTO)
+				.handler(this.grpcServer.clientStreaming(
+					{@method.javaRequestType}.getDefaultInstance(), 
+					{@method.javaResponseType}.getDefaultInstance(), 
+					(GrpcExchange.ClientStreaming<A, {@method.javaRequestType}, {@method.javaResponseType}> grpcExchange) -> this.{@method.javaMethodName}(grpcExchange)
+				))}
+
+server_streaming(InvernoGrpcMetadata.ServiceMetadata.MethodMetadata method) -> {
+	/**
+	 * {@(method.getMethodComment().orElse(""))|javadoc(1)}
+	 * 
+	 * @param exchange the server streaming exchange
+	 */
+	{@if (method.isDeprecated()) -> {@Deprecated
+	}}public void {@method.javaMethodName}(GrpcExchange.ServerStreaming<A, {@method.javaRequestType}, {@method.javaResponseType}> grpcExchange) \{
+		grpcExchange.response().stream(grpcExchange.request().value().flatMapMany(this::{@method.javaMethodName}));
+	\}
+
+	/**
+	 * {@(method.getMethodComment().orElse(""))|javadoc(1)}
+	 * 
+	 * @param request the client request
+	 * 
+	 * @return the server response publisher
+	 */
+	{@if (method.isDeprecated()) -> {@Deprecated
+	}}public Publisher<{@method.javaResponseType}> {@method.javaMethodName}({@method.javaRequestType} request) \{
+		throw new UnsupportedOperationException();
+	\}
+}
+
+server_streaming_route(InvernoGrpcMetadata.ServiceMetadata.MethodMetadata method) -> {
+			.route()
+				.path(SERVICE_NAME.methodPath("{@method.methodName}"))
+				.method(Method.POST)
+				.consumes(MediaTypes.APPLICATION_GRPC)
+				.consumes(MediaTypes.APPLICATION_GRPC_PROTO)
+				.handler(this.grpcServer.serverStreaming(
+					{@method.javaRequestType}.getDefaultInstance(), 
+					{@method.javaResponseType}.getDefaultInstance(), 
+					(GrpcExchange.ServerStreaming<A, {@method.javaRequestType}, {@method.javaResponseType}> grpcExchange) -> this.{@method.javaMethodName}(grpcExchange)
+				))}
+
+bidirectional_streaming(InvernoGrpcMetadata.ServiceMetadata.MethodMetadata method) -> {
+	/**
+	 * {@(method.getMethodComment().orElse(""))|javadoc(1)}
+	 * 
+	 * @param exchange the bidirectional streaming exchange
+	 */
+	{@if (method.isDeprecated()) -> {@Deprecated
+	}}public void {@method.javaMethodName}(GrpcExchange.BidirectionalStreaming<A, {@method.javaRequestType}, {@method.javaResponseType}> grpcExchange) \{
+		grpcExchange.response().stream(this.{@method.javaMethodName}(grpcExchange.request().stream()));
+	\}
+
+	/**
+	 * {@(method.getMethodComment().orElse(""))|javadoc(1)}
+	 * 
+	 * @param request the client request publisher
+	 * 
+	 * @return the server response publisher
+	 */
+	{@if (method.isDeprecated()) -> {@Deprecated
+	}}public Publisher<{@method.javaResponseType}> {@method.javaMethodName}(Publisher<{@method.javaRequestType}> request) \{
+		throw new UnsupportedOperationException();
+	\}
+}
+
+bidirectional_streaming_route(InvernoGrpcMetadata.ServiceMetadata.MethodMetadata method) -> {
+			.route()
+				.path(SERVICE_NAME.methodPath("{@method.methodName}"))
+				.method(Method.POST)
+				.consumes(MediaTypes.APPLICATION_GRPC)
+				.consumes(MediaTypes.APPLICATION_GRPC_PROTO)
+				.handler(this.grpcServer.bidirectionalStreaming(
+					{@method.javaRequestType}.getDefaultInstance(), 
+					{@method.javaResponseType}.getDefaultInstance(), 
+					(GrpcExchange.BidirectionalStreaming<A, {@method.javaRequestType}, {@method.javaResponseType}> grpcExchange) -> this.{@method.javaMethodName}(grpcExchange)
+				))}

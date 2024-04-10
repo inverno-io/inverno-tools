@@ -1,0 +1,35 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "test.unary";
+
+package test;
+
+/* 
+ * <p>
+ * This is a test service with a unary method.
+ * </p>
+ */
+service Unary {
+	
+	/*
+	 * <p>
+	 * Calls unary method.
+	 * </p>
+	 */
+	rpc callUnary (UnaryRequest) returns (UnaryResponse) {}
+}
+
+/*
+ * Unary request.
+ */
+message UnaryRequest {
+  string message = 1;
+}
+
+/*
+ * Unary response.
+ */
+message UnaryResponse {
+  string message = 1;
+}

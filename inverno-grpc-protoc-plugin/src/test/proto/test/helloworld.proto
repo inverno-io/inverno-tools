@@ -1,0 +1,68 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "test.hello";
+option java_outer_classname = "HelloWorldProto";
+
+package test;
+
+/* 
+ * <p>
+ * This is a hello service.
+ * </p>
+ * 
+ * <p>
+ * It is called Greeter and has 4 methods:
+ * </p>
+ * 
+ * <ul>
+ *   <li>SayHelloUnary</li>
+ *   <li>SayHelloClientStreaming</li>
+ *   <li>SayHelloServerStreaming</li>
+ *   <li>SayHelloBidirectionalStreaming</li>
+ * </ul>
+ *
+ */
+service Greeter {
+  /*
+   * <p>
+   * Unary hello request.
+   * </p>
+   */
+  rpc SayHelloUnary (HelloRequest) returns (HelloResponse) {}
+  
+  /*
+   * <p>
+   * Client Streaming hello request.
+   * </p>
+   */
+  rpc SayHelloClientStreaming (stream HelloRequest) returns (HelloResponse) {}
+  
+  /*
+   * <p>
+   * Server Streaming hello request.
+   * </p>
+   */
+  rpc SayHelloServerStreaming (HelloRequest) returns (stream HelloResponse) {}
+  
+  /*
+   * <p>
+   * Birirectional Streaming hello request.
+   * </p>
+   */
+  rpc SayHelloBidirectionalStreaming (stream HelloRequest) returns (stream HelloResponse) {}
+}
+
+/*
+ * Hello request.
+ */
+message HelloRequest {
+  string name = 1;
+}
+
+/*
+ * Hello response.
+ */
+message HelloResponse {
+  string message = 1;
+}
