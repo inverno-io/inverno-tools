@@ -10,7 +10,7 @@ The Inverno Maven Plugin is used to run, package and distribute modular applicat
 Considering a modular application project, the Inverno Maven plugin is used to run, start, stop a the application or build project images. There are three types of images that can be built using the plugin:
 
 - **runtime image** is a custom Java runtime containing a set of modules and their dependencies.
-- **application image** is a native self-contained Java application including all the necessary dependencies to run the project application without the need of a Java runtime. 
+- **application image** is a native self-contained Java application including all the necessary dependencies to run the project application without the need of a Java runtime.
 - **container image** is a Docker or OCI container image that can be packaged as a `.tar` archive or directly loaded on a Docker daemon or pushed to a container registry.
 
 The plugin is a Maven implementation of the [Inverno Build Tools][inverno-tool-build-tools], it can be used to build any Java modular application project and Inverno application in particular.
@@ -32,7 +32,7 @@ $ mvn inverno:run -Dinverno.run.arguments='--some.configuration=\"hello\"'
 ```
 
 > Actual arguments are determined by splitting the parameter value around spaces. There are several options to declare an argument which contains spaces:
-> - it can be escaped: `Hello\ World` 
+> - it can be escaped: `Hello\ World`
 > - it can be quoted: `"Hello World"` or `'Hello World'`
 >
 > Since quotes or double quotes are used as delimiters, they might need to be escaped as well to declare an argument that contains some: `I\'m\ happy`, `"I'm happy"`, `'I\'m happy'`.
@@ -51,7 +51,7 @@ By default the plugin will detect the main class of the application, but it is a
 $ mvn inverno:run -Dinverno.exec.mainClass=io.inverno.example.Main
 ```
 
-> When building an Inverno application, a pidfile is normally created when the application is started under `${project.build.directory}/maven-inverno` directory, it indicates the pid of the process running the application. If the build exits while the application is still running or if the pidfile was not properly removed after the application has exited, it might be necessary to manually kill the process and/or remove the pidfile. 
+> When building an Inverno application, a pidfile is normally created when the application is started under `${project.build.directory}/maven-inverno` directory, it indicates the pid of the process running the application. If the build exits while the application is still running or if the pidfile was not properly removed after the application has exited, it might be necessary to manually kill the process and/or remove the pidfile.
 
 ### Debug a module application project
 
@@ -155,7 +155,7 @@ By default, the project module and its dependencies are included in the resultin
 
 The resulting image is packaged to the formats defined in the configuration and attached, by default, to the Maven project as a result they are installed and published along with the project `.jar`.
 
-### Package the application
+### Package an application
 
 An application image is built using the `inverno:package-app` goal which generates a native platform-specific application package.
 
@@ -183,7 +183,7 @@ An application image is built using the `inverno:package-app` goal which generat
                                 </launcher>
                             </launchers>
                             <packageTypes>
-                            	<packageType>deb</packageType>
+                                <packageType>deb</packageType>
                             </packageTypes>
                             <archiveFormat>
                                 <archiveFormat>zip</archiveFormat>
@@ -197,14 +197,14 @@ An application image is built using the `inverno:package-app` goal which generat
 </project>
 ```
 
-The `inverno:build-app` goal is very similar to the `inverno:build-runtime` goal except that the resulting image provides a native application launcher and it can be packaged in a platform-specific format. For instance, we can generate a `.deb` on a Linux platform or a `.exe` or `.msi` installer on a Windows platform or a `.dmg` on a MacOS platform. The resulting package can be installed on these platforms in a standard way.
+The `inverno:package-app` goal is very similar to the `inverno:package-runtime` goal except that the resulting image provides a native application launcher and it can be packaged in a platform-specific format. For instance, we can generate a `.deb` on a Linux platform or a `.exe` or `.msi` installer on a Windows platform or a `.dmg` on a MacOS platform. The resulting package can be installed on these platforms in a standard way.
 
 > This goal uses `jpackage` tool which is an incubating feature in JDK&lt;16, if you intend to build an application image with an old JDK, you'll need to explicitly add the `jdk.incubator.jpackage` module in `MAVEN_OPTS`:
 > ```plaintext
 > $ export MAVEN_OPTS="--add-modules jdk.incubator.jpackage"
 > ```
 
-### Build the container image
+### Package an application container image
 
 A container image can be built in a TAR archive using the `inverno:package-image` goal which basically build an application image and package it in a container image.
 
@@ -242,7 +242,7 @@ A container image can be built in a TAR archive using the `inverno:package-image
 </project>
 ```
 
-The resulting image reference is defined by `${registry}/${repository}/${name}:${project.version}`, the registry and the repository are optional and the name default to the project artifact id. 
+The resulting image reference is defined by `${registry}/${repository}/${name}:${project.version}`, the registry and the repository are optional and the name default to the project artifact id.
 
 The resulting image can then be loaded in a docker daemon:
 
@@ -250,12 +250,12 @@ The resulting image can then be loaded in a docker daemon:
 $ docker load --input target/example-1.0.0-SNAPSHOT-container_linux_amd64.tar
 ```
 
-> As for `build-app` goal, this goal uses `jpackage` tool so if you intend to use a JDK&lt;16 you'll need to explicitly add the `jdk.incubator.jpackage` module in `MAVEN_OPTS`:
+> As for `package-app` goal, this goal uses `jpackage` tool so if you intend to use a JDK&lt;16 you'll need to explicitly add the `jdk.incubator.jpackage` module in `MAVEN_OPTS`:
 > ```plaintext
 > $ export MAVEN_OPTS="--add-modules jdk.incubator.jpackage"
 > ```
 
-### Install the container image to a Docker daemon
+### Install an application container image to a Docker daemon
 
 The `inverno:install-image` goal is used to build a container image and load it to a Docker daemon using the Docker CLI.
 
@@ -293,14 +293,14 @@ The `inverno:install-image` goal is used to build a container image and load it 
 </project>
 ```
 
-By default the `docker` command is used but it is possible to specify the path to the Docker CLI in the `inverno.container.docker.executable` parameter. 
+By default the `docker` command is used but it is possible to specify the path to the Docker CLI in the `inverno.container.docker.executable` parameter.
 
-> As for `build-app` goal, this goal uses `jpackage` tool so if you intend to use a JDK&lt;16 you'll need to explicitly add the `jdk.incubator.jpackage` module in `MAVEN_OPTS`:
+> As for `package-app` goal, this goal uses `jpackage` tool so if you intend to use a JDK&lt;16 you'll need to explicitly add the `jdk.incubator.jpackage` module in `MAVEN_OPTS`:
 > ```plaintext
 > $ export MAVEN_OPTS="--add-modules jdk.incubator.jpackage"
 > ```
 
-### Deploy the container image to a registry
+### Deploy an application container image to a registry
 
 The `inverno:deploy-image` goal builds a container image and deploy it to an image registry.
 
@@ -343,7 +343,7 @@ The `inverno:deploy-image` goal builds a container image and deploy it to an ima
 
 By default the registry points to the Docker hub `docker.io` but another registry can be specified, `gcr.io` in our example.
 
-> As for `build-app` goal, this goal uses `jpackage` tool so if you intend to use a JDK&lt;16 you'll need to explicitly add the `jdk.incubator.jpackage` module in `MAVEN_OPTS`:
+> As for `package-app` goal, this goal uses `jpackage` tool so if you intend to use a JDK&lt;16 you'll need to explicitly add the `jdk.incubator.jpackage` module in `MAVEN_OPTS`:
 > ```plaintext
 > $ export MAVEN_OPTS="--add-modules jdk.incubator.jpackage"
 > ```

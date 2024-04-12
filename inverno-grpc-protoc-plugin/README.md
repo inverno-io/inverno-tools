@@ -283,7 +283,7 @@ public class Main {
 
 > You should only specify `--client` argument to the plugin to only generate client stubs.
 
-## Implementing gRPC services
+## Implementing gRPC services
 
 The plugin generates one server stub per service, in our example we have defined one service: `Greeter`, the plugin should have generated the message types classes and `GreeterGrpcRoutesConfigurer` class used to implement service methods.
 
