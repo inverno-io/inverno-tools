@@ -23,6 +23,7 @@ if (( $# > 0 ))
 		echo "===== Releasing: $1 ====="
 		mvn -o versions:update-parent -DgenerateBackupPoms=false -DallowSnapshots=false -DallowDowngrade=true
 		mvn -o versions:update-property -DgenerateBackupPoms=false -Dproperty=version.inverno -DallowSnapshots=false -DallowDowngrade=true
+		mvn -o versions:update-property -DgenerateBackupPoms=false -Dproperty=version.inverno.mods -DallowSnapshots=false -DallowDowngrade=true
 		mvn versions:set -DgenerateBackupPoms=false -DnewVersion=$1
 		mvn clean prepare-package
 		git commit -a -m "Release $1"
@@ -39,6 +40,7 @@ if (( $# == 2 ))
 		echo "===== New Snapshot: $2 ====="
 		mvn -o versions:update-parent -DgenerateBackupPoms=false -DallowSnapshots=true
 		mvn -o versions:update-property -DgenerateBackupPoms=false -Dproperty=version.inverno -DallowSnapshots=true
+		mvn -o versions:update-property -DgenerateBackupPoms=false -Dproperty=version.inverno.mods -DallowSnapshots=true
 		mvn versions:set -DgenerateBackupPoms=false -DnewVersion=$2
 		git commit -a -m "$2"
 fi
