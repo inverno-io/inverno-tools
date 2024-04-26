@@ -24,7 +24,7 @@
 		<version>12</version>
 	</parent>
 	<artifactId>inverno-tools-root</artifactId>
-	<version>1.5.1</version>
+	<version>1.6.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	
 	<name>inverno-tools-root</name>
@@ -79,7 +79,7 @@
 		<maven.compiler.target>21</maven.compiler.target>
 		<maven.compiler.release>21</maven.compiler.release>
 		
-		<version.inverno>1.5.8</version.inverno>
+		<version.inverno>1.6.0-SNAPSHOT</version.inverno>
 		<version.inverno.mods>1.10.0</version.inverno.mods>
 	</properties>
 
