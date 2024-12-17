@@ -13,8 +13,7 @@ import io.inverno.mod.grpc.server.GrpcExchange;
 import io.inverno.mod.grpc.server.GrpcServer;
 import io.inverno.mod.http.base.ExchangeContext;
 import io.inverno.mod.http.base.Method;
-import io.inverno.mod.web.server.WebRoutable;
-import io.inverno.mod.web.server.WebRoutesConfigurer;
+import io.inverno.mod.web.server.WebRouter;
 {@if (service.isImportPublisher()) -> {import org.reactivestreams.Publisher;
 }}{@if (service.isImportMono()) -> {import reactor.core.publisher.Mono;
 }}
@@ -24,7 +23,7 @@ import io.inverno.mod.web.server.WebRoutesConfigurer;
  * @param <A> the exchange context type
  */
 {@if (service.isDeprecated()) -> {@Deprecated
-}}public abstract class {@service.javaServiceName}GrpcRoutesConfigurer<A extends ExchangeContext> implements WebRoutesConfigurer<A> \{
+}}public abstract class {@service.javaServiceName}GrpcRoutesConfigurer<A extends ExchangeContext> implements WebRouter.Configurer<A> \{
 
 	public static final GrpcServiceName SERVICE_NAME = GrpcServiceName.of({@(service.getPackageName().map(s -> "\"" + s + "\"").orElse(null))}, "{@service.serviceName}");
 	
@@ -35,7 +34,7 @@ import io.inverno.mod.web.server.WebRoutesConfigurer;
 	\}
 	
 	@Override
-	public final void configure(WebRoutable<A, ?> routes) \{
+	public final void configure(WebRouter<A> routes) \{
 		routes{service.methods;
 			(method) -> unary_route when (method.isUnary());
 			client_streaming_route when (method.isClientStreaming());
@@ -80,8 +79,8 @@ unary_route(InvernoGrpcMetadata.ServiceMetadata.MethodMetadata method) -> {
 			.route()
 				.path(SERVICE_NAME.methodPath("{@method.methodName}"))
 				.method(Method.POST)
-				.consumes(MediaTypes.APPLICATION_GRPC)
-				.consumes(MediaTypes.APPLICATION_GRPC_PROTO)
+				.consume(MediaTypes.APPLICATION_GRPC)
+				.consume(MediaTypes.APPLICATION_GRPC_PROTO)
 				.handler(this.grpcServer.unary(
 					{@method.javaRequestType}.getDefaultInstance(), 
 					{@method.javaResponseType}.getDefaultInstance(), 
@@ -116,8 +115,8 @@ client_streaming_route(InvernoGrpcMetadata.ServiceMetadata.MethodMetadata method
 			.route()
 				.path(SERVICE_NAME.methodPath("{@method.methodName}"))
 				.method(Method.POST)
-				.consumes(MediaTypes.APPLICATION_GRPC)
-				.consumes(MediaTypes.APPLICATION_GRPC_PROTO)
+				.consume(MediaTypes.APPLICATION_GRPC)
+				.consume(MediaTypes.APPLICATION_GRPC_PROTO)
 				.handler(this.grpcServer.clientStreaming(
 					{@method.javaRequestType}.getDefaultInstance(), 
 					{@method.javaResponseType}.getDefaultInstance(), 
@@ -152,8 +151,8 @@ server_streaming_route(InvernoGrpcMetadata.ServiceMetadata.MethodMetadata method
 			.route()
 				.path(SERVICE_NAME.methodPath("{@method.methodName}"))
 				.method(Method.POST)
-				.consumes(MediaTypes.APPLICATION_GRPC)
-				.consumes(MediaTypes.APPLICATION_GRPC_PROTO)
+				.consume(MediaTypes.APPLICATION_GRPC)
+				.consume(MediaTypes.APPLICATION_GRPC_PROTO)
 				.handler(this.grpcServer.serverStreaming(
 					{@method.javaRequestType}.getDefaultInstance(), 
 					{@method.javaResponseType}.getDefaultInstance(), 
@@ -188,8 +187,8 @@ bidirectional_streaming_route(InvernoGrpcMetadata.ServiceMetadata.MethodMetadata
 			.route()
 				.path(SERVICE_NAME.methodPath("{@method.methodName}"))
 				.method(Method.POST)
-				.consumes(MediaTypes.APPLICATION_GRPC)
-				.consumes(MediaTypes.APPLICATION_GRPC_PROTO)
+				.consume(MediaTypes.APPLICATION_GRPC)
+				.consume(MediaTypes.APPLICATION_GRPC_PROTO)
 				.handler(this.grpcServer.bidirectionalStreaming(
 					{@method.javaRequestType}.getDefaultInstance(), 
 					{@method.javaResponseType}.getDefaultInstance(), 

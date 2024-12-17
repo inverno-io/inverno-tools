@@ -6,8 +6,7 @@ import io.inverno.mod.grpc.server.GrpcExchange;
 import io.inverno.mod.grpc.server.GrpcServer;
 import io.inverno.mod.http.base.ExchangeContext;
 import io.inverno.mod.http.base.Method;
-import io.inverno.mod.web.server.WebRoutable;
-import io.inverno.mod.web.server.WebRoutesConfigurer;
+import io.inverno.mod.web.server.WebRouter;
 import org.reactivestreams.Publisher;
 import reactor.core.publisher.Mono;
 
@@ -29,7 +28,7 @@ import reactor.core.publisher.Mono;
  *
  * @param <A> the exchange context type
  */
-public abstract class GreeterGrpcRoutesConfigurer<A extends ExchangeContext> implements WebRoutesConfigurer<A> {
+public abstract class GreeterGrpcRoutesConfigurer<A extends ExchangeContext> implements WebRouter.Configurer<A> {
 
 	public static final GrpcServiceName SERVICE_NAME = GrpcServiceName.of("test", "Greeter");
 	
@@ -40,13 +39,13 @@ public abstract class GreeterGrpcRoutesConfigurer<A extends ExchangeContext> imp
 	}
 	
 	@Override
-	public final void configure(WebRoutable<A, ?> routes) {
+	public final void configure(WebRouter<A> routes) {
 		routes
 			.route()
 				.path(SERVICE_NAME.methodPath("SayHelloUnary"))
 				.method(Method.POST)
-				.consumes(MediaTypes.APPLICATION_GRPC)
-				.consumes(MediaTypes.APPLICATION_GRPC_PROTO)
+				.consume(MediaTypes.APPLICATION_GRPC)
+				.consume(MediaTypes.APPLICATION_GRPC_PROTO)
 				.handler(this.grpcServer.unary(
 					test.hello.HelloRequest.getDefaultInstance(), 
 					test.hello.HelloResponse.getDefaultInstance(), 
@@ -55,8 +54,8 @@ public abstract class GreeterGrpcRoutesConfigurer<A extends ExchangeContext> imp
 			.route()
 				.path(SERVICE_NAME.methodPath("SayHelloClientStreaming"))
 				.method(Method.POST)
-				.consumes(MediaTypes.APPLICATION_GRPC)
-				.consumes(MediaTypes.APPLICATION_GRPC_PROTO)
+				.consume(MediaTypes.APPLICATION_GRPC)
+				.consume(MediaTypes.APPLICATION_GRPC_PROTO)
 				.handler(this.grpcServer.clientStreaming(
 					test.hello.HelloRequest.getDefaultInstance(), 
 					test.hello.HelloResponse.getDefaultInstance(), 
@@ -65,8 +64,8 @@ public abstract class GreeterGrpcRoutesConfigurer<A extends ExchangeContext> imp
 			.route()
 				.path(SERVICE_NAME.methodPath("SayHelloServerStreaming"))
 				.method(Method.POST)
-				.consumes(MediaTypes.APPLICATION_GRPC)
-				.consumes(MediaTypes.APPLICATION_GRPC_PROTO)
+				.consume(MediaTypes.APPLICATION_GRPC)
+				.consume(MediaTypes.APPLICATION_GRPC_PROTO)
 				.handler(this.grpcServer.serverStreaming(
 					test.hello.HelloRequest.getDefaultInstance(), 
 					test.hello.HelloResponse.getDefaultInstance(), 
@@ -75,8 +74,8 @@ public abstract class GreeterGrpcRoutesConfigurer<A extends ExchangeContext> imp
 			.route()
 				.path(SERVICE_NAME.methodPath("SayHelloBidirectionalStreaming"))
 				.method(Method.POST)
-				.consumes(MediaTypes.APPLICATION_GRPC)
-				.consumes(MediaTypes.APPLICATION_GRPC_PROTO)
+				.consume(MediaTypes.APPLICATION_GRPC)
+				.consume(MediaTypes.APPLICATION_GRPC_PROTO)
 				.handler(this.grpcServer.bidirectionalStreaming(
 					test.hello.HelloRequest.getDefaultInstance(), 
 					test.hello.HelloResponse.getDefaultInstance(), 

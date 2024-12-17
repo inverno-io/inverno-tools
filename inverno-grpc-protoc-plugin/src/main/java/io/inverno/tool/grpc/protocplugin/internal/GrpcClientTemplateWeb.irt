@@ -1,0 +1,356 @@
+package io.inverno.tool.grpc.protocplugin.internal;
+
+import static io.inverno.tool.grpc.protocplugin.internal.GenericInvernoGrpcGenerator.javadoc;
+
+option modes = {"STRING"};
+option charset = "utf-8";
+
+web(InvernoGrpcMetadata.ServiceMetadata service) -> {public static abstract class Web<A extends ExchangeContext> implements {@service.javaServiceName}GrpcClient.WebClientStub<A> \{
+
+		private final ServiceID serviceID;
+		private final WebClient<? extends A> webClient;
+		private final GrpcClient grpcClient;
+
+		private final Web<A>.StubImpl stub;
+
+		public Web(ServiceID serviceID, WebClient<? extends A> webClient, GrpcClient grpcClient) \{
+			this.serviceID = serviceID;
+			this.webClient = webClient;
+			this.grpcClient = grpcClient;
+
+			this.stub = new {@service.javaServiceName}GrpcClient.Web.StubImpl(null);
+		\}
+
+		@Override
+		public {@service.javaServiceName}GrpcClient.WebClientStub<A> withMetadata(Consumer<GrpcOutboundRequestMetadata> metadataConfigurer) \{
+			return new {@service.javaServiceName}GrpcClient.Web<A>.StubImpl(metadataConfigurer);
+		\}
+		{service.methods;
+			(method) -> web_unary_delegate when (method.isUnary());
+			web_client_streaming_delegate when (method.isClientStreaming());
+			web_server_streaming_delegate when (method.isServerStreaming());
+			web_bidirectional_streaming_delegate
+		}
+
+		private final class StubImpl implements {@service.javaServiceName}GrpcClient.WebClientStub<A> \{
+
+			private final Consumer<GrpcOutboundRequestMetadata> metadataConfigurer;
+
+			public StubImpl(Consumer<GrpcOutboundRequestMetadata> metadataConfigurer) \{
+				this.metadataConfigurer = metadataConfigurer;
+			\}
+
+			@Override
+			public {@service.javaServiceName}GrpcClient.WebClientStub<A> withMetadata(Consumer<GrpcOutboundRequestMetadata> metadataConfigurer) \{
+				return new {@service.javaServiceName}GrpcClient.Web<A>.StubImpl(metadataConfigurer);
+			\}
+			{service.methods;
+				(method) -> web_unary_impl when (method.isUnary());
+				web_client_streaming_impl when (method.isClientStreaming());
+				web_server_streaming_impl when (method.isServerStreaming());
+				web_bidirectional_streaming_impl
+			}
+		\}
+	\}
+
+	/**
+	 * {@(service.getServiceComment().orElse(""))|javadoc(1)}
+	 *
+	 * @param <A> the exchange context type
+	 */
+	public interface WebClientStub<A extends ExchangeContext> extends GrpcClient.Stub<A, {@service.javaServiceName}GrpcClient.WebClientStub<A>> \{
+		{service.methods;
+			(method) -> web_unary when (method.isUnary());
+			web_client_streaming when (method.isClientStreaming());
+			web_server_streaming when (method.isServerStreaming());
+			web_bidirectional_streaming
+		}
+	\}}
+
+web_unary(InvernoGrpcMetadata.ServiceMetadata.MethodMetadata method) -> {
+		/**
+		 * {@(method.getMethodComment().orElse(""))|javadoc(2)}
+		 *
+		 * @return a mono emitting the unary exchange
+		 */
+		{@if (method.isDeprecated()) -> {@Deprecated
+		}}default Mono<GrpcExchange.Unary<A, {@method.javaRequestType}, {@method.javaResponseType}>> {@method.javaMethodName}() \{
+			return this.{@method.javaMethodName}((Consumer<A>)null);
+		\}
+
+		/**
+		 * {@(method.getMethodComment().orElse(""))|javadoc(2)}
+		 *
+		 * @param contextConfigurer the context configurer
+		 *
+		 * @return a mono emitting the unary exchange
+		 */
+		{@if (method.isDeprecated()) -> {@Deprecated
+		}}Mono<GrpcExchange.Unary<A, {@method.javaRequestType}, {@method.javaResponseType}>> {@method.javaMethodName}(Consumer<A> contextConfigurer);
+
+		/**
+		 * {@(method.getMethodComment().orElse(""))|javadoc(2)}
+		 *
+		 * @param request the client request
+		 *
+		 * @return the server response
+		 */
+		{@if (method.isDeprecated()) -> {@Deprecated
+		}}default Mono<{@method.javaResponseType}> {@method.javaMethodName}({@method.javaRequestType} request) \{
+			return this.{@method.javaMethodName}(request, (Consumer<A>)null);
+		\}
+
+		/**
+		 * {@(method.getMethodComment().orElse(""))|javadoc(2)}
+		 *
+		 * @param request           the client request
+		 * @param contextConfigurer the context configurer
+		 *
+		 * @return the server response
+		 */
+		{@if (method.isDeprecated()) -> {@Deprecated
+		}}default Mono<{@method.javaResponseType}> {@method.javaMethodName}({@method.javaRequestType} request, Consumer<A> contextConfigurer) \{
+			return this.{@method.javaMethodName}(contextConfigurer)
+				.flatMap(grpcExchange -> \{
+					grpcExchange.request().value(request);
+					return grpcExchange.response().flatMap(GrpcResponse.Unary::value);
+				\});
+		\}}
+
+web_unary_impl(InvernoGrpcMetadata.ServiceMetadata.MethodMetadata method) -> {
+			@Override
+			{@if (method.isDeprecated()) -> {@Deprecated
+			}}public Mono<GrpcExchange.Unary<A, {@method.javaRequestType}, {@method.javaResponseType}>> {@method.javaMethodName}(Consumer<A> contextConfigurer) \{
+				return Web.this.webClient.exchange(Web.this.serviceID.getURI())
+					.map(exchange -> \{
+						if(contextConfigurer != null) \{
+							contextConfigurer.accept(exchange.context());
+						\}
+						GrpcExchange.Unary<A, {@method.javaRequestType}, {@method.javaResponseType}> grpcExchange = (GrpcExchange.Unary<A, {@method.javaRequestType}, {@method.javaResponseType}>)Web.this.grpcClient.unary(exchange, SERVICE_NAME, "{@method.methodName}", {@method.javaRequestType}.getDefaultInstance(), {@method.javaResponseType}.getDefaultInstance());
+						grpcExchange.request().metadata(this.metadataConfigurer);
+						return grpcExchange;
+					\});
+			\}}
+
+web_unary_delegate(InvernoGrpcMetadata.ServiceMetadata.MethodMetadata method) -> {
+		@Override
+		{@if (method.isDeprecated()) -> {@Deprecated
+		}}public Mono<GrpcExchange.Unary<A, {@method.javaRequestType}, {@method.javaResponseType}>> {@method.javaMethodName}(Consumer<A> contextConfigurer) \{
+			return this.stub.{@method.javaMethodName}(contextConfigurer);
+		\}}
+
+web_client_streaming(InvernoGrpcMetadata.ServiceMetadata.MethodMetadata method) -> {
+		/**
+		 * {@(method.getMethodComment().orElse(""))|javadoc(2)}
+		 *
+		 * @return a mono emitting the client streaming exchange
+		 */
+		{@if (method.isDeprecated()) -> {@Deprecated
+		}}default Mono<GrpcExchange.ClientStreaming<A, {@method.javaRequestType}, {@method.javaResponseType}>> {@method.javaMethodName}() \{
+			return this.{@method.javaMethodName}((Consumer<A>)null);
+		\}
+
+		/**
+		 * {@(method.getMethodComment().orElse(""))|javadoc(2)}
+		 *
+		 * @param contextConfigurer the context configurer
+		 *
+		 * @return a mono emitting the client streaming exchange
+		 */
+		{@if (method.isDeprecated()) -> {@Deprecated
+		}}Mono<GrpcExchange.ClientStreaming<A, {@method.javaRequestType}, {@method.javaResponseType}>> {@method.javaMethodName}(Consumer<A> contextConfigurer);
+
+		/**
+		 * {@(method.getMethodComment().orElse(""))|javadoc(2)}
+		 *
+		 * @param request the client request publisher
+		 *
+		 * @return the server response
+		 */
+		{@if (method.isDeprecated()) -> {@Deprecated
+		}}default Mono<{@method.javaResponseType}> {@method.javaMethodName}(Publisher<{@method.javaRequestType}> request) \{
+			return this.{@method.javaMethodName}(request, (Consumer<A>)null);
+		\}
+
+		/**
+		 * {@(method.getMethodComment().orElse(""))|javadoc(2)}
+		 *
+		 * @param request the client request publisher
+		 * @param contextConfigurer the context configurer
+		 *
+		 * @return the server response
+		 */
+		{@if (method.isDeprecated()) -> {@Deprecated
+		}}default Mono<{@method.javaResponseType}> {@method.javaMethodName}(Publisher<{@method.javaRequestType}> request, Consumer<A> contextConfigurer) \{
+			return this.{@method.javaMethodName}(contextConfigurer)
+				.flatMap(grpcExchange -> \{
+					grpcExchange.request().stream(request);
+					return grpcExchange.response().flatMap(GrpcResponse.Unary::value);
+				\});
+		\}}
+
+web_client_streaming_impl(InvernoGrpcMetadata.ServiceMetadata.MethodMetadata method) -> {
+			@Override
+			{@if (method.isDeprecated()) -> {@Deprecated
+			}}public Mono<GrpcExchange.ClientStreaming<A, {@method.javaRequestType}, {@method.javaResponseType}>> {@method.javaMethodName}(Consumer<A> contextConfigurer) \{
+				return Web.this.webClient.exchange(Web.this.serviceID.getURI())
+					.map(exchange -> \{
+						if(contextConfigurer != null) \{
+							contextConfigurer.accept(exchange.context());
+						\}
+						GrpcExchange.ClientStreaming<A, {@method.javaRequestType}, {@method.javaResponseType}> grpcExchange = (GrpcExchange.ClientStreaming<A, {@method.javaRequestType}, {@method.javaResponseType}>)Web.this.grpcClient.clientStreaming(exchange, SERVICE_NAME, "{@method.methodName}", {@method.javaRequestType}.getDefaultInstance(), {@method.javaResponseType}.getDefaultInstance());
+						grpcExchange.request().metadata(this.metadataConfigurer);
+						return grpcExchange;
+					\});
+			\}}
+
+web_client_streaming_delegate(InvernoGrpcMetadata.ServiceMetadata.MethodMetadata method) -> {
+		@Override
+		{@if (method.isDeprecated()) -> {@Deprecated
+		}}public Mono<GrpcExchange.ClientStreaming<A, {@method.javaRequestType}, {@method.javaResponseType}>> {@method.javaMethodName}(Consumer<A> contextConfigurer) \{
+			return this.stub.{@method.javaMethodName}(contextConfigurer);
+        \}}
+
+web_server_streaming(InvernoGrpcMetadata.ServiceMetadata.MethodMetadata method) -> {
+		/**
+		 * {@(method.getMethodComment().orElse(""))|javadoc(2)}
+		 *
+		 * @return a mono emitting the server streaming exchange
+		 */
+		{@if (method.isDeprecated()) -> {@Deprecated
+		}}default Mono<GrpcExchange.ServerStreaming<A, {@method.javaRequestType}, {@method.javaResponseType}>> {@method.javaMethodName}() \{
+			return this.{@method.javaMethodName}((Consumer<A>)null);
+		\}
+
+		/**
+		 * {@(method.getMethodComment().orElse(""))|javadoc(2)}
+		 *
+		 * @param contextConfigurer the context configurer
+		 *
+		 * @return a mono emitting the server streaming exchange
+		 */
+		{@if (method.isDeprecated()) -> {@Deprecated
+		}}Mono<GrpcExchange.ServerStreaming<A, {@method.javaRequestType}, {@method.javaResponseType}>> {@method.javaMethodName}(Consumer<A> contextConfigurer);
+
+		/**
+		 * {@(method.getMethodComment().orElse(""))|javadoc(2)}
+		 *
+		 * @param request the client request
+		 *
+		 * @return the server response publisher
+		 */
+		{@if (method.isDeprecated()) -> {@Deprecated
+		}}default Publisher<{@method.javaResponseType}> {@method.javaMethodName}({@method.javaRequestType} request) \{
+			return this.{@method.javaMethodName}(request, (Consumer<A>)null);
+		\}
+
+		/**
+		 * {@(method.getMethodComment().orElse(""))|javadoc(2)}
+		 *
+		 * @param request the client request
+		 * @param contextConfigurer the context configurer
+		 *
+		 * @return the server response publisher
+		 */
+		{@if (method.isDeprecated()) -> {@Deprecated
+		}}default Publisher<{@method.javaResponseType}> {@method.javaMethodName}({@method.javaRequestType} request, Consumer<A> contextConfigurer) \{
+			return this.{@method.javaMethodName}(contextConfigurer)
+				.flatMapMany(grpcExchange -> \{
+					grpcExchange.request().value(request);
+					return grpcExchange.response().flatMapMany(GrpcResponse.Streaming::stream);
+				\});
+		\}}
+
+web_server_streaming_impl(InvernoGrpcMetadata.ServiceMetadata.MethodMetadata method) -> {
+			@Override
+			{@if (method.isDeprecated()) -> {@Deprecated
+			}}public Mono<GrpcExchange.ServerStreaming<A, {@method.javaRequestType}, {@method.javaResponseType}>> {@method.javaMethodName}(Consumer<A> contextConfigurer) \{
+				return Web.this.webClient.exchange(Web.this.serviceID.getURI())
+					.map(exchange -> \{
+						if(contextConfigurer != null) \{
+							contextConfigurer.accept(exchange.context());
+						\}
+						GrpcExchange.ServerStreaming<A, {@method.javaRequestType}, {@method.javaResponseType}> grpcExchange = (GrpcExchange.ServerStreaming<A, {@method.javaRequestType}, {@method.javaResponseType}>)Web.this.grpcClient.serverStreaming(exchange, SERVICE_NAME, "{@method.methodName}", {@method.javaRequestType}.getDefaultInstance(), {@method.javaResponseType}.getDefaultInstance());
+						grpcExchange.request().metadata(this.metadataConfigurer);
+						return grpcExchange;
+					\});
+			\}}
+
+web_server_streaming_delegate(InvernoGrpcMetadata.ServiceMetadata.MethodMetadata method) -> {
+		@Override
+		{@if (method.isDeprecated()) -> {@Deprecated
+		}}public Mono<GrpcExchange.ServerStreaming<A, {@method.javaRequestType}, {@method.javaResponseType}>> {@method.javaMethodName}(Consumer<A> contextConfigurer) \{
+			return this.stub.{@method.javaMethodName}(contextConfigurer);
+		\}}
+
+web_bidirectional_streaming(InvernoGrpcMetadata.ServiceMetadata.MethodMetadata method) -> {
+		/**
+		 * {@(method.getMethodComment().orElse(""))|javadoc(2)}
+		 *
+		 * @return a mono emitting the bidirectional streaming exchange
+		 */
+		{@if (method.isDeprecated()) -> {@Deprecated
+		}}default Mono<GrpcExchange.BidirectionalStreaming<A, {@method.javaRequestType}, {@method.javaResponseType}>> {@method.javaMethodName}() \{
+			return this.{@method.javaMethodName}((Consumer<A>)null);
+		\}
+
+		/**
+		 * {@(method.getMethodComment().orElse(""))|javadoc(2)}
+		 *
+		 * @param contextConfigurer the context configurer
+		 *
+		 * @return a mono emitting the bidirectional streaming exchange
+		 */
+		{@if (method.isDeprecated()) -> {@Deprecated
+		}}Mono<GrpcExchange.BidirectionalStreaming<A, {@method.javaRequestType}, {@method.javaResponseType}>> {@method.javaMethodName}(Consumer<A> contextConfigurer);
+
+		/**
+		 * {@(method.getMethodComment().orElse(""))|javadoc(2)}
+		 *
+		 * @param request the client request publisher
+		 *
+		 * @return the server response publisher
+		 */
+		{@if (method.isDeprecated()) -> {@Deprecated
+		}}default Publisher<{@method.javaResponseType}> {@method.javaMethodName}(Publisher<{@method.javaRequestType}> request) \{
+			return this.{@method.javaMethodName}(request, (Consumer<A>)null);
+		\}
+
+		/**
+		 * {@(method.getMethodComment().orElse(""))|javadoc(2)}
+		 *
+		 * @param request           the client request publisher
+		 * @param contextConfigurer the context configurer
+		 *
+		 * @return the server response publisher
+		 */
+		{@if (method.isDeprecated()) -> {@Deprecated
+		}}default Publisher<{@method.javaResponseType}> {@method.javaMethodName}(Publisher<{@method.javaRequestType}> request, Consumer<A> contextConfigurer) \{
+			return this.{@method.javaMethodName}(contextConfigurer)
+				.flatMapMany(grpcExchange -> \{
+					grpcExchange.request().stream(request);
+					return grpcExchange.response().flatMapMany(GrpcResponse.Streaming::stream);
+				\});
+		\}}
+
+web_bidirectional_streaming_impl(InvernoGrpcMetadata.ServiceMetadata.MethodMetadata method) -> {
+			@Override
+			{@if (method.isDeprecated()) -> {@Deprecated
+			}}public Mono<GrpcExchange.BidirectionalStreaming<A, {@method.javaRequestType}, {@method.javaResponseType}>> {@method.javaMethodName}(Consumer<A> contextConfigurer) \{
+				return Web.this.webClient.exchange(Web.this.serviceID.getURI())
+						.map(exchange -> \{
+							if(contextConfigurer != null) \{
+								contextConfigurer.accept(exchange.context());
+							\}
+						GrpcExchange.BidirectionalStreaming<A, {@method.javaRequestType}, {@method.javaResponseType}> grpcExchange = (GrpcExchange.BidirectionalStreaming<A, {@method.javaRequestType}, {@method.javaResponseType}>)Web.this.grpcClient.bidirectionalStreaming(exchange, SERVICE_NAME, "{@method.methodName}", {@method.javaRequestType}.getDefaultInstance(), {@method.javaResponseType}.getDefaultInstance());
+						grpcExchange.request().metadata(this.metadataConfigurer);
+						return grpcExchange;
+					\});
+			\}}
+
+web_bidirectional_streaming_delegate(InvernoGrpcMetadata.ServiceMetadata.MethodMetadata method) -> {
+		@Override
+		{@if (method.isDeprecated()) -> {@Deprecated
+		}}public Mono<GrpcExchange.BidirectionalStreaming<A, {@method.javaRequestType}, {@method.javaResponseType}>> {@method.javaMethodName}(Consumer<A> contextConfigurer) \{
+			return this.stub.{@method.javaMethodName}(contextConfigurer);
+        \}}

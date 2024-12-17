@@ -10,9 +10,9 @@
 
 The Inverno Build Tools module provides an API for running, packaging and distributing Java modular applications.
 
-A Java modular project is usually a Java module with dependencies which are not always clean Java modules (i.e. with a module descriptor). The Java ecosystem hasn't fully embraced the Java module system yet and as a result applications or libraries can still depend on automatic modules (i.e. with no module descriptor but with an `Automatic-Module-Name` entry in their `MANIFEST.MF`), which is the most common, or on unnamed modules (i.e. with no module descriptor and no `Automatic-Module-Name` entry in their `MANIFEST.MF`) which are becoming more and more rare but still exists. This situation poses mutliple problems.
+A Java modular project is usually a Java module with dependencies which are not always clean Java modules (i.e. with a module descriptor). The Java ecosystem hasn't fully embraced the Java module system yet and as a result applications or libraries can still depend on automatic modules (i.e. with no module descriptor but with an `Automatic-Module-Name` entry in their `MANIFEST.MF`), which is the most common, or on unnamed modules (i.e. with no module descriptor and no `Automatic-Module-Name` entry in their `MANIFEST.MF`) which are becoming more and more rare but still exists. This situation poses multiple problems.
 
-An unnamed module is barely usable: because it can't be named in a deterministic way, it can't be referenced in a module descriptor. However they can be sometimes useful at runtime (e.g. WebJars) which is why it is interesting to be able to reference them in a deterministic way if only to add them to the module path.
+An unnamed module is barely usable: because it can't be named in a deterministic way, it can't be referenced in a module descriptor. However, they can be sometimes useful at runtime (e.g. WebJars) which is why it is interesting to be able to reference them in a deterministic way if only to add them to the module path.
 
 The [JDK][jdk] now provides tools such as `jlink` or `jpackage` which can generate optimized native Java runtime with the exact dependencies required to run an application. Unfortunately these only works when an application and all its dependencies are clean Java modules.
 
@@ -79,7 +79,7 @@ project.modularizeDependencies()
     .buildJmod()
         .mainClass("io.inverno.example.Main")
         .doOnComplete(jmodPath -> {
-            // Do something usefull with the Jmod
+            // Do something useful with the Jmod
         })
     .buildRuntime()
         .vm("server")
@@ -188,11 +188,11 @@ project
     .execute();
 ```
 
-> Althouh it is always possible to run an application with a mix of modular and non-modular dependencies, the advantage of running the application with modularized dependencie is that it only uses the module path and non-modular dependencies are no longer grouped into the `ALL-UNNAMED` module, this fully embraces the Java module system.
+> Although it is always possible to run an application with a mix of modular and non-modular dependencies, the advantage of running the application with modularized dependencies is that it only uses the module path and non-modular dependencies are no longer grouped into the `ALL-UNNAMED` module, this fully embraces the Java module system.
 
 ### DebugTask
 
-The `DebugTask` is chained after the `ModularizeDependenciesTask`, it is identical to the `RunTask`, the onyl difference being that it adds debugging VM options to be able to attach a debugger to the process.
+The `DebugTask` is chained after the `ModularizeDependenciesTask`, it is identical to the `RunTask`, the only difference being that it adds debugging VM options to be able to attach a debugger to the process.
 
 The following example runs the project in debug mode and waiting for a debugger to be attached on port 8000:
 
@@ -252,7 +252,7 @@ project
 
 ### StopTask
 
-The `StopTask` is the only task not to be chained to the `ModularizeDependenciesTask`, it is obtained directly from the `Project` and it is used to gracefully stop a projet application started with the `StartTask`. It gets the pid of the application process to stop from the application pidfile.
+The `StopTask` is the only task not to be chained to the `ModularizeDependenciesTask`, it is obtained directly from the `Project` and it is used to gracefully stop a project application started with the `StartTask`. It gets the pid of the application process to stop from the application pidfile.
 
 If the task fails to stop gracefully the process within a given timeout, it will try to kill the process during the same timeout before raising an error.
 
@@ -304,7 +304,7 @@ project
     .execute();
 ```
 
-Note that if the module defines multipled main class, the task will raise an error asking to specify the main class explicitly:
+Note that if the module defines several main class, the task will raise an error asking to specify the main class explicitly:
 
 ```java
 Project project = ...
@@ -402,7 +402,7 @@ project
     .execute();
 ```
 
-The task relies on JDK's [jpackage][jpackage] tool and it exposes most of its options:
+The task relies on JDK's [jpackage][jpackage] tool, and it exposes most of its options:
 
 ```java
 Project project = ...
@@ -418,7 +418,7 @@ project
     .execute();
 ```
 
-The application image is also built on top of the runtime image, itself built on top of the jmod archive which were generated by previous tasks, it then inherit information such as configurations, legals and manuals...
+The application image is also built on top of the runtime image, itself built on top of the jmod archive which were generated by previous tasks, it then inherits information such as configurations, legals and manuals...
 
 Application launchers are native binaries starting the JVM, at least one launcher must be specified to generate an application image. If none is specified, the task will try to automatically create one looking for a main class in the project application module.
 
@@ -462,7 +462,7 @@ project
     .execute();
 ```
 
-The task can also automatically generates as many launchers as there are main classes in the project application module, launcher names being the class names:
+The task can also automatically generate as many launchers as there are main classes in the project application module, launcher names being the class names:
 
 ```java
 Project project = ...
@@ -534,7 +534,7 @@ project
     .execute();
 ```
 
-By default, within the archive the image is placed in a folder named after the project's final name but it is possible to override this and explicitly specify where to place the image in the archive:
+By default, within the archive the image is placed in a folder named after the project's final name, but it is possible to override this and explicitly specify where to place the image in the archive:
 
 ```java
 Project project = ...

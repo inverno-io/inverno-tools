@@ -16,8 +16,6 @@
 package io.inverno.tool.grpc.protocplugin.internal;
 
 import com.google.protobuf.DescriptorProtos;
-import io.inverno.mod.irt.Pipe;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -40,7 +38,7 @@ import java.util.stream.Stream;
 public class InvernoGrpcMetadata {
 	
 	/**
-	 * https://docs.oracle.com/javase/specs/jls/se21/html/jls-3.html#jls-3.9
+	 * <a href="https://docs.oracle.com/javase/specs/jls/se21/html/jls-3.html#jls-3.9">Java 21 language specification 3.9</a>
 	 */
 	private static final List<CharSequence> JAVA_RESERVED_KEYWORD = List.of(
 		"abstract",   "continue",   "for",          "new",         "switch",
@@ -180,7 +178,7 @@ public class InvernoGrpcMetadata {
 		}
 		
 		int fileNameIndex = file.getName().lastIndexOf('/') + 1;
-		String filename = file.getName().substring(Math.max(0, fileNameIndex));
+		String filename = file.getName().substring(fileNameIndex);
 		
 		final StringBuilder javaOuterClassName = new StringBuilder();
 		if(filename.endsWith(FILE_EXTENSION_PROTO)) {

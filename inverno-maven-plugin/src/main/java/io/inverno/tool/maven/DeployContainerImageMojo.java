@@ -36,7 +36,7 @@ import org.apache.maven.plugins.annotations.ResolutionScope;
 public class DeployContainerImageMojo extends AbstractContainerizeMojo {
 
 	/**
-	 * The user name to use to authenticate to the registry.
+	 * The username to use to authenticate to the registry.
 	 */
 	@Parameter(property = "inverno.container.registryUsername", required = false)
 	private String registryUsername;

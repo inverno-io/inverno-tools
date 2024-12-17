@@ -86,7 +86,7 @@ public interface InvernoGrpcGenerator {
 	 * </p>
 	 *
 	 * @param protocRequestBytes descriptor data
-	 * @param extensionRegistry     an extension registry
+	 * @param extensionRegistry  an extension registry
 	 *
 	 * @return a code generator response containing the generated files
 	 *
@@ -101,8 +101,9 @@ public interface InvernoGrpcGenerator {
 	 * Generates Inverno specific gRPC classes.
 	 * </p>
 	 * 
-	 * @param request
-	 * @return 
+	 * @param request the code generator request
+	 *
+	 * @return the code generator response
 	 */
 	PluginProtos.CodeGeneratorResponse generate(PluginProtos.CodeGeneratorRequest request);
 }

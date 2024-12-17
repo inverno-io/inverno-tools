@@ -169,7 +169,7 @@ public interface ContainerizeTask extends Task<ContainerizeTask.ContainerImage, 
 	 * </p>
 	 * 
 	 * <p>
-	 * Defaults to {@code debian:stable-slim}.
+	 * Defaults to {@code alpine:latest}.
 	 * </p>
 	 * 
 	 * @param from the base container image

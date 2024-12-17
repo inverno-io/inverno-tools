@@ -6,8 +6,7 @@ import io.inverno.mod.grpc.server.GrpcExchange;
 import io.inverno.mod.grpc.server.GrpcServer;
 import io.inverno.mod.http.base.ExchangeContext;
 import io.inverno.mod.http.base.Method;
-import io.inverno.mod.web.server.WebRoutable;
-import io.inverno.mod.web.server.WebRoutesConfigurer;
+import io.inverno.mod.web.server.WebRouter;
 import org.reactivestreams.Publisher;
 import reactor.core.publisher.Mono;
 
@@ -18,7 +17,7 @@ import reactor.core.publisher.Mono;
  *
  * @param <A> the exchange context type
  */
-public abstract class ClientStreamingGrpcRoutesConfigurer<A extends ExchangeContext> implements WebRoutesConfigurer<A> {
+public abstract class ClientStreamingGrpcRoutesConfigurer<A extends ExchangeContext> implements WebRouter.Configurer<A> {
 
 	public static final GrpcServiceName SERVICE_NAME = GrpcServiceName.of("test", "ClientStreaming");
 	
@@ -29,13 +28,13 @@ public abstract class ClientStreamingGrpcRoutesConfigurer<A extends ExchangeCont
 	}
 	
 	@Override
-	public final void configure(WebRoutable<A, ?> routes) {
+	public final void configure(WebRouter<A> routes) {
 		routes
 			.route()
 				.path(SERVICE_NAME.methodPath("callClientStreaming"))
 				.method(Method.POST)
-				.consumes(MediaTypes.APPLICATION_GRPC)
-				.consumes(MediaTypes.APPLICATION_GRPC_PROTO)
+				.consume(MediaTypes.APPLICATION_GRPC)
+				.consume(MediaTypes.APPLICATION_GRPC_PROTO)
 				.handler(this.grpcServer.clientStreaming(
 					test.clientstreaming.ClientStreamingRequest.getDefaultInstance(), 
 					test.clientstreaming.ClientStreamingResponse.getDefaultInstance(), 

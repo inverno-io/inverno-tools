@@ -68,7 +68,7 @@ public class GenericContainerizeTask extends AbstractTask<ContainerizeTask.Conta
 
 	private static final Target DEFAULT_TARGET = Target.TAR;
 	private static final ImageFormat DEFAULT_IMAGE_FORMAT = ImageFormat.OCI;
-	private static final String DEFAULT_FROM = "debian:stable-slim";
+	private static final String DEFAULT_FROM = "alpine:latest";
 	private static final Port DEFAULT_PORT = Port.tcp(8080);
 	
 	private Optional<Target> target = Optional.empty();

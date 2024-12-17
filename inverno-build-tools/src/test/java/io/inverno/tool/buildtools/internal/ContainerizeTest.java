@@ -62,7 +62,7 @@ public class ContainerizeTest {
 			.buildRuntime()
 			.packageApplication()
 			.containerize()
-			.from(Platform.getSystemPlatform() == Platform.WINDOWS ? "mcr.microsoft.com/windows/nanoserver:ltsc2022" : "debian:stable-slim")
+			.from(Platform.getSystemPlatform() == Platform.WINDOWS ? "mcr.microsoft.com/windows/nanoserver:ltsc2022" : "alpine")
 			.execute();
 		
 		Assertions.assertEquals(this.project.getName() + ":" + this.project.getVersion(), image.getCanonicalName());
@@ -95,7 +95,7 @@ public class ContainerizeTest {
 			.buildRuntime()
 			.packageApplication()
 			.containerize()
-			.from(Platform.getSystemPlatform() == Platform.WINDOWS ? "mcr.microsoft.com/windows/nanoserver:ltsc2022" : "debian:stable-slim")
+			.from(Platform.getSystemPlatform() == Platform.WINDOWS ? "mcr.microsoft.com/windows/nanoserver:ltsc2022" : "alpine")
 			.format(Format.Docker)
 			.execute();
 		

@@ -231,7 +231,7 @@ public class BuildRuntimeMojo extends AbstractInvernoMojo {
 	/* ArchiveTask */
 	
 	/**
-	 * A list of archive formats to generate (eg. zip, tar.gz...)
+	 * A list of archive formats to generate (e.g. zip, tar.gz...)
 	 */
 	@Parameter(property = "inverno.runtime.archiveFormats", required = true)
 	protected Set<String> archiveFormats;

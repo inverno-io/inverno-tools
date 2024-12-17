@@ -109,7 +109,7 @@ public class PackageApplicationMojo extends BuildRuntimeMojo {
 	private boolean automaticLaunchers;
 	
 	/**
-	 * A list of package types to generate (eg. rpm, deb, exe, msi, dmg pkg...)
+	 * A list of package types to generate (e.g. rpm, deb, exe, msi, dmg pkg...)
 	 */
 	@Parameter(property = "inverno.app.packageTypes", required = false)
 	protected Set<String> packageTypes;

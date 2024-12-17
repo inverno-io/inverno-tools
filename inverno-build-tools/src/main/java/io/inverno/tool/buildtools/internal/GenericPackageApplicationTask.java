@@ -459,22 +459,22 @@ public class GenericPackageApplicationTask extends AbstractTask<Set<Image>, Pack
 							}
 						});
 						if(launcher.isLauncherAsService()) {
-							launcherProperties.put("launcher-as-service", true);
+							launcherProperties.put("launcher-as-service", Boolean.TRUE.toString());
 						}
 						if(launcher.isWinConsole()) {
-							launcherProperties.put("win-console", true);
+							launcherProperties.put("win-console", Boolean.TRUE.toString());
 						}
 						if(launcher.isWinShortcut()) {
-							launcherProperties.put("win-shortcut", true);
+							launcherProperties.put("win-shortcut", Boolean.TRUE.toString());
 						}
 						if(launcher.isWinMenu()) {
-							launcherProperties.put("win-menu", true);
+							launcherProperties.put("win-menu", Boolean.TRUE.toString());
 						}
 						launcher.getLinuxAppCategory().ifPresent(value -> {
-							launcherProperties.put("linux-app-category", value.toString());
+							launcherProperties.put("linux-app-category", value);
 						});
 						if(launcher.isLinuxShortcut()) {
-							launcherProperties.put("linux-shortcut", true);
+							launcherProperties.put("linux-shortcut", Boolean.TRUE.toString());
 						}
 						
 						Path launcherPropertiesPath = launchersPath.resolve(launcherName + ".properties");

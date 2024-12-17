@@ -7,7 +7,7 @@ The Inverno Maven Plugin is used to run, package and distribute modular applicat
 ## Usage
 
 
-Considering a modular application project, the Inverno Maven plugin is used to run, start, stop a the application or build project images. There are three types of images that can be built using the plugin:
+Considering a modular application project, the Inverno Maven plugin is used to run, start, stop an application or build project images. There are three types of images that can be built using the plugin:
 
 - **runtime image** is a custom Java runtime containing a set of modules and their dependencies.
 - **application image** is a native self-contained Java application including all the necessary dependencies to run the project application without the need of a Java runtime.
@@ -45,7 +45,7 @@ VM options can be specified as follows:
 $ mvn inverno:run -Dinverno.exec.vmOptions="-Xms2G -Xmx2G"
 ```
 
-By default the plugin will detect the main class of the application, but it is also possible to specify it explicitly in case multiple main classes exist in the project module.
+By default, the plugin will detect the main class of the application, but it is also possible to specify it explicitly in case multiple main classes exist in the project module.
 
 ```plaintext
 $ mvn inverno:run -Dinverno.exec.mainClass=io.inverno.example.Main
@@ -115,7 +115,7 @@ In order to detect when the application has started, the start goal waits for a 
 
 ### Build a runtime image
 
-A runtime image is a custom Java runtime distribution containing specific modules and their dependencies. Such image is used as a base for generating application image but it can also be distributed as a lightweight Java runtime specific to the project module.
+A runtime image is a custom Java runtime distribution containing specific modules and their dependencies. Such image is used as a base for generating application image, but it can also be distributed as a lightweight Java runtime specific to the project module.
 
 The `inverno:build-runtime` goal assemble the project module and its dependencies.
 
@@ -197,7 +197,7 @@ An application image is built using the `inverno:package-app` goal which generat
 </project>
 ```
 
-The `inverno:package-app` goal is very similar to the `inverno:package-runtime` goal except that the resulting image provides a native application launcher and it can be packaged in a platform-specific format. For instance, we can generate a `.deb` on a Linux platform or a `.exe` or `.msi` installer on a Windows platform or a `.dmg` on a MacOS platform. The resulting package can be installed on these platforms in a standard way.
+The `inverno:package-app` goal is very similar to the `inverno:build-runtime` goal except that the resulting image provides a native application launcher, and it can be packaged in a platform-specific format. For instance, we can generate a `.deb` on a Linux platform or a `.exe` or `.msi` installer on a Windows platform or a `.dmg` on a macOS platform. The resulting package can be installed on these platforms in a standard way.
 
 > This goal uses `jpackage` tool which is an incubating feature in JDK&lt;16, if you intend to build an application image with an old JDK, you'll need to explicitly add the `jdk.incubator.jpackage` module in `MAVEN_OPTS`:
 > ```plaintext
@@ -293,7 +293,7 @@ The `inverno:install-image` goal is used to build a container image and load it 
 </project>
 ```
 
-By default the `docker` command is used but it is possible to specify the path to the Docker CLI in the `inverno.container.docker.executable` parameter.
+By default, the `docker` command is used, but it is possible to specify the path to the Docker CLI in the `inverno.container.docker.executable` parameter.
 
 > As for `package-app` goal, this goal uses `jpackage` tool so if you intend to use a JDK&lt;16 you'll need to explicitly add the `jdk.incubator.jpackage` module in `MAVEN_OPTS`:
 > ```plaintext
@@ -341,7 +341,7 @@ The `inverno:deploy-image` goal builds a container image and deploy it to an ima
 </project>
 ```
 
-By default the registry points to the Docker hub `docker.io` but another registry can be specified, `gcr.io` in our example.
+By default, the registry points to the Docker hub `docker.io` but another registry can be specified, `gcr.io` in our example.
 
 > As for `package-app` goal, this goal uses `jpackage` tool so if you intend to use a JDK&lt;16 you'll need to explicitly add the `jdk.incubator.jpackage` module in `MAVEN_OPTS`:
 > ```plaintext
@@ -369,7 +369,7 @@ By default the registry points to the Docker hub `docker.io` but another registr
 
 **Full name:**
 
-io.inverno.tool:inverno-maven-plugin:1.5.2:build-runtime
+io.inverno.tool:inverno-maven-plugin:1.6.0-SNAPSHOT:build-runtime
 
 **Description:**
 
@@ -402,7 +402,7 @@ A runtime image is a custom Java runtime containing a set of modules and their d
         </td>
         <td>String&gt;</td>
         <td>
-            A list of archive formats to generate (eg. zip, tar.gz...)
+            A list of archive formats to generate (e.g. zip, tar.gz...)
             <ul>
                 <li>
                     <em>User property</em>
@@ -934,7 +934,7 @@ Adds unnamed modules when generating the runtime.
 
 ##### &lt;archiveFormats&gt;
 
-A list of archive formats to generate (eg. zip, tar.gz...)
+A list of archive formats to generate (e.g. zip, tar.gz...)
 
 - **Type**: java.util.Set&lt;java.lang.String&gt;
 - **Required**: yes
@@ -1194,7 +1194,7 @@ Selects the HotSpot VM in the output image defined as: "client" / "server" / "mi
 
 **Full name:**
 
-io.inverno.tool:inverno-maven-plugin:1.5.2:debug
+io.inverno.tool:inverno-maven-plugin:1.6.0-SNAPSHOT:debug
 
 **Description:**
 
@@ -1540,7 +1540,7 @@ The working directory of the application.
 
 **Full name:**
 
-io.inverno.tool:inverno-maven-plugin:1.5.2:deploy-image
+io.inverno.tool:inverno-maven-plugin:1.6.0-SNAPSHOT:deploy-image
 
 **Description:**
 
@@ -1571,7 +1571,7 @@ Builds and deploys the project application container image to an image registry.
         </td>
         <td>String&gt;</td>
         <td>
-            A list of archive formats to generate (eg. zip, tar.gz...)
+            A list of archive formats to generate (e.g. zip, tar.gz...)
             <ul>
                 <li>
                     <em>User property</em>
@@ -2151,7 +2151,7 @@ Builds and deploys the project application container image to an image registry.
         </td>
         <td>String&gt;</td>
         <td>
-            A list of package types to generate (eg. rpm, deb, exe, msi, dmg pkg...)
+            A list of package types to generate (e.g. rpm, deb, exe, msi, dmg pkg...)
             <ul>
                 <li>
                     <em>User property</em>
@@ -2240,7 +2240,7 @@ Builds and deploys the project application container image to an image registry.
         </td>
         <td>String</td>
         <td>
-            The user name to use to authenticate to the registry.
+            The username to use to authenticate to the registry.
             <ul>
                 <li>
                     <em>User property</em>
@@ -2461,7 +2461,7 @@ Adds unnamed modules when generating the runtime.
 
 ##### &lt;archiveFormats&gt;
 
-A list of archive formats to generate (eg. zip, tar.gz...)
+A list of archive formats to generate (e.g. zip, tar.gz...)
 
 - **Type**: java.util.Set&lt;java.lang.String&gt;
 - **Required**: yes
@@ -2761,7 +2761,7 @@ A directory containing module descriptors to use to modularize unnamed or automa
 
 ##### &lt;packageTypes&gt;
 
-A list of package types to generate (eg. rpm, deb, exe, msi, dmg pkg...)
+A list of package types to generate (e.g. rpm, deb, exe, msi, dmg pkg...)
 
 - **Type**: java.util.Set&lt;java.lang.String&gt;
 - **Required**: no
@@ -2815,7 +2815,7 @@ The password to use to authenticate to the registry.
 
 ##### &lt;registryUsername&gt;
 
-The user name to use to authenticate to the registry.
+The username to use to authenticate to the registry.
 
 - **Type**: java.lang.String
 - **Required**: no
@@ -2926,7 +2926,7 @@ Windows specific configuration.
 
 **Full name:**
 
-io.inverno.tool:inverno-maven-plugin:1.5.2:help
+io.inverno.tool:inverno-maven-plugin:1.6.0-SNAPSHOT:help
 
 **Description:**
 
@@ -3066,7 +3066,7 @@ The maximum length of a display line, should be positive.
 
 **Full name:**
 
-io.inverno.tool:inverno-maven-plugin:1.5.2:install-image
+io.inverno.tool:inverno-maven-plugin:1.6.0-SNAPSHOT:install-image
 
 **Description:**
 
@@ -3097,7 +3097,7 @@ Builds and installs the project application container image to the local Docker 
         </td>
         <td>String&gt;</td>
         <td>
-            A list of archive formats to generate (eg. zip, tar.gz...)
+            A list of archive formats to generate (e.g. zip, tar.gz...)
             <ul>
                 <li>
                     <em>User property</em>
@@ -3702,7 +3702,7 @@ Builds and installs the project application container image to the local Docker 
         </td>
         <td>String&gt;</td>
         <td>
-            A list of package types to generate (eg. rpm, deb, exe, msi, dmg pkg...)
+            A list of package types to generate (e.g. rpm, deb, exe, msi, dmg pkg...)
             <ul>
                 <li>
                     <em>User property</em>
@@ -3982,7 +3982,7 @@ Adds unnamed modules when generating the runtime.
 
 ##### &lt;archiveFormats&gt;
 
-A list of archive formats to generate (eg. zip, tar.gz...)
+A list of archive formats to generate (e.g. zip, tar.gz...)
 
 - **Type**: java.util.Set&lt;java.lang.String&gt;
 - **Required**: yes
@@ -4299,7 +4299,7 @@ A directory containing module descriptors to use to modularize unnamed or automa
 
 ##### &lt;packageTypes&gt;
 
-A list of package types to generate (eg. rpm, deb, exe, msi, dmg pkg...)
+A list of package types to generate (e.g. rpm, deb, exe, msi, dmg pkg...)
 
 - **Type**: java.util.Set&lt;java.lang.String&gt;
 - **Required**: no
@@ -4446,7 +4446,7 @@ Windows specific configuration.
 
 **Full name:**
 
-io.inverno.tool:inverno-maven-plugin:1.5.2:package-app
+io.inverno.tool:inverno-maven-plugin:1.6.0-SNAPSHOT:package-app
 
 **Description:**
 
@@ -4479,7 +4479,7 @@ A project application package is a native self-contained Java application includ
         </td>
         <td>String&gt;</td>
         <td>
-            A list of archive formats to generate (eg. zip, tar.gz...)
+            A list of archive formats to generate (e.g. zip, tar.gz...)
             <ul>
                 <li>
                     <em>User property</em>
@@ -4982,7 +4982,7 @@ A project application package is a native self-contained Java application includ
         </td>
         <td>String&gt;</td>
         <td>
-            A list of package types to generate (eg. rpm, deb, exe, msi, dmg pkg...)
+            A list of package types to generate (e.g. rpm, deb, exe, msi, dmg pkg...)
             <ul>
                 <li>
                     <em>User property</em>
@@ -5202,7 +5202,7 @@ Adds unnamed modules when generating the runtime.
 
 ##### &lt;archiveFormats&gt;
 
-A list of archive formats to generate (eg. zip, tar.gz...)
+A list of archive formats to generate (e.g. zip, tar.gz...)
 
 - **Type**: java.util.Set&lt;java.lang.String&gt;
 - **Required**: yes
@@ -5456,7 +5456,7 @@ A directory containing module descriptors to use to modularize unnamed or automa
 
 ##### &lt;packageTypes&gt;
 
-A list of package types to generate (eg. rpm, deb, exe, msi, dmg pkg...)
+A list of package types to generate (e.g. rpm, deb, exe, msi, dmg pkg...)
 
 - **Type**: java.util.Set&lt;java.lang.String&gt;
 - **Required**: no
@@ -5561,7 +5561,7 @@ Windows specific configuration.
 
 **Full name:**
 
-io.inverno.tool:inverno-maven-plugin:1.5.2:package-image
+io.inverno.tool:inverno-maven-plugin:1.6.0-SNAPSHOT:package-image
 
 **Description:**
 
@@ -5592,7 +5592,7 @@ Builds and packages the project application container image in a TAR archive.
         </td>
         <td>String&gt;</td>
         <td>
-            A list of archive formats to generate (eg. zip, tar.gz...)
+            A list of archive formats to generate (e.g. zip, tar.gz...)
             <ul>
                 <li>
                     <em>User property</em>
@@ -6172,7 +6172,7 @@ Builds and packages the project application container image in a TAR archive.
         </td>
         <td>String&gt;</td>
         <td>
-            A list of package types to generate (eg. rpm, deb, exe, msi, dmg pkg...)
+            A list of package types to generate (e.g. rpm, deb, exe, msi, dmg pkg...)
             <ul>
                 <li>
                     <em>User property</em>
@@ -6452,7 +6452,7 @@ Adds unnamed modules when generating the runtime.
 
 ##### &lt;archiveFormats&gt;
 
-A list of archive formats to generate (eg. zip, tar.gz...)
+A list of archive formats to generate (e.g. zip, tar.gz...)
 
 - **Type**: java.util.Set&lt;java.lang.String&gt;
 - **Required**: yes
@@ -6752,7 +6752,7 @@ A directory containing module descriptors to use to modularize unnamed or automa
 
 ##### &lt;packageTypes&gt;
 
-A list of package types to generate (eg. rpm, deb, exe, msi, dmg pkg...)
+A list of package types to generate (e.g. rpm, deb, exe, msi, dmg pkg...)
 
 - **Type**: java.util.Set&lt;java.lang.String&gt;
 - **Required**: no
@@ -6899,7 +6899,7 @@ Windows specific configuration.
 
 **Full name:**
 
-io.inverno.tool:inverno-maven-plugin:1.5.2:run
+io.inverno.tool:inverno-maven-plugin:1.6.0-SNAPSHOT:run
 
 **Description:**
 
@@ -7187,7 +7187,7 @@ The working directory of the application.
 
 **Full name:**
 
-io.inverno.tool:inverno-maven-plugin:1.5.2:start
+io.inverno.tool:inverno-maven-plugin:1.6.0-SNAPSHOT:start
 
 **Description:**
 
@@ -7477,7 +7477,7 @@ The working directory of the application.
 
 **Full name:**
 
-io.inverno.tool:inverno-maven-plugin:1.5.2:stop
+io.inverno.tool:inverno-maven-plugin:1.6.0-SNAPSHOT:stop
 
 **Description:**
 

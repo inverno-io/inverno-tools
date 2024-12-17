@@ -6,8 +6,7 @@ import io.inverno.mod.grpc.server.GrpcExchange;
 import io.inverno.mod.grpc.server.GrpcServer;
 import io.inverno.mod.http.base.ExchangeContext;
 import io.inverno.mod.http.base.Method;
-import io.inverno.mod.web.server.WebRoutable;
-import io.inverno.mod.web.server.WebRoutesConfigurer;
+import io.inverno.mod.web.server.WebRouter;
 import org.reactivestreams.Publisher;
 import reactor.core.publisher.Mono;
 
@@ -17,7 +16,7 @@ import reactor.core.publisher.Mono;
  *
  * @param <A> the exchange context type
  */
-public abstract class TestServiceGrpcRoutesConfigurer<A extends ExchangeContext> implements WebRoutesConfigurer<A> {
+public abstract class TestServiceGrpcRoutesConfigurer<A extends ExchangeContext> implements WebRouter.Configurer<A> {
 
 	public static final GrpcServiceName SERVICE_NAME = GrpcServiceName.of("grpc.testing", "TestService");
 	
@@ -28,13 +27,13 @@ public abstract class TestServiceGrpcRoutesConfigurer<A extends ExchangeContext>
 	}
 	
 	@Override
-	public final void configure(WebRoutable<A, ?> routes) {
+	public final void configure(WebRouter<A> routes) {
 		routes
 			.route()
 				.path(SERVICE_NAME.methodPath("EmptyCall"))
 				.method(Method.POST)
-				.consumes(MediaTypes.APPLICATION_GRPC)
-				.consumes(MediaTypes.APPLICATION_GRPC_PROTO)
+				.consume(MediaTypes.APPLICATION_GRPC)
+				.consume(MediaTypes.APPLICATION_GRPC_PROTO)
 				.handler(this.grpcServer.unary(
 					io.grpc.testing.integration.EmptyProtos.Empty.getDefaultInstance(), 
 					io.grpc.testing.integration.EmptyProtos.Empty.getDefaultInstance(), 
@@ -43,8 +42,8 @@ public abstract class TestServiceGrpcRoutesConfigurer<A extends ExchangeContext>
 			.route()
 				.path(SERVICE_NAME.methodPath("UnaryCall"))
 				.method(Method.POST)
-				.consumes(MediaTypes.APPLICATION_GRPC)
-				.consumes(MediaTypes.APPLICATION_GRPC_PROTO)
+				.consume(MediaTypes.APPLICATION_GRPC)
+				.consume(MediaTypes.APPLICATION_GRPC_PROTO)
 				.handler(this.grpcServer.unary(
 					io.grpc.testing.integration.Messages.SimpleRequest.getDefaultInstance(), 
 					io.grpc.testing.integration.Messages.SimpleResponse.getDefaultInstance(), 
@@ -53,8 +52,8 @@ public abstract class TestServiceGrpcRoutesConfigurer<A extends ExchangeContext>
 			.route()
 				.path(SERVICE_NAME.methodPath("CacheableUnaryCall"))
 				.method(Method.POST)
-				.consumes(MediaTypes.APPLICATION_GRPC)
-				.consumes(MediaTypes.APPLICATION_GRPC_PROTO)
+				.consume(MediaTypes.APPLICATION_GRPC)
+				.consume(MediaTypes.APPLICATION_GRPC_PROTO)
 				.handler(this.grpcServer.unary(
 					io.grpc.testing.integration.Messages.SimpleRequest.getDefaultInstance(), 
 					io.grpc.testing.integration.Messages.SimpleResponse.getDefaultInstance(), 
@@ -63,8 +62,8 @@ public abstract class TestServiceGrpcRoutesConfigurer<A extends ExchangeContext>
 			.route()
 				.path(SERVICE_NAME.methodPath("StreamingOutputCall"))
 				.method(Method.POST)
-				.consumes(MediaTypes.APPLICATION_GRPC)
-				.consumes(MediaTypes.APPLICATION_GRPC_PROTO)
+				.consume(MediaTypes.APPLICATION_GRPC)
+				.consume(MediaTypes.APPLICATION_GRPC_PROTO)
 				.handler(this.grpcServer.serverStreaming(
 					io.grpc.testing.integration.Messages.StreamingOutputCallRequest.getDefaultInstance(), 
 					io.grpc.testing.integration.Messages.StreamingOutputCallResponse.getDefaultInstance(), 
@@ -73,8 +72,8 @@ public abstract class TestServiceGrpcRoutesConfigurer<A extends ExchangeContext>
 			.route()
 				.path(SERVICE_NAME.methodPath("StreamingInputCall"))
 				.method(Method.POST)
-				.consumes(MediaTypes.APPLICATION_GRPC)
-				.consumes(MediaTypes.APPLICATION_GRPC_PROTO)
+				.consume(MediaTypes.APPLICATION_GRPC)
+				.consume(MediaTypes.APPLICATION_GRPC_PROTO)
 				.handler(this.grpcServer.clientStreaming(
 					io.grpc.testing.integration.Messages.StreamingInputCallRequest.getDefaultInstance(), 
 					io.grpc.testing.integration.Messages.StreamingInputCallResponse.getDefaultInstance(), 
@@ -83,8 +82,8 @@ public abstract class TestServiceGrpcRoutesConfigurer<A extends ExchangeContext>
 			.route()
 				.path(SERVICE_NAME.methodPath("FullDuplexCall"))
 				.method(Method.POST)
-				.consumes(MediaTypes.APPLICATION_GRPC)
-				.consumes(MediaTypes.APPLICATION_GRPC_PROTO)
+				.consume(MediaTypes.APPLICATION_GRPC)
+				.consume(MediaTypes.APPLICATION_GRPC_PROTO)
 				.handler(this.grpcServer.bidirectionalStreaming(
 					io.grpc.testing.integration.Messages.StreamingOutputCallRequest.getDefaultInstance(), 
 					io.grpc.testing.integration.Messages.StreamingOutputCallResponse.getDefaultInstance(), 
@@ -93,8 +92,8 @@ public abstract class TestServiceGrpcRoutesConfigurer<A extends ExchangeContext>
 			.route()
 				.path(SERVICE_NAME.methodPath("HalfDuplexCall"))
 				.method(Method.POST)
-				.consumes(MediaTypes.APPLICATION_GRPC)
-				.consumes(MediaTypes.APPLICATION_GRPC_PROTO)
+				.consume(MediaTypes.APPLICATION_GRPC)
+				.consume(MediaTypes.APPLICATION_GRPC_PROTO)
 				.handler(this.grpcServer.bidirectionalStreaming(
 					io.grpc.testing.integration.Messages.StreamingOutputCallRequest.getDefaultInstance(), 
 					io.grpc.testing.integration.Messages.StreamingOutputCallResponse.getDefaultInstance(), 
@@ -103,8 +102,8 @@ public abstract class TestServiceGrpcRoutesConfigurer<A extends ExchangeContext>
 			.route()
 				.path(SERVICE_NAME.methodPath("UnimplementedCall"))
 				.method(Method.POST)
-				.consumes(MediaTypes.APPLICATION_GRPC)
-				.consumes(MediaTypes.APPLICATION_GRPC_PROTO)
+				.consume(MediaTypes.APPLICATION_GRPC)
+				.consume(MediaTypes.APPLICATION_GRPC_PROTO)
 				.handler(this.grpcServer.unary(
 					io.grpc.testing.integration.EmptyProtos.Empty.getDefaultInstance(), 
 					io.grpc.testing.integration.EmptyProtos.Empty.getDefaultInstance(), 

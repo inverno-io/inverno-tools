@@ -6,8 +6,7 @@ import io.inverno.mod.grpc.server.GrpcExchange;
 import io.inverno.mod.grpc.server.GrpcServer;
 import io.inverno.mod.http.base.ExchangeContext;
 import io.inverno.mod.http.base.Method;
-import io.inverno.mod.web.server.WebRoutable;
-import io.inverno.mod.web.server.WebRoutesConfigurer;
+import io.inverno.mod.web.server.WebRouter;
 import reactor.core.publisher.Mono;
 
 /**
@@ -15,7 +14,7 @@ import reactor.core.publisher.Mono;
  *
  * @param <A> the exchange context type
  */
-public abstract class LoadBalancerStatsServiceGrpcRoutesConfigurer<A extends ExchangeContext> implements WebRoutesConfigurer<A> {
+public abstract class LoadBalancerStatsServiceGrpcRoutesConfigurer<A extends ExchangeContext> implements WebRouter.Configurer<A> {
 
 	public static final GrpcServiceName SERVICE_NAME = GrpcServiceName.of("grpc.testing", "LoadBalancerStatsService");
 	
@@ -26,13 +25,13 @@ public abstract class LoadBalancerStatsServiceGrpcRoutesConfigurer<A extends Exc
 	}
 	
 	@Override
-	public final void configure(WebRoutable<A, ?> routes) {
+	public final void configure(WebRouter<A> routes) {
 		routes
 			.route()
 				.path(SERVICE_NAME.methodPath("GetClientStats"))
 				.method(Method.POST)
-				.consumes(MediaTypes.APPLICATION_GRPC)
-				.consumes(MediaTypes.APPLICATION_GRPC_PROTO)
+				.consume(MediaTypes.APPLICATION_GRPC)
+				.consume(MediaTypes.APPLICATION_GRPC_PROTO)
 				.handler(this.grpcServer.unary(
 					io.grpc.testing.integration.Messages.LoadBalancerStatsRequest.getDefaultInstance(), 
 					io.grpc.testing.integration.Messages.LoadBalancerStatsResponse.getDefaultInstance(), 
@@ -41,8 +40,8 @@ public abstract class LoadBalancerStatsServiceGrpcRoutesConfigurer<A extends Exc
 			.route()
 				.path(SERVICE_NAME.methodPath("GetClientAccumulatedStats"))
 				.method(Method.POST)
-				.consumes(MediaTypes.APPLICATION_GRPC)
-				.consumes(MediaTypes.APPLICATION_GRPC_PROTO)
+				.consume(MediaTypes.APPLICATION_GRPC)
+				.consume(MediaTypes.APPLICATION_GRPC_PROTO)
 				.handler(this.grpcServer.unary(
 					io.grpc.testing.integration.Messages.LoadBalancerAccumulatedStatsRequest.getDefaultInstance(), 
 					io.grpc.testing.integration.Messages.LoadBalancerAccumulatedStatsResponse.getDefaultInstance(), 

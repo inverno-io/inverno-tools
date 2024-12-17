@@ -31,7 +31,7 @@ import org.apache.maven.plugins.annotations.Parameter;
 public class MacOSConfigurationParameters implements PackageApplicationTask.MacOSConfiguration {
 	
 	/**
-	 * An identifier that uniquely identifies the application for macOSX. Defaults to the the main class name. May only use alphanumeric (A-Z,a-z,0-9), hyphen (-), and period (.) characters.
+	 * An identifier that uniquely identifies the application for macOSX. Defaults to the main class name. May only use alphanumeric (A-Z,a-z,0-9), hyphen (-), and period (.) characters.
 	 */
 	@Parameter(property = "inverno.app.macos.packageIdentifier", required = false)
 	private String packageIdentifier;
@@ -150,7 +150,7 @@ public class MacOSConfigurationParameters implements PackageApplicationTask.MacO
 
 	/**
 	 * <p>
-	 * Sets the team or user name portion in Apple signing identities.
+	 * Sets the team or username portion in Apple signing identities.
 	 * </p>
 	 * 
 	 * @param signingKeyUserName the signing key username

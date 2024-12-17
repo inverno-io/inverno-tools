@@ -9,7 +9,7 @@
 </xsl:template>
 
 <xsl:template name="getUsage">
-Considering a modular application project, the Inverno Maven plugin is used to run, start, stop a the application or build project images. There are three types of images that can be built using the plugin:
+Considering a modular application project, the Inverno Maven plugin is used to run, start, stop an application or build project images. There are three types of images that can be built using the plugin:
 
 - **runtime image** is a custom Java runtime containing a set of modules and their dependencies.
 - **application image** is a native self-contained Java application including all the necessary dependencies to run the project application without the need of a Java runtime.
@@ -48,7 +48,7 @@ VM options can be specified as follows:
 $ mvn inverno:run -Dinverno.exec.vmOptions="-Xms2G -Xmx2G"
 ```
 
-By default the plugin will detect the main class of the application, but it is also possible to specify it explicitly in case multiple main classes exist in the project module.
+By default, the plugin will detect the main class of the application, but it is also possible to specify it explicitly in case multiple main classes exist in the project module.
 
 ```plaintext
 $ mvn inverno:run -Dinverno.exec.mainClass=io.inverno.example.Main
@@ -118,7 +118,7 @@ In order to detect when the application has started, the start goal waits for a 
 
 ### Build a runtime image
 
-A runtime image is a custom Java runtime distribution containing specific modules and their dependencies. Such image is used as a base for generating application image but it can also be distributed as a lightweight Java runtime specific to the project module.
+A runtime image is a custom Java runtime distribution containing specific modules and their dependencies. Such image is used as a base for generating application image, but it can also be distributed as a lightweight Java runtime specific to the project module.
 
 The `inverno:build-runtime` goal assemble the project module and its dependencies.
 
@@ -200,7 +200,7 @@ An application image is built using the `inverno:package-app` goal which generat
 </project>]]></xsl:text>
 ```
 
-The `inverno:package-app` goal is very similar to the `inverno:package-runtime` goal except that the resulting image provides a native application launcher and it can be packaged in a platform-specific format. For instance, we can generate a `.deb` on a Linux platform or a `.exe` or `.msi` installer on a Windows platform or a `.dmg` on a MacOS platform. The resulting package can be installed on these platforms in a standard way.
+The `inverno:package-app` goal is very similar to the `inverno:build-runtime` goal except that the resulting image provides a native application launcher, and it can be packaged in a platform-specific format. For instance, we can generate a `.deb` on a Linux platform or a `.exe` or `.msi` installer on a Windows platform or a `.dmg` on a macOS platform. The resulting package can be installed on these platforms in a standard way.
 
 <xsl:text disable-output-escaping="yes"><![CDATA[>]]></xsl:text> This goal uses `jpackage` tool which is an incubating feature in JDK&lt;16, if you intend to build an application image with an old JDK, you'll need to explicitly add the `jdk.incubator.jpackage` module in `MAVEN_OPTS`:
 <xsl:text disable-output-escaping="yes"><![CDATA[>]]></xsl:text> ```plaintext
@@ -296,7 +296,7 @@ The `inverno:install-image` goal is used to build a container image and load it 
 </project>]]></xsl:text>
 ```
 
-By default the `docker` command is used but it is possible to specify the path to the Docker CLI in the `inverno.container.docker.executable` parameter.
+By default, the `docker` command is used, but it is possible to specify the path to the Docker CLI in the `inverno.container.docker.executable` parameter.
 
 <xsl:text disable-output-escaping="yes"><![CDATA[>]]></xsl:text> As for `package-app` goal, this goal uses `jpackage` tool so if you intend to use a JDK&lt;16 you'll need to explicitly add the `jdk.incubator.jpackage` module in `MAVEN_OPTS`:
 <xsl:text disable-output-escaping="yes"><![CDATA[>]]></xsl:text> ```plaintext
@@ -344,7 +344,7 @@ The `inverno:deploy-image` goal builds a container image and deploy it to an ima
 </project>]]></xsl:text>
 ```
 
-By default the registry points to the Docker hub `docker.io` but another registry can be specified, `gcr.io` in our example.
+By default, the registry points to the Docker hub `docker.io` but another registry can be specified, `gcr.io` in our example.
 
 <xsl:text disable-output-escaping="yes"><![CDATA[>]]></xsl:text> As for `package-app` goal, this goal uses `jpackage` tool so if you intend to use a JDK&lt;16 you'll need to explicitly add the `jdk.incubator.jpackage` module in `MAVEN_OPTS`:
 <xsl:text disable-output-escaping="yes"><![CDATA[>]]></xsl:text> ```plaintext
