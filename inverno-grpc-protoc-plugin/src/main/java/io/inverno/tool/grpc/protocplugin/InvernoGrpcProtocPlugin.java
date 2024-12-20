@@ -15,12 +15,12 @@
  */
 package io.inverno.tool.grpc.protocplugin;
 
-import com.google.common.io.ByteStreams;
 import com.google.protobuf.ExtensionRegistry;
 import com.google.protobuf.compiler.PluginProtos;
 import io.inverno.tool.grpc.protocplugin.internal.GenericInvernoGrpcGenerator;
 import java.io.IOException;
 import java.nio.file.Path;
+import org.apache.commons.io.IOUtils;
 
 /**
  * <p>
@@ -121,7 +121,7 @@ public class InvernoGrpcProtocPlugin {
 				response = generator.generate(Path.of(dumpPath), extensionRegistry);
 			}
 			else {
-				response = generator.generate(ByteStreams.toByteArray(System.in), extensionRegistry);
+				response = generator.generate(IOUtils.toByteArray(System.in), extensionRegistry);
 			}
 			response.writeTo(System.out);
 		}

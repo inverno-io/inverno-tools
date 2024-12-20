@@ -35,7 +35,7 @@ import io.inverno.tool.grpc.protocplugin.InvernoGrpcProtocPlugin;
  * }</pre>
  * 
  * <p>
- * The gRPC generator can also be invoked programatically to process a descriptor dump for instance:
+ * The gRPC generator can also be invoked programmatically to process a descriptor dump for instance:
  * </p>
  * 
  * <pre>{@code
@@ -50,11 +50,11 @@ import io.inverno.tool.grpc.protocplugin.InvernoGrpcProtocPlugin;
 module io.inverno.tool.grpc.protocplugin {
 	requires io.inverno.core;
 	requires io.inverno.mod.irt;
-	
-	requires com.google.common;
+
 	requires com.google.protobuf;
 	requires com.google.protobuf.util;
-	
+	requires org.apache.commons.io;
+
 	exports io.inverno.tool.grpc.protocplugin;
 }
 

@@ -160,6 +160,18 @@ public class ModuleInfoParameters extends ModuleInfo {
 		public void setTransitive(boolean isTransitive) {
 			this.isTransitive = isTransitive;
 		}
+
+		/**
+		 * <p>
+		 * Removes the directive if it exists.
+		 * </p>
+		 *
+		 * @param remove {@code true} to remove the directive, {@code false} otherwise
+		 */
+		@Parameter(required = false, defaultValue = "false")
+		public void setRemove(boolean remove) {
+			this.remove = remove;
+		}
 	}
 
 	/**
@@ -194,6 +206,18 @@ public class ModuleInfoParameters extends ModuleInfo {
 		@Parameter(required = false)
 		public void setTo(List<String> to) {
 			this.to = to;
+		}
+
+		/**
+		 * <p>
+		 * Removes the directive if it exists.
+		 * </p>
+		 *
+		 * @param remove {@code true} to remove the directive, {@code false} otherwise
+		 */
+		@Parameter(required = false, defaultValue = "false")
+		public void setRemove(boolean remove) {
+			this.remove = remove;
 		}
 	}
 
@@ -230,6 +254,18 @@ public class ModuleInfoParameters extends ModuleInfo {
 		public void setTo(List<String> to) {
 			this.to = to;
 		}
+
+		/**
+		 * <p>
+		 * Removes the directive if it exists.
+		 * </p>
+		 *
+		 * @param remove {@code true} to remove the directive, {@code false} otherwise
+		 */
+		@Parameter(required = false, defaultValue = "false")
+		public void setRemove(boolean remove) {
+			this.remove = remove;
+		}
 	}
 
 	/**
@@ -252,6 +288,18 @@ public class ModuleInfoParameters extends ModuleInfo {
 		@Parameter(required = true)
 		public void setType(String typeName) {
 			this.typeName = typeName;
+		}
+
+		/**
+		 * <p>
+		 * Removes the directive if it exists.
+		 * </p>
+		 *
+		 * @param remove {@code true} to remove the directive, {@code false} otherwise
+		 */
+		@Parameter(required = false, defaultValue = "false")
+		public void setRemove(boolean remove) {
+			this.remove = remove;
 		}
 	}
 
@@ -287,6 +335,18 @@ public class ModuleInfoParameters extends ModuleInfo {
 		@Parameter(name="with", required = true)
 		public void setWith(List<String> with) {
 			this.with = with;
+		}
+
+		/**
+		 * <p>
+		 * Removes the directive if it exists.
+		 * </p>
+		 *
+		 * @param remove {@code true} to remove the directive, {@code false} otherwise
+		 */
+		@Parameter(required = false, defaultValue = "false")
+		public void setRemove(boolean remove) {
+			this.remove = remove;
 		}
 	}
 }

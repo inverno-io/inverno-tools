@@ -240,7 +240,7 @@ public interface BuildRuntimeTask extends Task<Image, BuildRuntimeTask> {
 		 * Defaults to the project's module.
 		 * </p>
 		 * 
-		 * @return an optional returning the the module to execute or an empty optional
+		 * @return an optional returning the module to execute or an empty optional
 		 */
 		default Optional<String> getModule() {
 			return Optional.empty();
@@ -248,7 +248,7 @@ public interface BuildRuntimeTask extends Task<Image, BuildRuntimeTask> {
 
 		/**
 		 * <p>
-		 * Returns the main class to execute with the laucnher.
+		 * Returns the main class to execute with the launcher.
 		 * </p>
 		 * 
 		 * <p>

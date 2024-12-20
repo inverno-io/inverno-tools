@@ -289,6 +289,11 @@ public class ModuleInfo {
 		protected boolean isStatic;
 
 		/**
+		 * Flag indicating whether the directive should be removed if it exists.
+		 */
+		protected boolean remove;
+
+		/**
 		 * <p>
 		 * Creates a blank import declaration.
 		 * </p>
@@ -344,6 +349,17 @@ public class ModuleInfo {
 			return this.onDemand;
 		}
 
+		/**
+		 * <p>
+		 * Determines whether the directive should be removed when defined.
+		 * </p>
+		 *
+		 * @return true to remove the directive false otherwise
+		 */
+		public boolean isRemove() {
+			return remove;
+		}
+
 		@Override
 		public String toString() {
 			StringBuilder s = new StringBuilder();
@@ -384,6 +400,11 @@ public class ModuleInfo {
 		 * Flag indicating whether this is a transitive dependency.
 		 */
 		protected boolean isTransitive;
+
+		/**
+		 * Flag indicating whether the directive should be removed if it exists.
+		 */
+		protected boolean remove;
 
 		/**
 		 * <p>
@@ -440,7 +461,18 @@ public class ModuleInfo {
 		public boolean isTransitive() {
 			return this.isTransitive;
 		}
-		
+
+		/**
+		 * <p>
+		 * Determines whether the directive should be removed when defined.
+		 * </p>
+		 *
+		 * @return true to remove the directive false otherwise
+		 */
+		public boolean isRemove() {
+			return remove;
+		}
+
 		@Override
 		public String toString() {
 			StringBuilder s = new StringBuilder();
@@ -475,6 +507,11 @@ public class ModuleInfo {
 		 * The names of the modules to which the package is exported.
 		 */
 		protected List<String> to;
+
+		/**
+		 * Flag indicating whether the directive should be removed if it exists.
+		 */
+		protected boolean remove;
 
 		/**
 		 * <p>
@@ -518,7 +555,18 @@ public class ModuleInfo {
 		public List<String> getTo() {
 			return this.to;
 		}
-		
+
+		/**
+		 * <p>
+		 * Determines whether the directive should be removed when defined.
+		 * </p>
+		 *
+		 * @return true to remove the directive false otherwise
+		 */
+		public boolean isRemove() {
+			return remove;
+		}
+
 		@Override
 		public String toString() {
 			StringBuilder s = new StringBuilder();
@@ -551,6 +599,11 @@ public class ModuleInfo {
 		 * The names of the modules to which the package is opened.
 		 */
 		protected List<String> to;
+
+		/**
+		 * Flag indicating whether the directive should be removed if it exists.
+		 */
+		protected boolean remove;
 
 		/**
 		 * <p>
@@ -594,6 +647,17 @@ public class ModuleInfo {
 		public List<String> getTo() {
 			return this.to;
 		}
+
+		/**
+		 * <p>
+		 * Determines whether the directive should be removed when defined.
+		 * </p>
+		 *
+		 * @return true to remove the directive false otherwise
+		 */
+		public boolean isRemove() {
+			return remove;
+		}
 		
 		@Override
 		public String toString() {
@@ -624,6 +688,11 @@ public class ModuleInfo {
 		protected String typeName;
 
 		/**
+		 * Flag indicating whether the directive should be removed if it exists.
+		 */
+		protected boolean remove;
+
+		/**
 		 * <p>
 		 * Creates a blank uses directive.
 		 * </p>
@@ -652,7 +721,18 @@ public class ModuleInfo {
 		public String getType() {
 			return this.typeName;
 		}
-		
+
+		/**
+		 * <p>
+		 * Determines whether the directive should be removed when defined.
+		 * </p>
+		 *
+		 * @return true to remove the directive false otherwise
+		 */
+		public boolean isRemove() {
+			return remove;
+		}
+
 		@Override
 		public String toString() {
 			StringBuilder s = new StringBuilder();
@@ -680,6 +760,11 @@ public class ModuleInfo {
 		 * The implementation types in the module providing the service.
 		 */
 		protected List<String> with;
+
+		/**
+		 * Flag indicating whether the directive should be removed if it exists.
+		 */
+		protected boolean remove;
 
 		/**
 		 * <p>
@@ -722,6 +807,17 @@ public class ModuleInfo {
 		 */
 		public List<String> getWith() {
 			return this.with;
+		}
+
+		/**
+		 * <p>
+		 * Determines whether the directive should be removed when defined.
+		 * </p>
+		 *
+		 * @return true to remove the directive false otherwise
+		 */
+		public boolean isRemove() {
+			return remove;
 		}
 		
 		@Override

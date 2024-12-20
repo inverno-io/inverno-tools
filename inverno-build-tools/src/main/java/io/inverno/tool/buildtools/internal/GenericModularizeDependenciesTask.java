@@ -139,7 +139,7 @@ public class GenericModularizeDependenciesTask extends AbstractTask<Set<Dependen
 	
 	/**
 	 * <p>
-	 * Returns the path to the user-provided {@link module-info.java} for the specified dependency.
+	 * Returns the path to the user-provided {@code module-info.java} for the specified dependency.
 	 * </p>
 	 * 
 	 * <p>
@@ -378,7 +378,7 @@ public class GenericModularizeDependenciesTask extends AbstractTask<Set<Dependen
 	
 	/**
 	 * <p>
-	 * Generates the {@link module-info.java} descriptor for the specified dependency.
+	 * Generates the {@code module-info.java} descriptor for the specified dependency.
 	 * </p>
 	 * 
 	 * @param project    the build project
@@ -489,7 +489,7 @@ public class GenericModularizeDependenciesTask extends AbstractTask<Set<Dependen
 					requiresIterator.remove();
 				}
 			}
-			moduleInfo.getRequires().addAll(moduleInfoOverride.getRequires());
+			moduleInfo.getRequires().addAll(moduleInfoOverride.getRequires().stream().filter(directive -> !directive.isRemove()).collect(Collectors.toSet()));
 
 			// Exports
 			Map<String, ModuleInfo.ExportsDirective> overriddenExportsByName = moduleInfoOverride.getExports().stream()
@@ -500,7 +500,7 @@ public class GenericModularizeDependenciesTask extends AbstractTask<Set<Dependen
 					exportsIterator.remove();
 				}
 			}
-			moduleInfo.getExports().addAll(moduleInfoOverride.getExports());
+			moduleInfo.getExports().addAll(moduleInfoOverride.getExports().stream().filter(directive -> !directive.isRemove()).collect(Collectors.toSet()));
 
 			// Opens
 			Map<String, ModuleInfo.OpensDirective> overriddenOpensByName = moduleInfoOverride.getOpens().stream()
@@ -511,7 +511,7 @@ public class GenericModularizeDependenciesTask extends AbstractTask<Set<Dependen
 					opensIterator.remove();
 				}
 			}
-			moduleInfo.getOpens().addAll(moduleInfoOverride.getOpens());
+			moduleInfo.getOpens().addAll(moduleInfoOverride.getOpens().stream().filter(directive -> !directive.isRemove()).collect(Collectors.toSet()));
 			
 			// Uses
 			Map<String, ModuleInfo.UsesDirective> overriddenUsesByName = moduleInfoOverride.getUses().stream()
@@ -522,7 +522,7 @@ public class GenericModularizeDependenciesTask extends AbstractTask<Set<Dependen
 					usesIterator.remove();
 				}
 			}
-			moduleInfo.getUses().addAll(moduleInfoOverride.getUses());
+			moduleInfo.getUses().addAll(moduleInfoOverride.getUses().stream().filter(directive -> !directive.isRemove()).collect(Collectors.toSet()));
 			
 			// Provides
 			Map<String, ModuleInfo.ProvidesDirective> overriddenProvidesByName = moduleInfoOverride.getProvides().stream()
@@ -533,7 +533,7 @@ public class GenericModularizeDependenciesTask extends AbstractTask<Set<Dependen
 					providesIterator.remove();
 				}
 			}
-			moduleInfo.getProvides().addAll(moduleInfoOverride.getProvides());
+			moduleInfo.getProvides().addAll(moduleInfoOverride.getProvides().stream().filter(directive -> !directive.isRemove()).collect(Collectors.toSet()));
 		}
 		catch(IOException | ParseException e) {
 			throw new TaskExecutionException("Error overriding module-info.java for " + dependency + "", e);

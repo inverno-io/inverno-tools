@@ -57,7 +57,7 @@ public interface ModularizeDependenciesTask extends Task<Set<Dependency>, Modula
 
 	/**
 	 * <p>
-	 * Specifies the path where to find module descritors to use for automatic and unnamed module dependencies instead of trying to generate them.
+	 * Specifies the path where to find module descriptors to use for automatic and unnamed module dependencies instead of trying to generate them.
 	 * </p>
 	 * 
 	 * <p>
