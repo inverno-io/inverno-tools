@@ -51,11 +51,11 @@ public final class ProtocGrpcRunner {
 	static {
 		try {
 			Path protocPath = Files.list(PROTOC_PATH).filter(p -> p.getFileName().toString().endsWith(".exe")).findFirst().orElseThrow(() -> new RuntimeException("Cant't resolve protoc.exe")).toAbsolutePath();
-			PROTOC = protocPath.toString();
-			PosixFileAttributeView view = Files.getFileAttributeView(protocPath, PosixFileAttributeView.class);
-			if(view != null) {
-				view.setPermissions(Set.of(PosixFilePermission.OWNER_READ, PosixFilePermission.OWNER_WRITE, PosixFilePermission.OWNER_EXECUTE));
+			PosixFileAttributeView protocView = Files.getFileAttributeView(protocPath, PosixFileAttributeView.class);
+			if(protocView != null) {
+				protocView.setPermissions(Set.of(PosixFilePermission.OWNER_READ, PosixFilePermission.OWNER_WRITE, PosixFilePermission.OWNER_EXECUTE));
 			}
+			PROTOC = protocPath.toString();
 		}
 		catch(IOException e) {
 			throw new RuntimeException("Can't resolve protoc.exe", e);
@@ -78,8 +78,10 @@ public final class ProtocGrpcRunner {
 		try {
 			Path invernoGrpcProtocPluginPath = PROTOC_PATH.resolve(IS_WINDOWS ? "invernoGrpcProtocPlugin.bat" : "invernoGrpcProtocPlugin.sh");
 			Files.write(invernoGrpcProtocPluginPath, invernoGrpcProtocPluginCommand.toString().getBytes(), StandardOpenOption.CREATE, StandardOpenOption.WRITE, StandardOpenOption.TRUNCATE_EXISTING);
-			Files.setPosixFilePermissions(invernoGrpcProtocPluginPath, Set.of(PosixFilePermission.OWNER_READ, PosixFilePermission.OWNER_WRITE, PosixFilePermission.OWNER_EXECUTE));
-			
+			PosixFileAttributeView invernoGrpcProtocPluginView = Files.getFileAttributeView(invernoGrpcProtocPluginPath, PosixFileAttributeView.class);
+			if(invernoGrpcProtocPluginView != null) {
+				invernoGrpcProtocPluginView.setPermissions(Set.of(PosixFilePermission.OWNER_READ, PosixFilePermission.OWNER_WRITE, PosixFilePermission.OWNER_EXECUTE));
+			}
 			INVERNO_GRPC_PROTOC_PLUGIN = invernoGrpcProtocPluginPath.toString();
 		}
 		catch(IOException e) {
