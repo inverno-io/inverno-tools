@@ -18,6 +18,7 @@ package io.inverno.tool.protoc.plugin;
 import io.inverno.tool.grpc.protocplugin.InvernoGrpcProtocPlugin;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
@@ -49,8 +50,10 @@ public final class ProtocGrpcRunner {
 	static {
 		try {
 			Path protocPath = Files.list(PROTOC_PATH).filter(p -> p.getFileName().toString().endsWith(".exe")).findFirst().orElseThrow(() -> new RuntimeException("Cant't resolve protoc.exe")).toAbsolutePath();
-			Files.setPosixFilePermissions(protocPath, Set.of(PosixFilePermission.OWNER_READ, PosixFilePermission.OWNER_WRITE, PosixFilePermission.OWNER_EXECUTE));
 			PROTOC = protocPath.toString();
+			if(FileSystems.getDefault().supportedFileAttributeViews().contains("posix")) {
+				Files.setPosixFilePermissions(protocPath, Set.of(PosixFilePermission.OWNER_READ, PosixFilePermission.OWNER_WRITE, PosixFilePermission.OWNER_EXECUTE));
+				}
 		}
 		catch(IOException e) {
 			throw new RuntimeException("Can't resolve protoc.exe", e);
