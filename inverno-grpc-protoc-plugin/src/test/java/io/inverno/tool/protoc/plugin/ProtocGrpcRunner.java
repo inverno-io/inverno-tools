@@ -16,18 +16,15 @@
 package io.inverno.tool.protoc.plugin;
 
 import io.inverno.tool.grpc.protocplugin.InvernoGrpcProtocPlugin;
+
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
-import java.nio.file.attribute.PosixFilePermission;
-import java.nio.file.attribute.PosixFilePermissions;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 
 /**
  * 
@@ -49,8 +46,10 @@ public final class ProtocGrpcRunner {
 	
 	static {
 		try {
-			Path protocPath = Files.list(PROTOC_PATH).filter(p -> p.getFileName().toString().endsWith(".exe")).findFirst().orElseThrow(() -> new RuntimeException("Cant't resolve protoc.exe")).toAbsolutePath();
-			Files.setPosixFilePermissions(protocPath, Set.of(PosixFilePermission.OWNER_READ, PosixFilePermission.OWNER_WRITE, PosixFilePermission.OWNER_EXECUTE));
+			Path protocPath = Files.list(PROTOC_PATH).filter(p -> p.getFileName().toString().endsWith(".exe")).findFirst().orElseThrow(() -> new RuntimeException("Can't resolve protoc.exe")).toAbsolutePath();
+			protocPath.toFile().setReadable(true);
+			protocPath.toFile().setWritable(true);
+			protocPath.toFile().setExecutable(true);
 			PROTOC = protocPath.toString();
 		}
 		catch(IOException e) {
@@ -74,7 +73,9 @@ public final class ProtocGrpcRunner {
 		try {
 			Path invernoGrpcProtocPluginPath = PROTOC_PATH.resolve(IS_WINDOWS ? "invernoGrpcProtocPlugin.bat" : "invernoGrpcProtocPlugin.sh");
 			Files.write(invernoGrpcProtocPluginPath, invernoGrpcProtocPluginCommand.toString().getBytes(), StandardOpenOption.CREATE, StandardOpenOption.WRITE, StandardOpenOption.TRUNCATE_EXISTING);
-			Files.setPosixFilePermissions(invernoGrpcProtocPluginPath, Set.of(PosixFilePermission.OWNER_READ, PosixFilePermission.OWNER_WRITE, PosixFilePermission.OWNER_EXECUTE));
+			invernoGrpcProtocPluginPath.toFile().setReadable(true);
+			invernoGrpcProtocPluginPath.toFile().setWritable(true);
+			invernoGrpcProtocPluginPath.toFile().setExecutable(true);
 			INVERNO_GRPC_PROTOC_PLUGIN = invernoGrpcProtocPluginPath.toString();
 		}
 		catch(IOException e) {
@@ -101,10 +102,13 @@ public final class ProtocGrpcRunner {
 	public static int runProtocGrpc(Path protoPath, String grpcProtocPluginArgs, Path... protoFilePaths) throws IOException, InterruptedException {
 		Files.createDirectories(GRPC_OUTPUT_PATH);
 
-		Path invernoGrpcProtocPluginPath = Files.createTempFile("invernoGrpcProtocPlugin", ".sh", PosixFilePermissions.asFileAttribute(Set.of(PosixFilePermission.OWNER_READ, PosixFilePermission.OWNER_WRITE, PosixFilePermission.OWNER_EXECUTE)));
+		Path invernoGrpcProtocPluginPath = Files.createTempFile("invernoGrpcProtocPlugin", IS_WINDOWS ? ".bat" : ".sh"/*, PosixFilePermissions.asFileAttribute(Set.of(PosixFilePermission.OWNER_READ, PosixFilePermission.OWNER_WRITE, PosixFilePermission.OWNER_EXECUTE))*/);
+		invernoGrpcProtocPluginPath.toFile().setReadable(true);
+		invernoGrpcProtocPluginPath.toFile().setWritable(true);
+		invernoGrpcProtocPluginPath.toFile().setExecutable(true);
 		try {
 			StringBuilder invernoGrpcProtocPluginCommand = new StringBuilder();
-			invernoGrpcProtocPluginCommand.append(IS_WINDOWS ? "" : "#!/bin/sh").append(System.lineSeparator());
+			invernoGrpcProtocPluginCommand.append(IS_WINDOWS ? "@echo off" : "#!/bin/sh").append(System.lineSeparator());
 			invernoGrpcProtocPluginCommand.append(INVERNO_GRPC_PROTOC_PLUGIN).append(" ").append(grpcProtocPluginArgs);
 			Files.write(invernoGrpcProtocPluginPath, invernoGrpcProtocPluginCommand.toString().getBytes(), StandardOpenOption.CREATE, StandardOpenOption.WRITE);
 

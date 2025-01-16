@@ -16,12 +16,11 @@
 package io.inverno.tool.protoc.plugin.internal;
 
 import io.inverno.tool.protoc.plugin.ProtocGrpcRunner;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
 import java.nio.file.Files;
 import java.nio.file.Path;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.condition.DisabledOnOs;
-import org.junit.jupiter.api.condition.OS;
 
 /**
  * <p>
@@ -31,7 +30,6 @@ import org.junit.jupiter.api.condition.OS;
  * @author <a href="jeremy.kuhn@inverno.io">Jeremy Kuhn</a>
  * @since 1.9
  */
-@DisabledOnOs({OS.WINDOWS}) // This currently only works on unix system as it generates and uses .sh scripts
 public class InvernoGrpcGeneratorTest {
 	
 	private static final Path SOURCE_PROTO_PATH = Path.of("src/test/proto");
