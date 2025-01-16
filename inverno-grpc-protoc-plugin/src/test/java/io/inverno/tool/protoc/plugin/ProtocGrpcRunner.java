@@ -22,6 +22,7 @@ import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
+import java.nio.file.attribute.PosixFileAttributeView;
 import java.nio.file.attribute.PosixFilePermission;
 import java.nio.file.attribute.PosixFilePermissions;
 import java.util.Arrays;
@@ -51,9 +52,10 @@ public final class ProtocGrpcRunner {
 		try {
 			Path protocPath = Files.list(PROTOC_PATH).filter(p -> p.getFileName().toString().endsWith(".exe")).findFirst().orElseThrow(() -> new RuntimeException("Cant't resolve protoc.exe")).toAbsolutePath();
 			PROTOC = protocPath.toString();
-			if(FileSystems.getDefault().supportedFileAttributeViews().contains("posix")) {
-				Files.setPosixFilePermissions(protocPath, Set.of(PosixFilePermission.OWNER_READ, PosixFilePermission.OWNER_WRITE, PosixFilePermission.OWNER_EXECUTE));
-				}
+			PosixFileAttributeView view = Files.getFileAttributeView(protocPath, PosixFileAttributeView.class);
+			if(view != null) {
+				view.setPermissions(Set.of(PosixFilePermission.OWNER_READ, PosixFilePermission.OWNER_WRITE, PosixFilePermission.OWNER_EXECUTE));
+			}
 		}
 		catch(IOException e) {
 			throw new RuntimeException("Can't resolve protoc.exe", e);
