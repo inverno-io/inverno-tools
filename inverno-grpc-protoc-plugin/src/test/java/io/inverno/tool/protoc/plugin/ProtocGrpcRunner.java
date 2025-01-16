@@ -22,6 +22,7 @@ import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
+import java.nio.file.attribute.FileAttribute;
 import java.nio.file.attribute.PosixFileAttributeView;
 import java.nio.file.attribute.PosixFilePermission;
 import java.nio.file.attribute.PosixFilePermissions;
@@ -51,11 +52,9 @@ public final class ProtocGrpcRunner {
 	static {
 		try {
 			Path protocPath = Files.list(PROTOC_PATH).filter(p -> p.getFileName().toString().endsWith(".exe")).findFirst().orElseThrow(() -> new RuntimeException("Cant't resolve protoc.exe")).toAbsolutePath();
-			if(!IS_WINDOWS) {
-				PosixFileAttributeView protocView = Files.getFileAttributeView(protocPath, PosixFileAttributeView.class);
-				if(protocView != null) {
-					protocView.setPermissions(Set.of(PosixFilePermission.OWNER_READ, PosixFilePermission.OWNER_WRITE, PosixFilePermission.OWNER_EXECUTE));
-				}
+			PosixFileAttributeView protocView = Files.getFileAttributeView(protocPath, PosixFileAttributeView.class);
+			if(protocView != null) {
+				protocView.setPermissions(Set.of(PosixFilePermission.OWNER_READ, PosixFilePermission.OWNER_WRITE, PosixFilePermission.OWNER_EXECUTE));
 			}
 			PROTOC = protocPath.toString();
 		}
@@ -80,11 +79,9 @@ public final class ProtocGrpcRunner {
 		try {
 			Path invernoGrpcProtocPluginPath = PROTOC_PATH.resolve(IS_WINDOWS ? "invernoGrpcProtocPlugin.bat" : "invernoGrpcProtocPlugin.sh");
 			Files.write(invernoGrpcProtocPluginPath, invernoGrpcProtocPluginCommand.toString().getBytes(), StandardOpenOption.CREATE, StandardOpenOption.WRITE, StandardOpenOption.TRUNCATE_EXISTING);
-			if(!IS_WINDOWS) {
-				PosixFileAttributeView invernoGrpcProtocPluginView = Files.getFileAttributeView(invernoGrpcProtocPluginPath, PosixFileAttributeView.class);
-				if(invernoGrpcProtocPluginView != null) {
-					invernoGrpcProtocPluginView.setPermissions(Set.of(PosixFilePermission.OWNER_READ, PosixFilePermission.OWNER_WRITE, PosixFilePermission.OWNER_EXECUTE));
-				}
+			PosixFileAttributeView invernoGrpcProtocPluginView = Files.getFileAttributeView(invernoGrpcProtocPluginPath, PosixFileAttributeView.class);
+			if(invernoGrpcProtocPluginView != null) {
+				invernoGrpcProtocPluginView.setPermissions(Set.of(PosixFilePermission.OWNER_READ, PosixFilePermission.OWNER_WRITE, PosixFilePermission.OWNER_EXECUTE));
 			}
 			INVERNO_GRPC_PROTOC_PLUGIN = invernoGrpcProtocPluginPath.toString();
 		}
@@ -112,7 +109,13 @@ public final class ProtocGrpcRunner {
 	public static int runProtocGrpc(Path protoPath, String grpcProtocPluginArgs, Path... protoFilePaths) throws IOException, InterruptedException {
 		Files.createDirectories(GRPC_OUTPUT_PATH);
 
-		Path invernoGrpcProtocPluginPath = Files.createTempFile("invernoGrpcProtocPlugin", ".sh", PosixFilePermissions.asFileAttribute(Set.of(PosixFilePermission.OWNER_READ, PosixFilePermission.OWNER_WRITE, PosixFilePermission.OWNER_EXECUTE)));
+		Path invernoGrpcProtocPluginPath;
+		if(FileSystems.getDefault().supportedFileAttributeViews().contains("posix")) {
+			invernoGrpcProtocPluginPath = Files.createTempFile("invernoGrpcProtocPlugin", ".sh", PosixFilePermissions.asFileAttribute(Set.of(PosixFilePermission.OWNER_READ, PosixFilePermission.OWNER_WRITE, PosixFilePermission.OWNER_EXECUTE)));
+		}
+		else {
+			invernoGrpcProtocPluginPath = Files.createTempFile("invernoGrpcProtocPlugin", ".sh");
+		}
 		try {
 			StringBuilder invernoGrpcProtocPluginCommand = new StringBuilder();
 			invernoGrpcProtocPluginCommand.append(IS_WINDOWS ? "" : "#!/bin/sh").append(System.lineSeparator());
