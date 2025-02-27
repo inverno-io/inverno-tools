@@ -11,7 +11,9 @@
 
 # Inverno Tools
 
+[![Maven Central](https://img.shields.io/maven-central/v/io.inverno/inverno-tools-root)](https://central.sonatype.com/search?namespace=io.inverno.tool)
 [![CI/CD](https://github.com/inverno-io/inverno-tools/actions/workflows/maven.yml/badge.svg)](https://github.com/inverno-io/inverno-tools/actions/workflows/maven.yml)
+[![GitHub License](https://img.shields.io/badge/license-Apache%20License%202.0-blue.svg?style=flat)](http://www.apache.org/licenses/LICENSE-2.0)
 
 The Inverno framework provides tools for running and building modular Java applications and Inverno applications in particular. It allows for instance to create native runtime and application images providing all the dependencies required to run a modular application. It is also possible to build Docker and [OCI][open-container-image] images, install them on a local Docker daemon or deploy them on remote registry.
 
