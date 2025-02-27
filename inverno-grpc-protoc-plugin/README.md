@@ -205,18 +205,18 @@ The client application module requires the boot module, the gRPC client module, 
             <groupId>io.inverno.mod</groupId>
             <artifactId>inverno-grpc-client</artifactId>
         </dependency>
-		<dependency>
-			<groupId>io.inverno.mod</groupId>
-			<artifactId>inverno-http-client</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>io.inverno.mod</groupId>
-			<artifactId>inverno-web-client</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>io.inverno.mod</groupId>
-			<artifactId>inverno-discovery-http</artifactId>
-		</dependency>
+        <dependency>
+            <groupId>io.inverno.mod</groupId>
+            <artifactId>inverno-http-client</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.inverno.mod</groupId>
+            <artifactId>inverno-web-client</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.inverno.mod</groupId>
+            <artifactId>inverno-discovery-http</artifactId>
+        </dependency>
     </dependencies>
 </project>
 ```
@@ -303,7 +303,7 @@ Using the `HttpClient` based implementation:
 ```java
 try(GreeterGrpcClient.HttpClientStub<ExchangeContext> stub = app_grpc_client.httpGreeterGrpcClient().createStub("127.0.0.1", 8080)) {
     HelloReply response = stub
-		.withMetadata(metadata -> metadata.messageEncoding("gzip"))
+        .withMetadata(metadata -> metadata.messageEncoding("gzip"))
         .sayHello(HelloRequest.newBuilder()
             .setName("Bob")
             .build()
